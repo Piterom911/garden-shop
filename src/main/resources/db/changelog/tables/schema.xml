@@ -4,7 +4,33 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="sprint1 " author="admin">
+    <changeSet id="sprint1.0 create role enum" author="roman">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="1">
+                    SELECT COUNT(*) FROM pg_type WHERE typname = 'role_enum';
+                </sqlCheck>
+            </not>
+        </preConditions>
+        <sql>
+            CREATE TYPE role_enum AS ENUM ('ADMIN', 'CLIENT');
+        </sql>
+    </changeSet>
 
+    <changeSet id="sprint1.1 create table users" author="roman">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="phone_number" type="VARCHAR(255)"/>
+            <column name="password_hash" type="VARCHAR(255)"/>
+            <column name="role" type="role_enum" defaultValue="CLIENT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

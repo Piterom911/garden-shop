@@ -1,6 +1,7 @@
 package com.predators.service;
 
 import com.predators.entity.Product;
+import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,6 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
 
     private final ProductJpaRepository repository;
 
@@ -28,9 +28,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(Long id) {
-
-        return   repository.findById(id).get();
-
+        return repository.findById(id).orElseThrow(() ->
+                new ProductNotFoundException("Product with " + id + " Not Found"));
     }
 
     @Override

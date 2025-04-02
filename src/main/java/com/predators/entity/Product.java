@@ -23,6 +23,8 @@ public class Product {
 
     private BigDecimal price;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category categoryId;
 
     private String imageUrl;

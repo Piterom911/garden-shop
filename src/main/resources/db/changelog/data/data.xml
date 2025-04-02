@@ -4,7 +4,30 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="sprint1 " author="roman">
-
+    <changeSet id="insert_initial_categories" author="serhii kurlykin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="categories"/>
+        </preConditions>
+        <insert tableName="categories">
+            <column name="type" value="GARDEN_TOOLS"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="type" value="PLANTS"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="type" value="FERTILIZERS"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="type" value="DECORATIONS"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="type" value="SEEDS"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="type" value="POTS"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="type" value="GARDEN_FURNITURE"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface FavoriteService {
 
-    List<Favorite>getAllFavorites();                               // получить все избранные
+    List<Favorite> getAll();
 
-    Favorite createFavorite(Favorite favorite);                    // создать новое избранное
+    Favorite create(Favorite favorite);
 
-    Favorite getFavoriteById(Long id);                             // получить избранное по ID
+    Favorite getById(Long id);
 
-    void deleteFavorite(Long id);                                  // удалить избранное по ID
+    void delete(Long id);
 }

@@ -49,4 +49,13 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="sprint1.1 create table favorites" author="anton">
+        <createTable tableName="favorites">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_favorite"/>
+            </column>
+
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

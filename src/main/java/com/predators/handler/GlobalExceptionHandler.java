@@ -1,6 +1,7 @@
 package com.predators.handler;
 
 import com.predators.exception.CategoryNotFoundException;
+import com.predators.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -11,7 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler({CategoryNotFoundException.class})
+    @ExceptionHandler({CategoryNotFoundException.class, UserNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception ex,
                                                           HttpHeaders headers,
                                                           HttpStatusCode status,

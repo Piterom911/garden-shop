@@ -1,6 +1,7 @@
 package com.predators.handler;
 
 import com.predators.exception.FavoriteNotFoundException;
+import com.predators.exception.CategoryNotFoundException;
 import com.predators.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({UserNotFoundException.class, FavoriteNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, FavoriteNotFoundException.class, CategoryNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception ex,
                                                           HttpHeaders headers,
                                                           HttpStatusCode status,

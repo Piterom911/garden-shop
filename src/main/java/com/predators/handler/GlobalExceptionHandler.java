@@ -1,17 +1,24 @@
 package com.predators.handler;
 import com.predators.exception.ResourceNotFoundException;
+
+import com.predators.exception.UserNotFoundException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice                 //Аннотация @RestControllerAdvice позволяет ловить исключения во всех контроллерах
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> resourceNotFound(ResourceNotFoundException ex) {
+    @ExceptionHandler({UserNotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundException(Exception ex,
+                                                          HttpHeaders headers,
+                                                          HttpStatusCode status,
+                                                          WebRequest request) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }                                //Обработка ResourceNotFoundException, возвращаем 404 и сообщение
-
-
+    }
 }

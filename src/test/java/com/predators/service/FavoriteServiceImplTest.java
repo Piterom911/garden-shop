@@ -5,35 +5,31 @@ import com.predators.exception.FavoriteNotFoundException;
 import com.predators.repository.FavoriteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-public class  FavoriteServiceTest {
+@ExtendWith(MockitoExtension.class)
+class FavoriteServiceImplTest {
 
     @Mock
     private FavoriteRepository favoriteRepository;
+
     @InjectMocks
     private FavoriteServiceImpl favoriteService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     @Test
     void testGetAllFavorites() {
-        Favorite favorite1 = new Favorite();
-        Favorite favorite2 = new Favorite();
-        when(favoriteRepository.findAll()).thenReturn(Arrays.asList(favorite1, favorite2));
+        when(favoriteRepository.findAll()).thenReturn(Arrays.asList(new Favorite(), new Favorite()));
 
         List<Favorite> result = favoriteService.getAll();
 
@@ -53,9 +49,9 @@ public class  FavoriteServiceTest {
     }
 
     @Test
-    void testGetFavoriteById_WhenIdExists() {
+    void testGetFavoriteById_WhenExists() {
         Favorite favorite = new Favorite();
-        when(favoriteRepository.findById(1L)).thenReturn(java.util.Optional.of(favorite));
+        when(favoriteRepository.findById(1L)).thenReturn(Optional.of(favorite));
 
         Favorite result = favoriteService.getById(1L);
 
@@ -64,13 +60,11 @@ public class  FavoriteServiceTest {
     }
 
     @Test
-    void testGetFavoriteById_WhenNotExist() {
-        when(favoriteRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+    void testGetFavoriteById_WhenNotFound() {
+        when(favoriteRepository.findById(99L)).thenReturn(Optional.empty());
 
-        FavoriteNotFoundException exception = assertThrows(
-                FavoriteNotFoundException.class,
-                () -> favoriteService.getById(99L)
-        );
+        FavoriteNotFoundException exception = assertThrows(FavoriteNotFoundException.class,
+                () -> favoriteService.getById(99L));
 
         assertEquals("Favorite not found with id: 99", exception.getMessage());
     }
@@ -78,8 +72,11 @@ public class  FavoriteServiceTest {
     @Test
     void testDeleteFavorite() {
         Long id = 1L;
+
         doNothing().when(favoriteRepository).deleteById(id);
+
         favoriteService.delete(id);
+
         verify(favoriteRepository, times(1)).deleteById(id);
     }
 }

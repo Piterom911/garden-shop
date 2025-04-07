@@ -50,7 +50,7 @@
             <column name="role" type="role_enum" defaultValue="CLIENT">
                 <constraints nullable="false"/>
             </column>
-           </createTable>
+        </createTable>
     </changeSet>
 
     <changeSet id="create_categories_table" author="serhii kurlykin">
@@ -74,15 +74,29 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_favorite"/>
             </column>
-
+            <column name="user_id" type="BIGINT"/>
+            <column name="product_id" type="BIGINT"/>
         </createTable>
     </changeSet>
 
-    <changeSet id="sprint1-add fk for category and products" author="konstantin">
+    <changeSet id="sprint1-add fk for categories and products" author="konstantin">
         <addForeignKeyConstraint baseTableName="products" baseColumnNames="category_id"
                                  constraintName="category_id_fkey"
                                  referencedTableName="categories"
                                  referencedColumnNames="id"/>
+    </changeSet>
 
+    <changeSet id="sprint1-add fk for favorites and products" author="anton">
+        <addForeignKeyConstraint baseTableName="favorites" baseColumnNames="product_id"
+                                 constraintName="product_id_fkey"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="sprint1-add fk for favorites and users" author="anton">
+        <addForeignKeyConstraint baseTableName="favorites" baseColumnNames="user_id"
+                                 constraintName="user_id_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

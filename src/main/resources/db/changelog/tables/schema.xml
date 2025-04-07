@@ -6,7 +6,7 @@
 
     <changeSet id="sprint1 create table Product" author="konstantin">
         <createTable tableName="products">
-            <column autoIncrement="true" name="product_id" type="BIGINT">
+            <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_products"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
@@ -60,7 +60,7 @@
             </not>
         </preConditions>
         <createTable tableName="categories">
-            <column name="category_id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(50)">
@@ -76,5 +76,13 @@
             </column>
 
         </createTable>
+    </changeSet>
+
+    <changeSet id="sprint1-add fk for category and products" author="konstantin">
+        <addForeignKeyConstraint baseTableName="products" baseColumnNames="category_id"
+                                 constraintName="category_id_fkey"
+                                 referencedTableName="categories"
+                                 referencedColumnNames="id"/>
+
     </changeSet>
 </databaseChangeLog>

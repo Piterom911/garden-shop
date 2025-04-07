@@ -4,6 +4,9 @@ package com.predators.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 @Getter
@@ -19,8 +22,6 @@ public class Category {
 
     private String name;
 
-
-
-    //@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
-    //private List<Product> products = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
 }

@@ -2,8 +2,11 @@ package com.predators.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.math.BigDecimal;
 import java.security.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -11,6 +14,7 @@ import java.security.Timestamp;
 @Getter
 @Setter
 @Builder
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -25,13 +29,13 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category categoryId;
+    private Category category;
 
     private String imageUrl;
 
     private BigDecimal discountPrice;
 
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 }

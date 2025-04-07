@@ -45,8 +45,8 @@ class ProductControllerTest {
         String user = "{\n" +
                 "  \"name\": \"string\",\n" +
                 "  \"description\": \"string\",\n" +
-                "  \"price\": \"number\",\n" +
-                "  \"category\": \"string\",\n" +
+                "  \"price\": \"15\",\n" +
+                "  \"category\": \"1\",\n" +
                 "  \"image\": \"string\"\n" +
                 "}";
         given()

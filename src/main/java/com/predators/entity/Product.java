@@ -3,7 +3,7 @@ package com.predators.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @AllArgsConstructor
@@ -11,11 +11,12 @@ import java.security.Timestamp;
 @Getter
 @Setter
 @Builder
+@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long id;
 
     private String name;
 
@@ -25,7 +26,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category categoryId;
+    private Category category;
 
     private String imageUrl;
 

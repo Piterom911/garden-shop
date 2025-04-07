@@ -3,7 +3,7 @@ package com.predators.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category categoryId;
+    private Category category;
 
     private String imageUrl;
 

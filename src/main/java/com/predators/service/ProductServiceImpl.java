@@ -4,7 +4,8 @@ import com.predators.entity.Product;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
 import org.springframework.stereotype.Service;
-
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -23,6 +24,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
+        product.setCreatedAt(Timestamp.from(Instant.now()));
         return repository.save(product);
     }
 
@@ -40,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product update(Long id) {
         Product productId = getById(id);
+        productId.setUpdatedAt(Timestamp.from(Instant.now()));
         return repository.save(productId);
     }
 }

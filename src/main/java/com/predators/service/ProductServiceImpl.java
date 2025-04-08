@@ -1,5 +1,7 @@
 package com.predators.service;
 
+import com.predators.dto.ProductResponseDto;
+import com.predators.entity.Category;
 import com.predators.entity.Product;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
@@ -13,9 +15,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductJpaRepository repository;
 
-    public ProductServiceImpl(ProductJpaRepository repository) {
+    public ProductServiceImpl(ProductJpaRepository repository, CategoryService categoryService) {
         this.repository = repository;
+        this.categoryService = categoryService;
     }
+
+    private final CategoryService categoryService;
 
     @Override
     public List<Product> getAll() {
@@ -24,6 +29,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
+        Category byId = categoryService.getById(product.getCategory().getId());
+        product.setCategory(byId);
         product.setCreatedAt(Timestamp.from(Instant.now()));
         return repository.save(product);
     }

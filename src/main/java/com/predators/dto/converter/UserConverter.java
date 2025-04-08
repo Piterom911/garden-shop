@@ -3,17 +3,10 @@ package com.predators.dto.converter;
 import com.predators.dto.UserRequestDto;
 import com.predators.dto.UserResponseDto;
 import com.predators.entity.User;
-import com.predators.service.UserService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserConverter {
-    private final UserService userService;
-
-    public UserConverter(UserService userService) {
-        this.userService = userService;
-    }
-
 
     public User toEntity(UserRequestDto userDto) {
 
@@ -31,7 +24,6 @@ public class UserConverter {
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-//                .favorites(user.getFavorite())
                 .build();
     }
 }

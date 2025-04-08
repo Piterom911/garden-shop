@@ -1,8 +1,11 @@
 package com.predators.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.predators.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +32,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.CLIENT;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Favorite favorite;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonBackReference
+    private List<Favorite> favorites;
 }

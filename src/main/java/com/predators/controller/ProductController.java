@@ -1,7 +1,11 @@
 package com.predators.controller;
 
+import com.predators.dto.ProductResponseDto;
+import com.predators.dto.converter.ProductConverter;
+import com.predators.dto.ProductRequestDto;
 import com.predators.entity.Product;
 import com.predators.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("v1/products")
 public class ProductController {
 
     private final ProductService service;
@@ -17,6 +21,9 @@ public class ProductController {
     public ProductController(ProductService service) {
         this.service = service;
     }
+
+    @Autowired
+    private ProductConverter productConverter;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -26,9 +33,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> create(@RequestBody Product product) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto productDto) {
+        Product product = productConverter.toEntity(productDto);
         Product createdProd = service.create(product);
-        return new ResponseEntity<>(createdProd, HttpStatus.CREATED);
+        ProductResponseDto productResponseDto = productConverter.toDto(createdProd);
+        return ResponseEntity.ok(productResponseDto);
     }
 
     @GetMapping("/{id}")

@@ -1,4 +1,4 @@
-package com.predators.controller;
+package com.predators.controller.integrationTest;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -25,7 +25,7 @@ class ProductControllerTest {
         given()
                 .port(port)
                 .when()
-                .get("/products")
+                .get("v1/products")
                 .then()
                 .statusCode(200);
     }
@@ -35,7 +35,7 @@ class ProductControllerTest {
         given()
                 .port(port)
                 .when()
-                .get("/products/1")
+                .get("v1/products/1")
                 .then()
                 .statusCode(200);
     }
@@ -54,7 +54,7 @@ class ProductControllerTest {
                 .contentType(ContentType.JSON)
                 .body(user)
                 .when()
-                .post("/products")
+                .post("v1/products")
                 .then()
                 .statusCode(201);
     }
@@ -73,7 +73,7 @@ class ProductControllerTest {
                 .contentType(ContentType.JSON)
                 .body(user)
                 .when()
-                .put("/products/1")
+                .put("v1/products/1")
                 .then()
                 .statusCode(201);
     }
@@ -84,7 +84,7 @@ class ProductControllerTest {
         given()
                 .port(port)
                 .when()
-                .delete("/products/1")
+                .delete("v1/products/1")
                 .then()
                 .statusCode(200);
     }

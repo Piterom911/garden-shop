@@ -1,8 +1,9 @@
-package com.predators.controller;
+package com.predators.controller.unitTest;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.predators.controller.CategoryController;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;

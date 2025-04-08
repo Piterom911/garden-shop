@@ -1,6 +1,7 @@
-package com.predators.controller;
+package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.predators.controller.FavoriteController;
 import com.predators.entity.Favorite;
 import com.predators.service.FavoriteService;
 import org.junit.jupiter.api.Test;

@@ -4,6 +4,25 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
+    <changeSet id="sprint1 create table Product" author="konstantin">
+        <createTable tableName="products">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_products"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="price" type="DECIMAL"/>
+            <column name="category_id" type="BIGINT"/>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="discount_price" type="DECIMAL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+
     <changeSet id="sprint1.0 create role enum" author="roman">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -32,5 +51,52 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="create_categories_table" author="serhii kurlykin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="categories"/>
+            </not>
+        </preConditions>
+        <createTable tableName="categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="sprint1.1 create table favorites" author="anton">
+        <createTable tableName="favorites">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_favorite"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="product_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="sprint1-add fk for categories and products" author="konstantin">
+        <addForeignKeyConstraint baseTableName="products" baseColumnNames="category_id"
+                                 constraintName="category_id_fkey"
+                                 referencedTableName="categories"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="sprint1-add fk for favorites and products" author="anton">
+        <addForeignKeyConstraint baseTableName="favorites" baseColumnNames="product_id"
+                                 constraintName="product_id_fkey"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="sprint1-add fk for favorites and users" author="anton">
+        <addForeignKeyConstraint baseTableName="favorites" baseColumnNames="user_id"
+                                 constraintName="user_id_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

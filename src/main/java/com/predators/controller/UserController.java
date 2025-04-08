@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/users")
+@RequestMapping("/v1/users")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -22,7 +22,7 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<User> create(@RequestBody User user) {
         return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
     }

@@ -49,7 +49,8 @@ class UserControllerTest {
                 "testuser@mail.com",
                 "+49-151-768-13-91",
                 "password-hash",
-                Role.CLIENT
+                Role.CLIENT,
+                new Favorite()
         );
     }
 

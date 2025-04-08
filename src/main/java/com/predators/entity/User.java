@@ -4,7 +4,6 @@ import com.predators.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Getter
 @Setter

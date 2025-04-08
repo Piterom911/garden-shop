@@ -31,6 +31,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role = Role.CLIENT;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Favorite> favorite;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Favorite> favorite;
 }

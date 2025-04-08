@@ -99,4 +99,21 @@
                                  referencedTableName="users"
                                  referencedColumnNames="id"/>
     </changeSet>
+
+    <changeSet id="sprint2 create table Cart" author="konstantin">
+        <createTable tableName="carts">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_carts"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="sprint2-add fk for cart and user" author="konstantin">
+        <addForeignKeyConstraint baseTableName="carts" baseColumnNames="user_id"
+                                 constraintName="cart_id_fkey"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
 </databaseChangeLog>

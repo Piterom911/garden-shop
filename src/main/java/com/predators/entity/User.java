@@ -31,4 +31,7 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Favorite favorite;
+
+    @OneToOne(mappedBy = "userId")
+    private Cart carts;
 }

@@ -8,7 +8,7 @@ import com.predators.service.CategoryService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductConverter {
+public class ProductConverter implements Converter<ProductRequestDto,ProductResponseDto, Product> {
     private final CategoryService categoryService;
 
     public ProductConverter(CategoryService categoryService) {

@@ -1,5 +1,6 @@
 package com.predators.entity;
 
+import com.predators.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,31 +9,26 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@Table(name = "products")
-public class Product {
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "orders")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    private String description;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
-    private BigDecimal price;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    private String imageUrl;
-
-    private BigDecimal discountPrice;
+    private BigDecimal totalAmount;
 
     private Timestamp createdAt;
 

@@ -1,7 +1,8 @@
-package com.predators.entity;
+package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.predators.controller.UserController;
+import com.predators.entity.User;
 import com.predators.entity.enums.Role;
 import com.predators.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +51,8 @@ class UserControllerTest {
                 "+49-151-768-13-91",
                 "password-hash",
                 Role.CLIENT,
-                new Favorite()
+                null,
+                null
         );
     }
 
@@ -58,7 +60,7 @@ class UserControllerTest {
     public void createUser_ReturnCreated() throws Exception {
         given(userService.create(ArgumentMatchers.any())).willAnswer(invocation -> invocation.getArgument(0));
 
-        ResultActions response = mockMvc.perform(post("/api/users")
+        ResultActions response = mockMvc.perform(post("/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user)));
 
@@ -71,7 +73,7 @@ class UserControllerTest {
 
         given(userService.getAll()).willReturn(userList);
 
-        mockMvc.perform(get("/api/users"))
+        mockMvc.perform(get("/v1/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()").value(userList.size()))
@@ -83,7 +85,7 @@ class UserControllerTest {
         Long userId = 1L;
         given(userService.getById(userId)).willReturn(user);
 
-        mockMvc.perform(get("/api/users/{id}", userId))
+        mockMvc.perform(get("/v1/users/{id}", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(userId))
@@ -95,7 +97,7 @@ class UserControllerTest {
         Long userId = 1L;
         willDoNothing().given(userService).delete(userId);
 
-        mockMvc.perform(delete("/api/users/{id}", userId))
+        mockMvc.perform(delete("/v1/users/{id}", userId))
                 .andExpect(status().isOk());
     }
 }

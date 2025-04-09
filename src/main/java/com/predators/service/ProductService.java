@@ -1,5 +1,6 @@
 package com.predators.service;
 
+import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Product;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public interface ProductService {
 
     void delete(Long id);
 
-    Product update(Long id);
+    Product update(Long id, ProductRequestDto productDto);
 }

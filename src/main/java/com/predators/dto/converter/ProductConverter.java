@@ -1,7 +1,7 @@
 package com.predators.dto.converter;
 
-import com.predators.dto.ProductRequestDto;
-import com.predators.dto.ProductResponseDto;
+import com.predators.dto.product.ProductRequestDto;
+import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
 import com.predators.service.CategoryService;
@@ -25,7 +25,6 @@ public class ProductConverter implements Converter<ProductRequestDto,ProductResp
                 .price(productDto.price())
                 .category(category)
                 .imageUrl(productDto.imageUrl())
-                .discountPrice(productDto.discountPrice())
                 .build();
     }
 

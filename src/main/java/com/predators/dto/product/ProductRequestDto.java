@@ -1,4 +1,4 @@
-package com.predators.dto;
+package com.predators.dto.product;
 
 import lombok.*;
 import java.math.BigDecimal;
@@ -8,6 +8,6 @@ public record ProductRequestDto(String name,
                                 String description,
                                 BigDecimal price,
                                 Long categoryId,
-                                String imageUrl,
-                                BigDecimal discountPrice) {
+                                String imageUrl
+                                ) {
 }

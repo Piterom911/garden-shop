@@ -1,6 +1,6 @@
 package com.predators.service;
 
-import com.predators.dto.ProductResponseDto;
+import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
 import com.predators.exception.ProductNotFoundException;
@@ -29,8 +29,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-        Category byId = categoryService.getById(product.getCategory().getId());
-        product.setCategory(byId);
+        Category category = categoryService.getById(product.getCategory().getId());
+        product.setCategory(category);
         product.setCreatedAt(Timestamp.from(Instant.now()));
         return repository.save(product);
     }
@@ -47,9 +47,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(Long id) {
-        Product productId = getById(id);
-        productId.setUpdatedAt(Timestamp.from(Instant.now()));
-        return repository.save(productId);
+    public Product update(Long id, ProductRequestDto productDto) {
+        Category category = categoryService.getById(productDto.categoryId());
+        Product product = getById(id);
+        product.setCategory(category);
+        product.setUpdatedAt(Timestamp.from(Instant.now()));
+        return repository.save(product);
     }
 }

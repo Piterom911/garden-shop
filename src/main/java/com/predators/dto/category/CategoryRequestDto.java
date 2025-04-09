@@ -1,4 +1,4 @@
-package com.predators.dto;
+package com.predators.dto.category;
 
 import groovy.transform.builder.Builder;
 

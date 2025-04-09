@@ -133,7 +133,6 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-
     <changeSet id="sprint2-create-orders-table" author="anton">
         <createTable tableName="orders">
             <column name="id" type="BIGINT" autoIncrement="true">
@@ -154,6 +153,28 @@
                 constraintName="fk_orders_user"
                 referencedTableName="users"
                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="sprint2-create-order-items-table" author="roman">
+        <createTable tableName="order_items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order_items"/>
+            </column>
+            <column name="order_id" type="BIGINT"/>
+            <column name="product_id" type="BIGINT"/>
+            <column name="quantity" type="INT"/>
+            <column name="price_at_purchase" type="DECIMAL"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="order_items" baseColumnNames="order_id"
+                                 constraintName="order_id_fkey"
+                                 referencedTableName="orders"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="order_items" baseColumnNames="product_id"
+                                 constraintName="product_id_fkey"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

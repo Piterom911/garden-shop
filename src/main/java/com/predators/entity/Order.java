@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,4 +33,7 @@ public class Order {
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+    private List<OrderItem> orderItem;
 }

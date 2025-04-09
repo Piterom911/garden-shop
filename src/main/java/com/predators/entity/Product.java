@@ -37,4 +37,7 @@ public class Product {
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+    private List<OrderItem> orderItem;
 }

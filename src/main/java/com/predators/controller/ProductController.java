@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("v1/products")
@@ -18,18 +19,19 @@ public class ProductController {
 
     private final ProductService service;
 
-    public ProductController(ProductService service) {
-        this.service = service;
-    }
+    private final ProductConverter converter;
 
-    @Autowired
-    private ProductConverter converter;
+    public ProductController(ProductService service, ProductConverter converter) {
+        this.service = service;
+        this.converter = converter;
+    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Product>> getAll() {
-        List<Product> all = service.getAll();
-        return new ResponseEntity<>(all, HttpStatus.OK);
+    public ResponseEntity<List<ProductResponseDto>> getAll() {
+        List<ProductResponseDto> dtoList = service.getAll().stream()
+                .map(converter::toDto).collect(Collectors.toList());
+        return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
     @PostMapping
@@ -41,9 +43,9 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id) {
         Product product = service.getById(id);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return new ResponseEntity<>(converter.toDto(product), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -53,8 +55,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, ProductRequestDto productDto) {
+    public ResponseEntity<ProductResponseDto> update(@PathVariable Long id, ProductRequestDto productDto) {
         Product update = service.update(id,productDto);
-        return new ResponseEntity<>(update, HttpStatus.CREATED);
+        return new ResponseEntity<>(converter.toDto(update), HttpStatus.CREATED);
     }
 }

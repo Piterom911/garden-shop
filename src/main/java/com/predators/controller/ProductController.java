@@ -23,7 +23,7 @@ public class ProductController {
     }
 
     @Autowired
-    private ProductConverter productConverter;
+    private ProductConverter converter;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -35,10 +35,9 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto productDto) {
-        Product product = productConverter.toEntity(productDto);
+        Product product = converter.toEntity(productDto);
         Product createdProd = service.create(product);
-        ProductResponseDto productResponseDto = productConverter.toDto(createdProd);
-        return ResponseEntity.ok(productResponseDto);
+        return ResponseEntity.ok(converter.toDto(createdProd));
     }
 
     @GetMapping("/{id}")
@@ -54,8 +53,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-        Product update = service.update(id);
+    public ResponseEntity<Product> update(@PathVariable Long id, ProductRequestDto productDto) {
+        Product update = service.update(id,productDto);
         return new ResponseEntity<>(update, HttpStatus.CREATED);
     }
 }

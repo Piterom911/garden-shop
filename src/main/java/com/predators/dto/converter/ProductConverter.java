@@ -25,7 +25,6 @@ public class ProductConverter implements Converter<ProductRequestDto,ProductResp
                 .price(productDto.price())
                 .category(category)
                 .imageUrl(productDto.imageUrl())
-                .discountPrice(productDto.discountPrice())
                 .build();
     }
 

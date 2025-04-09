@@ -35,4 +35,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
     private List<Favorite> favorites;
+
+    @OneToOne(mappedBy = "userId")
+    private Cart carts;
 }

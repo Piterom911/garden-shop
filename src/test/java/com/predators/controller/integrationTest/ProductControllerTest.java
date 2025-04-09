@@ -46,13 +46,14 @@ class ProductControllerTest {
 
     @Test
     void testCreate() {
-        String user = "{\n" +
-                "  \"name\": \"one\",\n" +
-                "  \"description\": \"one description\",\n" +
-                "  \"price\": \"20.89\",\n" +
-                "  \"categoryId\": \"1\",\n" +
-                "  \"image\": \"http/\"\n" +
-                "}";
+        String user = """
+                {
+                  "name": "one",
+                  "description": "one description",
+                  "price": "20.89",
+                  "categoryId": "1",
+                  "image": "http/"
+                }""";
         given()
                 .port(port)
                 .contentType(ContentType.JSON)
@@ -65,13 +66,14 @@ class ProductControllerTest {
 
     @Test
     void testUpdate() {
-        String user = "{\n" +
-                "  \"name\": \"one\",\n" +
-                "  \"description\": \"one description\",\n" +
-                "  \"price\": \"10.12\",\n" +
-                "  \"categoryId\": \"1\",\n" +
-                "  \"image\": \"http/\"\n" +
-                "}";
+        String user = """
+                {
+                  "name": "one",
+                  "description": "one description",
+                  "price": "10.12",
+                  "categoryId": "1",
+                  "image": "http/"
+                }""";
         given()
                 .port(port)
                 .contentType(ContentType.JSON)

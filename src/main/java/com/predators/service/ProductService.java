@@ -1,6 +1,6 @@
 package com.predators.service;
 
-import com.predators.dto.ProductRequestDto;
+import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Product;
 
 import java.util.List;

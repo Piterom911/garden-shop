@@ -1,7 +1,6 @@
 package com.predators.service;
 
-import com.predators.dto.ProductRequestDto;
-import com.predators.dto.ProductResponseDto;
+import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
 import com.predators.exception.ProductNotFoundException;

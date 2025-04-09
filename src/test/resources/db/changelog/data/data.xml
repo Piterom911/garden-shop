@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="konstantin">
+        <sql>
+            INSERT INTO users( name, email, phone_number, password_hash, role) values ('Oleg','Al@as.com','2548796','qw12','CLIENT');
+            INSERT INTO users( name, email, phone_number, password_hash, role) values ('Max','Mx@as.com','26988723','mx12','CLIENT');
+            INSERT INTO categories( name) values ('Fertilizer');
+            INSERT INTO products( name, description, price, category_id, image_url,discount_price,created_at,updated_at) values ('banana','ban', 10, 1,'http/CLIENT', 2,CURRENT_TIMESTAMP,null);
+            INSERT INTO products( name, description, price, category_id, image_url,discount_price,created_at,updated_at) values ('orange','or', 20, 1,'http/CLIENT', 2,CURRENT_TIMESTAMP,null);
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

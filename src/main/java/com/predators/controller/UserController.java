@@ -1,7 +1,7 @@
 package com.predators.controller;
 
-import com.predators.dto.UserRequestDto;
-import com.predators.dto.UserResponseDto;
+import com.predators.dto.user.UserRequestDto;
+import com.predators.dto.user.UserResponseDto;
 import com.predators.dto.converter.UserConverter;
 import com.predators.entity.User;
 import com.predators.service.UserServiceImpl;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/users")
+@RequestMapping("v1/users")
 public class UserController {
 
     private final UserServiceImpl userService;

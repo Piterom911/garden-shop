@@ -33,7 +33,7 @@ class FavoriteControllerTest {
     void testGetAllFavorites() throws Exception {
         when(favoriteService.getAll()).thenReturn(List.of(new Favorite()));
 
-        mockMvc.perform(get("/api/favorites"))
+        mockMvc.perform(get("/v1/favorites"))
                 .andExpect(status().isOk());
 
         verify(favoriteService, times(1)).getAll();
@@ -44,7 +44,7 @@ class FavoriteControllerTest {
         Favorite favorite = new Favorite();
         when(favoriteService.create(any(Favorite.class))).thenReturn(favorite);
 
-        mockMvc.perform(post("/api/favorites")
+        mockMvc.perform(post("/v1/favorites")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(favorite)))
                 .andExpect(status().isOk());
@@ -57,7 +57,7 @@ class FavoriteControllerTest {
         Favorite favorite = new Favorite();
         when(favoriteService.getById(1L)).thenReturn(favorite);
 
-        mockMvc.perform(get("/api/favorites/1"))
+        mockMvc.perform(get("/v1/favorites/1"))
                 .andExpect(status().isOk());
 
         verify(favoriteService, times(1)).getById(1L);
@@ -67,7 +67,7 @@ class FavoriteControllerTest {
     void testDeleteFavorite() throws Exception {
         doNothing().when(favoriteService).delete(1L);
 
-        mockMvc.perform(delete("/api/favorites/1"))
+        mockMvc.perform(delete("/v1/favorites/1"))
                 .andExpect(status().isOk());
 
         verify(favoriteService, times(1)).delete(1L);

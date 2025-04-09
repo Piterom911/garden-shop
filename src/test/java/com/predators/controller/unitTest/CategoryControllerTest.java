@@ -42,7 +42,7 @@ class CategoryControllerTest {
         ), new Category(2L, "PLANTS",null));
         when(categoryService.getAll()).thenReturn(categories);
 
-        mockMvc.perform(get("/api/categories"))
+        mockMvc.perform(get("/v1/categories"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(categories)));
     }
@@ -52,7 +52,7 @@ class CategoryControllerTest {
         Category category = new Category(1L, "GARDEN_TOOLS",null);
         when(categoryService.getById(1L)).thenReturn(category);
 
-        mockMvc.perform(get("/api/categories/1"))
+        mockMvc.perform(get("/v1/categories/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(category)));
     }
@@ -62,7 +62,7 @@ class CategoryControllerTest {
         Category category = new Category(1L, "GARDEN_TOOLS",null);
         when(categoryService.create(any(Category.class))).thenReturn(category);
 
-        mockMvc.perform(post("/api/categories")
+        mockMvc.perform(post("/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(category)))
                 .andExpect(status().isCreated())
@@ -73,7 +73,7 @@ class CategoryControllerTest {
     void deleteCategory() throws Exception {
         doNothing().when(categoryService).delete(1L);
 
-        mockMvc.perform(delete("/api/categories/1"))
+        mockMvc.perform(delete("/v1/categories/1"))
                 .andExpect(status().isNoContent());
     }
 }

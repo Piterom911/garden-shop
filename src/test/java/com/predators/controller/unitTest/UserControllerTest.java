@@ -2,6 +2,9 @@ package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.predators.controller.UserController;
+import com.predators.entity.Cart;
+import com.predators.entity.Favorite;
+import com.predators.entity.Product;
 import com.predators.entity.User;
 import com.predators.entity.enums.Role;
 import com.predators.service.UserServiceImpl;
@@ -52,7 +55,7 @@ class UserControllerTest {
                 "password-hash",
                 Role.CLIENT,
                 null,
-                null
+                new Cart()
         );
     }
 
@@ -97,7 +100,7 @@ class UserControllerTest {
         Long userId = 1L;
         willDoNothing().given(userService).delete(userId);
 
-        mockMvc.perform(delete("/v1/users/{id}", userId))
+        mockMvc.perform(delete("v1/users/{id}", userId))
                 .andExpect(status().isOk());
     }
 }

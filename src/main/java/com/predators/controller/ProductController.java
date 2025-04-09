@@ -1,11 +1,10 @@
 package com.predators.controller;
 
-import com.predators.dto.ProductResponseDto;
+import com.predators.dto.product.ProductResponseDto;
 import com.predators.dto.converter.ProductConverter;
-import com.predators.dto.ProductRequestDto;
+import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Product;
 import com.predators.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

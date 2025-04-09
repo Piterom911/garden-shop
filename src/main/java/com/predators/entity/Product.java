@@ -26,7 +26,7 @@ public class Product {
 
     private BigDecimal price;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
 

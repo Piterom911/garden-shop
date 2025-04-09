@@ -1,4 +1,4 @@
-package com.predators.dto;
+package com.predators.dto.product;
 
 import lombok.Builder;
 

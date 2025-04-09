@@ -1,7 +1,7 @@
 package com.predators.dto.converter;
 
-import com.predators.dto.OrderRequestDto;
-import com.predators.dto.OrderResponseDto;
+import com.predators.dto.order.OrderRequestDto;
+import com.predators.dto.order.OrderResponseDto;
 import com.predators.entity.Order;
 import com.predators.entity.User;
 import com.predators.entity.enums.OrderStatus;

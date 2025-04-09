@@ -133,4 +133,27 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
+
+    <changeSet id="sprint2-create-orders-table" author="anton">
+        <createTable tableName="orders">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_orders"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="total_amount" type="DECIMAL"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="sprint2-orders-fk-user" author="anton">
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="user_id"
+                constraintName="fk_orders_user"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+    </changeSet>
+
 </databaseChangeLog>

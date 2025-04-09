@@ -2,14 +2,18 @@ package com.predators.controller.integrationTest;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
+
 import static io.restassured.RestAssured.given;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class ProductControllerTest {
 
     @LocalServerPort
@@ -73,18 +77,19 @@ class ProductControllerTest {
                 .contentType(ContentType.JSON)
                 .body(user)
                 .when()
-                .put("v1/products/2")
+                .put("v1/products/1")
                 .then()
                 .statusCode(201);
     }
 
 
     @Test
+    @Transactional
     void testDelete() {
         given()
                 .port(port)
                 .when()
-                .delete("v1/products/1")
+                .delete("v1/products/2")
                 .then()
                 .statusCode(200);
     }

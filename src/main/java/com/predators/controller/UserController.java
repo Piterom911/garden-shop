@@ -1,5 +1,8 @@
 package com.predators.controller;
 
+import com.predators.dto.UserRequestDto;
+import com.predators.dto.UserResponseDto;
+import com.predators.dto.converter.UserConverter;
 import com.predators.entity.User;
 import com.predators.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -11,25 +14,31 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/users")
+@RequestMapping("/v1/users")
 public class UserController {
 
     private final UserServiceImpl userService;
 
+    private final UserConverter userConverter;
+
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
+    public ResponseEntity<List<UserResponseDto>> getAll() {
         List<User> users = userService.getAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<UserResponseDto> usersDto = users.stream().map(userConverter::toDto).toList();
+        return new ResponseEntity<>(usersDto, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        return new ResponseEntity<>(userService.create(user), HttpStatus.CREATED);
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDto> create(@RequestBody UserRequestDto userDto) {
+        User user = userConverter.toEntity(userDto);
+        UserResponseDto dto = userConverter.toDto(userService.create(user));
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(userService.getById(id), HttpStatus.OK);
+    public ResponseEntity<UserResponseDto> getById(@PathVariable(name = "id") Long id) {
+        UserResponseDto userDto = userConverter.toDto(userService.create(userService.getById(id)));
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

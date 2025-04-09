@@ -22,20 +22,6 @@
         </createTable>
     </changeSet>
 
-
-    <changeSet id="sprint1.0 create role enum" author="roman">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <sqlCheck expectedResult="1">
-                    SELECT COUNT(*) FROM pg_type WHERE typname = 'role_enum';
-                </sqlCheck>
-            </not>
-        </preConditions>
-        <sql>
-            CREATE TYPE role_enum AS ENUM ('ADMIN', 'CLIENT');
-        </sql>
-    </changeSet>
-
     <changeSet id="sprint1.1 create table users" author="roman">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -47,7 +33,7 @@
             </column>
             <column name="phone_number" type="VARCHAR(255)"/>
             <column name="password_hash" type="VARCHAR(255)"/>
-            <column name="role" type="role_enum" defaultValue="CLIENT">
+            <column name="role" type="VARCHAR(255)" defaultValue="CLIENT">
                 <constraints nullable="false"/>
             </column>
         </createTable>

@@ -1,6 +1,7 @@
 package com.predators.service;
 
 import com.predators.entity.User;
+import com.predators.entity.enums.Role;
 import com.predators.exception.UserNotFoundException;
 import com.predators.repository.UserJpaRepository;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        if (user.getRole() == null) {
+            user.setRole(Role.CLIENT);
+        }
         return userRepository.save(user);
     }
 

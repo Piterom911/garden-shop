@@ -5,7 +5,6 @@ import com.predators.dto.user.UserResponseDto;
 import com.predators.dto.converter.UserConverter;
 import com.predators.entity.User;
 import com.predators.service.UserService;
-import com.predators.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

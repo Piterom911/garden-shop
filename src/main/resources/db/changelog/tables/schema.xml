@@ -115,9 +115,11 @@
 
     <changeSet id="sprint2-orders-fk-user" author="anton">
         <addForeignKeyConstraint
-                baseTableName="orders" baseColumnNames="user_id"
+                baseTableName="orders"
+                baseColumnNames="user_id"
                 constraintName="fk_orders_user"
-                referencedTableName="users" referencedColumnNames="id"/>
+                referencedTableName="users"
+                referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

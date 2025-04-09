@@ -43,11 +43,11 @@ class ProductControllerTest {
     @Test
     void testCreate() {
         String user = "{\n" +
-                "  \"name\": \"string\",\n" +
-                "  \"description\": \"string\",\n" +
-                "  \"price\": \"15\",\n" +
-                "  \"category\": \"1\",\n" +
-                "  \"image\": \"string\"\n" +
+                "  \"name\": \"one\",\n" +
+                "  \"description\": \"one description\",\n" +
+                "  \"price\": \"20.89\",\n" +
+                "  \"categoryId\": \"1\",\n" +
+                "  \"image\": \"http/\"\n" +
                 "}";
         given()
                 .port(port)
@@ -62,18 +62,18 @@ class ProductControllerTest {
     @Test
     void testUpdate() {
         String user = "{\n" +
-                "  \"name\": \"string\",\n" +
-                "  \"description\": \"string\",\n" +
-                "  \"price\": \"number\",\n" +
-                "  \"category\": \"string\",\n" +
-                "  \"image\": \"string\"\n" +
+                "  \"name\": \"one\",\n" +
+                "  \"description\": \"one description\",\n" +
+                "  \"price\": \"10.12\",\n" +
+                "  \"categoryId\": \"1\",\n" +
+                "  \"image\": \"http/\"\n" +
                 "}";
         given()
                 .port(port)
                 .contentType(ContentType.JSON)
                 .body(user)
                 .when()
-                .put("v1/products/1")
+                .put("v1/products/2")
                 .then()
                 .statusCode(201);
     }

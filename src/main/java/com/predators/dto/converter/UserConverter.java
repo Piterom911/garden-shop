@@ -6,7 +6,7 @@ import com.predators.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserConverter {
+public class UserConverter implements Converter<UserRequestDto, UserResponseDto, User> {
 
     public User toEntity(UserRequestDto userDto) {
 

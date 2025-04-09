@@ -1,5 +1,7 @@
 package com.predators.controller;
 
+import com.predators.dto.category.CategoryResponceDto;
+import com.predators.dto.converter.CategoryConverter;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
 import org.springframework.http.HttpStatus;
@@ -7,20 +9,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("v1/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final CategoryService service;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    private final CategoryConverter converter;
+
+    public CategoryController(CategoryService categoryService, CategoryConverter converter) {
+        this.service = categoryService;
+        this.converter = converter;
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAll());
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<CategoryResponceDto>> getAll() {
+        List<CategoryResponceDto> dtolist = service.getAll().stream()
+                .map(converter::toDto).collect(Collectors.toList());
+        return new ResponseEntity<>(dtolist, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -12,22 +12,22 @@ import org.springframework.stereotype.Component;
 public class CartItemConverter {
     private final ProductService productService;
 
-    public CartItem toEntity(CartItemRequestDto cartItemDto, Long cartId) {
-        productService.getById(cartItemDto.productId());
-
-        return CartItem.builder()
-                .cartId(cartId)
-                .productId(cartItemDto.productId())
-                .quantity(cartItemDto.quantity())
-                .build();
-    }
-
-    public CartItemResponseDto toDto(CartItem cartItem) {
-        return new CartItemResponseDto(
-                cartItem.getId(),
-                cartItem.getCartId(),
-                cartItem.getProductId(),
-                cartItem.getQuantity()
-        );
-    }
+//    public CartItem toEntity(CartItemRequestDto cartItemDto, Long cartId) {
+//        productService.getById(cartItemDto.productId());
+//
+//        return CartItem.builder()
+//                .id(cartI.)
+//                .productId(cartItemDto.productId())
+//                .quantity(cartItemDto.quantity())
+//                .build();
+//    }
+//
+//    public CartItemResponseDto toDto(CartItem cartItem) {
+//        return new CartItemResponseDto(
+//                cartItem.getId(),
+//                cartItem.getCartId(),
+//                cartItem.getProductId(),
+//                cartItem.getQuantity()
+//        );
+//    }
 }

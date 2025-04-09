@@ -9,7 +9,7 @@ import com.predators.service.UserService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderConverter {
+public class OrderConverter implements Converter<OrderRequestDto, OrderResponseDto, Order> {
 
     private final UserService userService;
 

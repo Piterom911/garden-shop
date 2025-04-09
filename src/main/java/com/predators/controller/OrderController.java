@@ -8,7 +8,6 @@ import com.predators.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,40 +16,40 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderConverter orderConverter;
+    private final OrderConverter converter;
 
     public OrderController(OrderService orderService, OrderConverter orderConverter) {
         this.orderService = orderService;
-        this.orderConverter = orderConverter;
+        this.converter = orderConverter;
     }
 
     @GetMapping
     public ResponseEntity<List<OrderResponseDto>> getAllOrders() {
         List<OrderResponseDto> list = orderService.getAll()
                 .stream()
-                .map(orderConverter::toDto)
+                .map(converter::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
 
     @PostMapping
     public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderRequestDto dto) {
-        Order created = orderService.create(orderConverter.toEntity(dto));
+        Order created = orderService.create(converter.toEntity(dto));
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(orderConverter.toDto(created));
+                .body(converter.toDto(created));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Long id) {
         Order order = orderService.getById(id);
-        return ResponseEntity.ok(orderConverter.toDto(order));
+        return ResponseEntity.ok(converter.toDto(order));
     }
 
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderResponseDto> updateOrderStatus(@PathVariable Long id,
                                                               @RequestParam String status) {
         Order updated = orderService.updateStatus(id, status);
-        return ResponseEntity.ok(orderConverter.toDto(updated));
+        return ResponseEntity.ok(converter.toDto(updated));
     }
 
     @DeleteMapping("/{id}")

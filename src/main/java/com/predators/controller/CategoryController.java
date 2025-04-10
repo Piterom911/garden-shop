@@ -1,5 +1,6 @@
 package com.predators.controller;
 
+import com.predators.dto.category.CategoryRequestDto;
 import com.predators.dto.category.CategoryResponceDto;
 import com.predators.dto.converter.CategoryConverter;
 import com.predators.entity.Category;
@@ -33,19 +34,24 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.getById(id));
+    public ResponseEntity<CategoryResponceDto> getById(@PathVariable Long id) {
+        Category category = service.getById(id);
+        return new ResponseEntity<>(converter.toDto(category), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(categoryService.create(category));
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<CategoryResponceDto> create(@RequestBody CategoryRequestDto categoryDto) {
+        Category category = converter.toEntity(categoryDto);
+        Category createdCategory = service.create(category);
+        return ResponseEntity.ok(converter.toDto(createdCategory));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }

@@ -2,7 +2,6 @@ package com.predators.controller;
 
 import com.predators.dto.cart.CartRequestDto;
 import com.predators.dto.cart.CartResponseDto;
-import com.predators.entity.Cart;
 import com.predators.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

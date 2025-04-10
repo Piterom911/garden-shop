@@ -2,7 +2,7 @@ package com.predators.controller.unitTest;
 
 import com.predators.controller.CategoryController;
 import com.predators.dto.category.CategoryRequestDto;
-import com.predators.dto.category.CategoryResponceDto;
+import com.predators.dto.category.CategoryResponseDto;
 import com.predators.dto.converter.CategoryConverter;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
@@ -37,12 +37,12 @@ public class CategoryControllerTest {
     @Test
     void testGetAllCategories() {
         Category category = new Category();
-        CategoryResponceDto dto = new CategoryResponceDto(1L,"one",null);
+        CategoryResponseDto dto = new CategoryResponseDto(1L,"one",null);
 
         when(categoryService.getAll()).thenReturn(List.of(category));
         when(categoryConverter.toDto(category)).thenReturn(dto);
 
-        ResponseEntity<List<CategoryResponceDto>> response = categoryController.getAll();
+        ResponseEntity<List<CategoryResponseDto>> response = categoryController.getAll();
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(1, response.getBody().size());
@@ -53,12 +53,12 @@ public class CategoryControllerTest {
     void testGetCategoryById() {
         Long id = 1L;
         Category category = new Category();
-        CategoryResponceDto dto = new CategoryResponceDto(1L,"one",null);
+        CategoryResponseDto dto = new CategoryResponseDto(1L,"one",null);
 
         when(categoryService.getById(id)).thenReturn(category);
         when(categoryConverter.toDto(category)).thenReturn(dto);
 
-        ResponseEntity<CategoryResponceDto> response = categoryController.getById(id);
+        ResponseEntity<CategoryResponseDto> response = categoryController.getById(id);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(dto, response.getBody());
@@ -70,13 +70,13 @@ public class CategoryControllerTest {
         CategoryRequestDto requestDto = new CategoryRequestDto("one");
         Category category = new Category();
         Category createdCategory = new Category();
-        CategoryResponceDto responseDto = new CategoryResponceDto(1L,"one",null);
+        CategoryResponseDto responseDto = new CategoryResponseDto(1L,"one",null);
 
         when(categoryConverter.toEntity(requestDto)).thenReturn(category);
         when(categoryService.create(category)).thenReturn(createdCategory);
         when(categoryConverter.toDto(createdCategory)).thenReturn(responseDto);
 
-        ResponseEntity<CategoryResponceDto> response = categoryController.create(requestDto);
+        ResponseEntity<CategoryResponseDto> response = categoryController.create(requestDto);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(responseDto, response.getBody());

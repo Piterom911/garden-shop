@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record CategoryResponceDto(Long id,
+public record CategoryResponseDto(Long id,
                                   String name,
                                   List<Product> products) {
 }

@@ -1,7 +1,7 @@
 package com.predators.controller;
 
 import com.predators.dto.category.CategoryRequestDto;
-import com.predators.dto.category.CategoryResponceDto;
+import com.predators.dto.category.CategoryResponseDto;
 import com.predators.dto.converter.CategoryConverter;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
@@ -27,21 +27,21 @@ public class CategoryController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<CategoryResponceDto>> getAll() {
-        List<CategoryResponceDto> dtolist = service.getAll().stream()
+    public ResponseEntity<List<CategoryResponseDto>> getAll() {
+        List<CategoryResponseDto> dtolist = service.getAll().stream()
                 .map(converter::toDto).collect(Collectors.toList());
         return new ResponseEntity<>(dtolist, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponceDto> getById(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponseDto> getById(@PathVariable Long id) {
         Category category = service.getById(id);
         return new ResponseEntity<>(converter.toDto(category), HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CategoryResponceDto> create(@RequestBody CategoryRequestDto categoryDto) {
+    public ResponseEntity<CategoryResponseDto> create(@RequestBody CategoryRequestDto categoryDto) {
         Category category = converter.toEntity(categoryDto);
         Category createdCategory = service.create(category);
         return ResponseEntity.ok(converter.toDto(createdCategory));

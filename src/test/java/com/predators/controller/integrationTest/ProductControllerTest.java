@@ -2,14 +2,18 @@ package com.predators.controller.integrationTest;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
+
 import static io.restassured.RestAssured.given;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class ProductControllerTest {
 
     @LocalServerPort
@@ -42,13 +46,14 @@ class ProductControllerTest {
 
     @Test
     void testCreate() {
-        String user = "{\n" +
-                "  \"name\": \"string\",\n" +
-                "  \"description\": \"string\",\n" +
-                "  \"price\": \"15\",\n" +
-                "  \"category\": \"1\",\n" +
-                "  \"image\": \"string\"\n" +
-                "}";
+        String user = """
+                {
+                  "name": "one",
+                  "description": "one description",
+                  "price": "20.89",
+                  "categoryId": "1",
+                  "image": "http/"
+                }""";
         given()
                 .port(port)
                 .contentType(ContentType.JSON)
@@ -61,13 +66,14 @@ class ProductControllerTest {
 
     @Test
     void testUpdate() {
-        String user = "{\n" +
-                "  \"name\": \"string\",\n" +
-                "  \"description\": \"string\",\n" +
-                "  \"price\": \"number\",\n" +
-                "  \"category\": \"string\",\n" +
-                "  \"image\": \"string\"\n" +
-                "}";
+        String user = """
+                {
+                  "name": "one",
+                  "description": "one description",
+                  "price": "10.12",
+                  "categoryId": "1",
+                  "image": "http/"
+                }""";
         given()
                 .port(port)
                 .contentType(ContentType.JSON)
@@ -80,11 +86,12 @@ class ProductControllerTest {
 
 
     @Test
+    @Transactional
     void testDelete() {
         given()
                 .port(port)
                 .when()
-                .delete("v1/products/1")
+                .delete("v1/products/2")
                 .then()
                 .statusCode(200);
     }

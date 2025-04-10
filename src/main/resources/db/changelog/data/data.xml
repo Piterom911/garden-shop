@@ -9,8 +9,16 @@
             INSERT INTO users( name, email, phone_number, password_hash, role) values ('Oleg','Al@as.com','2548796','qw12','CLIENT');
             INSERT INTO users( name, email, phone_number, password_hash, role) values ('Max','Mx@as.com','26988723','mx12','CLIENT');
             INSERT INTO categories( name) values ('Fertilizer');
+            INSERT INTO categories( name) values ('Protective products and septic tanks');
+            INSERT INTO categories( name) values ('Planting material');
+            INSERT INTO categories( name) values ('Tools and equipment');
+            INSERT INTO categories( name) values ('Pots and planters');
             INSERT INTO products( name, description, price, category_id, image_url,discount_price,created_at,updated_at) values ('banana','ban', 10, 1,'http/CLIENT', 2,CURRENT_TIMESTAMP,null);
-            INSERT INTO products( name, description, price, category_id, image_url,discount_price,created_at,updated_at) values ('orange','or', 20.98, 1,'http/Admin', 2,CURRENT_TIMESTAMP,null);
+            INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('orange','or', 207.98, 1,'http/Admin',CURRENT_TIMESTAMP,null);
+            INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('one','or', 204.98, 2,'http/Admin',CURRENT_TIMESTAMP,null);
+            INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('two','or', 201.98, 3,'http/Admin',CURRENT_TIMESTAMP,null);
+            INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('three','or', 20.98, 1,'http/Admin',CURRENT_TIMESTAMP,null);
+            INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('four','or', 20.978, 3,'http/Admin',CURRENT_TIMESTAMP,null);
 
         </sql>
     </changeSet>

@@ -26,7 +26,6 @@ public class ProductController {
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<ProductResponseDto>> getAll() {
         List<ProductResponseDto> dtoList = service.getAll().stream()
                 .map(converter::toDto).collect(Collectors.toList());
@@ -34,11 +33,10 @@ public class ProductController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto productDto) {
         Product product = converter.toEntity(productDto);
         Product createdProd = service.create(product);
-        return ResponseEntity.ok(converter.toDto(createdProd));
+        return new ResponseEntity<>(converter.toDto(createdProd), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -54,7 +52,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> update(@PathVariable Long id, ProductRequestDto productDto) {
+    public ResponseEntity<ProductResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody ProductRequestDto productDto) {
         Product update = service.update(id,productDto);
         return new ResponseEntity<>(converter.toDto(update), HttpStatus.CREATED);
     }

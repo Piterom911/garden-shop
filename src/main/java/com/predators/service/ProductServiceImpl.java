@@ -3,6 +3,7 @@ package com.predators.service;
 import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
+import com.predators.exception.CategoryNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductJpaRepository repository;
 
+    private final CategoryService categoryService;
+
     public ProductServiceImpl(ProductJpaRepository repository, CategoryService categoryService) {
         this.repository = repository;
         this.categoryService = categoryService;
     }
-
-    private final CategoryService categoryService;
 
     @Override
     public List<Product> getAll() {
@@ -49,7 +50,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product update(Long id, ProductRequestDto productDto) {
         Category category = categoryService.getById(productDto.categoryId());
+        if (category == null) {
+            throw new CategoryNotFoundException("Category with " + id + " Not Found");
+        }
         Product product = getById(id);
+        product.setName(productDto.name());
+        product.setDescription(productDto.description());
+        product.setPrice(productDto.price());
         product.setCategory(category);
         product.setUpdatedAt(Timestamp.from(Instant.now()));
         return repository.save(product);

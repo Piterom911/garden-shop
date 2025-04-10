@@ -10,7 +10,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_products"/>
             </column>
             <column name="name" type="VARCHAR(255)"/>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(10000)"/>
             <column name="price" type="DECIMAL"/>
             <column name="category_id" type="BIGINT"/>
             <column name="image_url" type="VARCHAR(255)"/>

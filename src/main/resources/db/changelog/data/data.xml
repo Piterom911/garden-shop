@@ -19,6 +19,7 @@
             INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('two','or', 201.98, 3,'http/Admin',CURRENT_TIMESTAMP,null);
             INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('three','or', 20.98, 1,'http/Admin',CURRENT_TIMESTAMP,null);
             INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('four','or', 20.978, 3,'http/Admin',CURRENT_TIMESTAMP,null);
+            INSERT INTO products( name, description, price, category_id, image_url,created_at,updated_at) values ('fourteen','or', 20.978, 3,'http/Admin',CURRENT_TIMESTAMP,null);
 
         </sql>
     </changeSet>

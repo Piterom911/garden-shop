@@ -14,11 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -33,20 +33,37 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getAll(ProductFilterDto filter, int page, int size, String[] sort) {
-        Sort sorting = Sort.by(
-                Arrays.stream(sort)
-                        .map(s -> {
-                            String[] split = s.split(",");
-                            return new Sort.Order(Sort.Direction.fromString(split[1]), split[0]);
-                        })
-                        .collect(Collectors.toList())
-        );
-        Pageable pageable = PageRequest.of(page, size, sorting);
+    public List<Product> getAll() {
+        return repository.findAll();
+    }
 
+    @Override
+    public Page<Product> getAll(ProductFilterDto filter, int page, int size, String[] sortParams) {
+        List<Sort.Order> orders = new ArrayList<>();
+
+        for (String param : sortParams) {
+            if (param == null || param.isBlank()) continue;
+
+            String[] split = param.split(";");
+
+            String field = split[0].trim();
+            String direction = (split.length > 1) ? split[1].trim().toUpperCase() : "ASC";
+
+            try {
+                Sort.Direction dir = Sort.Direction.valueOf(direction);
+                orders.add(new Sort.Order(dir, field));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid sort direction: " + direction + " for field: " + field);
+            }
+        }
+
+        if (orders.isEmpty()) {
+            orders.add(new Sort.Order(Sort.Direction.ASC, "name")); // fallback
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
         Specification<Product> spec = ProductSpecification.withFilters(filter);
-
-        return repository.findAll(spec,pageable);
+        return repository.findAll(spec, pageable);
     }
 
     @Override

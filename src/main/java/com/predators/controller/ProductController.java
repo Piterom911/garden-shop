@@ -1,11 +1,13 @@
 package com.predators.controller;
 
-import com.predators.dto.ProductResponseDto;
 import com.predators.dto.converter.ProductConverter;
-import com.predators.dto.ProductRequestDto;
+import com.predators.dto.product.ProductFilterDto;
+import com.predators.dto.product.ProductRequestDto;
+import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Product;
 import com.predators.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,38 +15,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/products")
+@RequestMapping("/v1/products")
 public class ProductController {
 
     private final ProductService service;
 
-    public ProductController(ProductService service) {
+    private final ProductConverter converter;
+
+    public ProductController(ProductService service, ProductConverter converter) {
         this.service = service;
+        this.converter = converter;
     }
 
-    @Autowired
-    private ProductConverter productConverter;
-
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Product>> getAll() {
-        List<Product> all = service.getAll();
+    public ResponseEntity<List<ProductResponseDto>> getAll() {
+        List<ProductResponseDto> all =
+                service.getAll().stream().map(converter::toDto).toList();
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<Page<ProductResponseDto>> getAll(
+            @RequestParam(defaultValue = "0", name = "page") int page,
+            @RequestParam(defaultValue = "10", name = "size") int size,
+            @RequestParam(defaultValue = "name;asc", name = "sort") String[] sort,
+            @ModelAttribute ProductFilterDto filter
+    ) throws BadRequestException {
+        Page<Product> all = service.getAll(filter, page, size, sort);
+        Page<ProductResponseDto> dtoPage = all.map(converter::toDto);
+        return new ResponseEntity<>(dtoPage, HttpStatus.OK);
+    }
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto productDto) {
-        Product product = productConverter.toEntity(productDto);
+        Product product = converter.toEntity(productDto);
         Product createdProd = service.create(product);
-        ProductResponseDto productResponseDto = productConverter.toDto(createdProd);
-        return ResponseEntity.ok(productResponseDto);
+        return new ResponseEntity<>(converter.toDto(createdProd), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id) {
         Product product = service.getById(id);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return new ResponseEntity<>(converter.toDto(product), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -54,8 +66,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-        Product update = service.update(id);
-        return new ResponseEntity<>(update, HttpStatus.CREATED);
+    public ResponseEntity<ProductResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody ProductRequestDto productDto) {
+        Product update = service.update(id,productDto);
+        return new ResponseEntity<>(converter.toDto(update), HttpStatus.CREATED);
     }
 }

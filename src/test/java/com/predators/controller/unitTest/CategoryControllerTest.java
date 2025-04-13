@@ -1,79 +1,95 @@
 package com.predators.controller.unitTest;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.predators.controller.CategoryController;
+import com.predators.dto.category.CategoryRequestDto;
+import com.predators.dto.category.CategoryResponceDto;
+import com.predators.dto.converter.CategoryConverter;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import java.util.Arrays;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
-class CategoryControllerTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-    private MockMvc mockMvc;
+public class CategoryControllerTest {
 
     @Mock
     private CategoryService categoryService;
 
+    @Mock
+    private CategoryConverter categoryConverter;
+
     @InjectMocks
     private CategoryController categoryController;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void getAllCategories() throws Exception {
-        List<Category> categories = Arrays.asList(new Category(1L, "GARDEN_TOOLS",null
-        ), new Category(2L, "PLANTS",null));
-        when(categoryService.getAll()).thenReturn(categories);
+    void testGetAllCategories() {
+        Category category = new Category();
+        CategoryResponceDto dto = new CategoryResponceDto(1L,"one",null);
 
-        mockMvc.perform(get("/api/categories"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(categories)));
+        when(categoryService.getAll()).thenReturn(List.of(category));
+        when(categoryConverter.toDto(category)).thenReturn(dto);
+
+        ResponseEntity<List<CategoryResponceDto>> response = categoryController.getAll();
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.getBody().size());
+        verify(categoryService, times(1)).getAll();
     }
 
     @Test
-    void getCategoryById() throws Exception {
-        Category category = new Category(1L, "GARDEN_TOOLS",null);
-        when(categoryService.getById(1L)).thenReturn(category);
+    void testGetCategoryById() {
+        Long id = 1L;
+        Category category = new Category();
+        CategoryResponceDto dto = new CategoryResponceDto(1L,"one",null);
 
-        mockMvc.perform(get("/api/categories/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(category)));
+        when(categoryService.getById(id)).thenReturn(category);
+        when(categoryConverter.toDto(category)).thenReturn(dto);
+
+        ResponseEntity<CategoryResponceDto> response = categoryController.getById(id);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(dto, response.getBody());
+        verify(categoryService).getById(id);
     }
 
     @Test
-    void createCategory() throws Exception {
-        Category category = new Category(1L, "GARDEN_TOOLS",null);
-        when(categoryService.create(any(Category.class))).thenReturn(category);
+    void testCreateCategory() {
+        CategoryRequestDto requestDto = new CategoryRequestDto("one");
+        Category category = new Category();
+        Category createdCategory = new Category();
+        CategoryResponceDto responseDto = new CategoryResponceDto(1L,"one",null);
 
-        mockMvc.perform(post("/api/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(category)))
-                .andExpect(status().isCreated())
-                .andExpect(content().json(objectMapper.writeValueAsString(category)));
+        when(categoryConverter.toEntity(requestDto)).thenReturn(category);
+        when(categoryService.create(category)).thenReturn(createdCategory);
+        when(categoryConverter.toDto(createdCategory)).thenReturn(responseDto);
+
+        ResponseEntity<CategoryResponceDto> response = categoryController.create(requestDto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(responseDto, response.getBody());
+        verify(categoryService).create(category);
     }
 
     @Test
-    void deleteCategory() throws Exception {
-        doNothing().when(categoryService).delete(1L);
+    void testDeleteCategory() {
+        Long id = 1L;
 
-        mockMvc.perform(delete("/api/categories/1"))
-                .andExpect(status().isNoContent());
+        ResponseEntity<Void> response = categoryController.delete(id);
+
+        assertEquals(200, response.getStatusCodeValue());
+        verify(categoryService).delete(id);
     }
 }

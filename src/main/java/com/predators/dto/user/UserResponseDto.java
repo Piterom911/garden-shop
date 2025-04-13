@@ -1,4 +1,4 @@
-package com.predators.dto;
+package com.predators.dto.user;
 
 import lombok.Builder;
 
@@ -6,5 +6,4 @@ import lombok.Builder;
 public record UserResponseDto(Long id,
                               String name,
                               String email,
-                              String phoneNumber) {
-}
+                              String phoneNumber) {}

@@ -26,7 +26,7 @@ public class Product {
 
     private BigDecimal price;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -37,4 +37,7 @@ public class Product {
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+    private List<OrderItem> orderItem;
 }

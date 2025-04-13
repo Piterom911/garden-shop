@@ -1,7 +1,7 @@
 package com.predators.controller;
 
-import com.predators.dto.OrderRequestDto;
-import com.predators.dto.OrderResponseDto;
+import com.predators.dto.order.OrderRequestDto;
+import com.predators.dto.order.OrderResponseDto;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.entity.Order;
 import com.predators.service.OrderService;

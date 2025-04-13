@@ -1,4 +1,4 @@
-package com.predators.dto;
+package com.predators.dto.product;
 
 import lombok.Builder;
 
@@ -11,7 +11,7 @@ public record ProductResponseDto(Long id,
                                  String description,
                                  BigDecimal price,
                                  Long categoryId,
-                                 String imageUrl,
+                                 String image,
                                  BigDecimal discountPrice,
                                  Timestamp createdAt,
                                  Timestamp updatedAt) {

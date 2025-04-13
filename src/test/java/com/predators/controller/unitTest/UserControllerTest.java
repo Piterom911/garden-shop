@@ -2,9 +2,11 @@ package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.predators.controller.UserController;
+import com.predators.dto.converter.UserConverter;
+import com.predators.dto.user.UserRequestDto;
+import com.predators.dto.user.UserResponseDto;
 import com.predators.entity.User;
-import com.predators.entity.enums.Role;
-import com.predators.service.UserServiceImpl;
+import com.predators.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +27,7 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = UserController.class)
@@ -36,33 +39,39 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserServiceImpl userService;
+    private UserService userService;
+
+    @MockBean
+    private UserConverter userConverter;
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private UserRequestDto userRequestDto;
 
     private User user;
 
     @BeforeEach
     public void init() {
-        user = new User(1L,
-                "Test User",
-                "testuser@mail.com",
-                "+49-151-768-13-91",
-                "password-hash",
-                Role.CLIENT,
-                null,
-                null
+        userRequestDto = new UserRequestDto(
+                "Test User", "testuser@mail.com", "+49-151-768-13-91", "password"
         );
+        user = User.builder()
+                .id(1L)
+                .name("Test User")
+                .email("testuser@mail.com")
+                .phoneNumber("+49-151-768-13-91")
+                .passwordHash("password")
+                .build();
     }
 
     @Test
     public void createUser_ReturnCreated() throws Exception {
         given(userService.create(ArgumentMatchers.any())).willAnswer(invocation -> invocation.getArgument(0));
 
-        ResultActions response = mockMvc.perform(post("/v1/users")
+        ResultActions response = mockMvc.perform(post("/v1/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)));
+                .content(objectMapper.writeValueAsString(userRequestDto)));
 
         response.andExpect(MockMvcResultMatchers.status().isCreated());
     }
@@ -72,6 +81,10 @@ class UserControllerTest {
         List<User> userList = Arrays.asList(user);
 
         given(userService.getAll()).willReturn(userList);
+
+        given(userConverter.toDto(user)).willReturn(
+                new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber())
+        );
 
         mockMvc.perform(get("/v1/users"))
                 .andExpect(status().isOk())
@@ -83,18 +96,25 @@ class UserControllerTest {
     @Test
     public void getUserById_ReturnsUser() throws Exception {
         Long userId = 1L;
+
         given(userService.getById(userId)).willReturn(user);
+        given(userConverter.toDto(user)).willReturn(
+                new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber())
+        );
 
         mockMvc.perform(get("/v1/users/{id}", userId))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(userId))
-                .andExpect(jsonPath("$.name").value(user.getName()));
+                .andExpect(jsonPath("$.name").value(user.getName()))
+                .andExpect(jsonPath("$.email").value(user.getEmail()))
+                .andExpect(jsonPath("$.phoneNumber").value(user.getPhoneNumber()));
     }
 
     @Test
     public void deleteUserById_ReturnsOk() throws Exception {
-        Long userId = 1L;
+        Long userId = user.getId();
         willDoNothing().given(userService).delete(userId);
 
         mockMvc.perform(delete("/v1/users/{id}", userId))

@@ -1,10 +1,10 @@
 package com.predators.controller;
 
-import com.predators.dto.UserRequestDto;
-import com.predators.dto.UserResponseDto;
+import com.predators.dto.user.UserRequestDto;
+import com.predators.dto.user.UserResponseDto;
 import com.predators.dto.converter.UserConverter;
 import com.predators.entity.User;
-import com.predators.service.UserServiceImpl;
+import com.predators.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/v1/users")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     private final UserConverter userConverter;
 
@@ -25,7 +25,7 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<User> users = userService.getAll();
         List<UserResponseDto> usersDto = users.stream().map(userConverter::toDto).toList();
-        return new ResponseEntity<>(usersDto, HttpStatus.OK);
+        return ResponseEntity.ok(usersDto);
     }
 
     @PostMapping("/register")
@@ -37,8 +37,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getById(@PathVariable(name = "id") Long id) {
-        UserResponseDto userDto = userConverter.toDto(userService.create(userService.getById(id)));
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+        User user = userService.getById(id);
+        UserResponseDto userDto = userConverter.toDto(user);
+        return ResponseEntity.ok(userDto);
     }
 
     @DeleteMapping("/{id}")

@@ -3,7 +3,6 @@ package com.predators.controller;
 import com.predators.entity.Favorite;
 import com.predators.service.FavoriteService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController

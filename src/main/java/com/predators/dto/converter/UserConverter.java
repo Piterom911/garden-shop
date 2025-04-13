@@ -1,7 +1,7 @@
 package com.predators.dto.converter;
 
-import com.predators.dto.UserRequestDto;
-import com.predators.dto.UserResponseDto;
+import com.predators.dto.user.UserRequestDto;
+import com.predators.dto.user.UserResponseDto;
 import com.predators.entity.User;
 import org.springframework.stereotype.Component;
 

@@ -1,19 +1,21 @@
 package com.predators.controller;
 
-import com.predators.dto.product.ProductResponseDto;
 import com.predators.dto.converter.ProductConverter;
+import com.predators.dto.product.ProductFilterDto;
 import com.predators.dto.product.ProductRequestDto;
+import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Product;
 import com.predators.service.ProductService;
+import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("v1/products")
+@RequestMapping("/v1/products")
 public class ProductController {
 
     private final ProductService service;
@@ -27,9 +29,21 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> getAll() {
-        List<ProductResponseDto> dtoList = service.getAll().stream()
-                .map(converter::toDto).collect(Collectors.toList());
-        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+        List<ProductResponseDto> all =
+                service.getAll().stream().map(converter::toDto).toList();
+        return new ResponseEntity<>(all, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Page<ProductResponseDto>> getAll(
+            @RequestParam(defaultValue = "0", name = "page") int page,
+            @RequestParam(defaultValue = "10", name = "size") int size,
+            @RequestParam(defaultValue = "name;asc", name = "sort") String[] sort,
+            @ModelAttribute ProductFilterDto filter
+    ) throws BadRequestException {
+        Page<Product> all = service.getAll(filter, page, size, sort);
+        Page<ProductResponseDto> dtoPage = all.map(converter::toDto);
+        return new ResponseEntity<>(dtoPage, HttpStatus.OK);
     }
 
     @PostMapping

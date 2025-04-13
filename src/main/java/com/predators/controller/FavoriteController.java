@@ -17,22 +17,22 @@ public class FavoriteController {
     }
 
     @GetMapping
-    public List<Favorite> getAllFavorites() {
+    public List<Favorite> getAll() {
         return favoriteService.getAll();
     }
 
     @PostMapping
-    public Favorite createFavorite(@RequestBody Favorite favorite) {
+    public Favorite create(@RequestBody Favorite favorite) {
         return favoriteService.create(favorite);
     }
 
     @GetMapping("/{id}")
-    public Favorite getFavoriteById(@PathVariable Long id) {
+    public Favorite getById(@PathVariable Long id) {
         return favoriteService.getById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteFavorite(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         favoriteService.delete(id);
     }
 }

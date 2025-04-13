@@ -24,7 +24,7 @@ Entities :
 
 Part 2 :
 1) Controllers (use REST API document)
-2) {Order Anton}, Cart, CartItem, OrderItems
+2) Order , Cart, CartItem, OrderItems
 5) DTO
 3) Filter products
 4) Relationship

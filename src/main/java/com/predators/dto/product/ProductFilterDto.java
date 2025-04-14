@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public record ProductFilterDto (BigDecimal minPrice,
                                 BigDecimal maxPrice,
-                                boolean discount,
+                                Boolean discount,
                                 Category category) {
 
 }

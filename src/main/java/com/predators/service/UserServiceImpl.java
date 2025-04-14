@@ -7,6 +7,7 @@ import com.predators.repository.UserJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,4 +44,11 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
     }
+
+    @Override
+    public User getByEmail(String email) {
+        return Optional.of(userRepository.findByEmail(email)).orElseThrow(() ->
+                new UserNotFoundException("User with emil " + email + " not found"));
+    }
+
 }

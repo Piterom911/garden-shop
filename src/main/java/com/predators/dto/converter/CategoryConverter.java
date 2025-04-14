@@ -1,13 +1,13 @@
 package com.predators.dto.converter;
 
 import com.predators.dto.category.CategoryRequestDto;
-import com.predators.dto.category.CategoryResponceDto;
+import com.predators.dto.category.CategoryResponseDto;
 import com.predators.entity.Category;
 import com.predators.service.ProductService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CategoryConverter implements Converter<CategoryRequestDto, CategoryResponceDto, Category> {
+public class CategoryConverter implements Converter<CategoryRequestDto, CategoryResponseDto, Category> {
 
     private final ProductService productService;
 
@@ -21,8 +21,8 @@ public class CategoryConverter implements Converter<CategoryRequestDto, Category
                 .build();
     }
 
-    public CategoryResponceDto toDto(Category category) {
-        return CategoryResponceDto.builder()
+    public CategoryResponseDto toDto(Category category) {
+        return CategoryResponseDto.builder()
                 .id(category.getId())
                 .name(category.getName())
                 .products(category.getProducts())

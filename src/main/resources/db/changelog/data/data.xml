@@ -6,7 +6,7 @@
 
     <changeSet id="1" author="konstantin">
         <sql>
-            INSERT INTO users( name, email, phone_number, password_hash, role) values ('Oleg','Al@as.com','2548796','qw12','CLIENT');
+            INSERT INTO users( name, email, phone_number, password_hash, role) values ('test','test','2548796','$2a$10$c/mM34wFCiCnuxmNKcvFhu/sq/ByiL.hWGo1VafcolmxNBbV78tr2','CLIENT');
             INSERT INTO users( name, email, phone_number, password_hash, role) values ('Max','Mx@as.com','26988723','mx12','CLIENT');
             INSERT INTO categories( name) values ('Fertilizer');
             INSERT INTO categories( name) values ('Protective products and septic tanks');

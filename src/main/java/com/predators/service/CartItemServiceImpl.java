@@ -1,13 +1,13 @@
 package com.predators.service;
 
 import com.predators.entity.CartItem;
-import com.predators.entity.Category;
 import com.predators.repository.CartItemJpaRepository;
-import com.predators.repository.CategoryJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CartItemServiceImpl implements CartItemService {
@@ -27,7 +27,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem create(CartItem cartItem) {
-        return cartItemJpaRepository.save(new CartItem());
+        return cartItemJpaRepository.save(cartItem);
     }
 
     @Override
@@ -36,5 +36,10 @@ public class CartItemServiceImpl implements CartItemService {
             throw new RuntimeException("CartItem Not Found");
         }
         cartItemJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<CartItem> findByProduct_Id(Long productId) {
+        return cartItemJpaRepository.findByProduct_Id(productId);
     }
 }

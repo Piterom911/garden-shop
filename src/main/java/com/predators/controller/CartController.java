@@ -1,13 +1,10 @@
 package com.predators.controller;
 
-import com.predators.dto.cart.CartRequestDto;
-import com.predators.dto.cart.CartResponseDto;
+import com.predators.dto.cart.ProductToCartRequestDto;
+import com.predators.entity.CartItem;
 import com.predators.service.CartService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/cart")
@@ -20,8 +17,13 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<CartResponseDto> add(@RequestBody CartRequestDto cartRequestDto) {
+    public ResponseEntity<CartItem> addProduct(@RequestBody ProductToCartRequestDto productToCartRequestDto) {
+        return ResponseEntity.ok(service.addProduct(productToCartRequestDto));
+    }
 
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable(name = "id") Long productId) {
+        service.deleteProduct(productId);
+        return ResponseEntity.ok().build();
     }
 }

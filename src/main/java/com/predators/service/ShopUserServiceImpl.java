@@ -4,6 +4,8 @@ import com.predators.entity.ShopUser;
 import com.predators.exception.UserAlreadyExistsException;
 import com.predators.exception.UserNotFoundException;
 import com.predators.repository.UserJpaRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +56,14 @@ public class ShopUserServiceImpl implements ShopUserService {
     public ShopUser getByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+    }
+
+    @Override
+    public ShopUser getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String email = authentication.getName();
+        return getByEmail(email);
     }
 
 }

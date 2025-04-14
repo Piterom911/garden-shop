@@ -1,10 +1,10 @@
 package com.predators.dto.converter;
 
-import com.predators.dto.cart.CartRequestDto;
+import com.predators.dto.cart.ProductToCartRequestDto;
 import com.predators.dto.cart.CartResponseDto;
 import com.predators.entity.Cart;
 
-public class CartConverter implements Converter<CartRequestDto, CartResponseDto, Cart> {
+public class CartConverter implements Converter<ProductToCartRequestDto, CartResponseDto, Cart> {
 
     @Override
     public CartResponseDto toDto(Cart cart) {
@@ -12,7 +12,7 @@ public class CartConverter implements Converter<CartRequestDto, CartResponseDto,
     }
 
     @Override
-    public Cart toEntity(CartRequestDto cartRequestDto) {
+    public Cart toEntity(ProductToCartRequestDto productToCartRequestDto) {
 
         return null;
     }

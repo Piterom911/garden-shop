@@ -15,4 +15,6 @@ public interface ShopUserService {
     void delete(Long id);
 
     ShopUser getByEmail(String email);
+
+    ShopUser getCurrentUser();
 }

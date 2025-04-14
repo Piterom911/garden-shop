@@ -1,5 +1,6 @@
 package com.predators.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,8 +21,10 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private ShopUser userId;
 
     @OneToMany(mappedBy = "cart")
+    @JsonBackReference
     private List<CartItem> cartItems;
 }

@@ -24,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDto>> getAllOrders() {
+    public ResponseEntity<List<OrderResponseDto>> getAll() {
         List<OrderResponseDto> list = orderService.getAll()
                 .stream()
                 .map(converter::toDto)
@@ -33,27 +33,27 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderRequestDto dto) {
+    public ResponseEntity<OrderResponseDto> create(@RequestBody OrderRequestDto dto) {
         Order created = orderService.create(converter.toEntity(dto));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(converter.toDto(created));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponseDto> getById(@PathVariable Long id) {
         Order order = orderService.getById(id);
         return ResponseEntity.ok(converter.toDto(order));
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<OrderResponseDto> updateOrderStatus(@PathVariable Long id,
+    public ResponseEntity<OrderResponseDto> updateStatus(@PathVariable Long id,
                                                               @RequestParam String status) {
         Order updated = orderService.updateStatus(id, status);
         return ResponseEntity.ok(converter.toDto(updated));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderService.delete(id);
         return ResponseEntity.noContent().build();
     }

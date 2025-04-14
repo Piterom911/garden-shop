@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -78,7 +78,7 @@ class ShopShopUserControllerTest {
 
     @Test
     public void getAllUsers_ReturnsUserList() throws Exception {
-        List<ShopUser> userList = Arrays.asList(user);
+        List<ShopUser> userList = Collections.singletonList(user);
 
         given(shopUserService.getAll()).willReturn(userList);
 

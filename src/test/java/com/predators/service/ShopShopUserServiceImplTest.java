@@ -3,6 +3,7 @@ package com.predators.service;
 import com.predators.entity.ShopUser;
 import com.predators.exception.UserNotFoundException;
 import com.predators.repository.UserJpaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,13 @@ class ShopShopUserServiceImplTest {
 
     @InjectMocks
     private ShopUserServiceImpl userService;
+
+    @BeforeEach
+    void setUp() {
+        Long testUserId = 1L;
+        ShopUser testUser = new ShopUser();
+        testUser.setId(testUserId);
+    }
 
     @Test
     public void testGetAll() {
@@ -49,13 +57,27 @@ class ShopShopUserServiceImplTest {
 
     @Test
     void testGetByIdNotFound() {
-        assertThrows(UserNotFoundException.class, () ->
-                userService.getById(2L));
+        assertThrows(UserNotFoundException.class, () -> userService.getById(2L));
     }
 
     @Test
-    void delete() {
-//        userService.delete(1L);
-//        verify(userRepository, times(1)).deleteById(1L);
+    void delete_userExists() {
+        Long userIdToDelete = 1L;
+        when(userRepository.findById(userIdToDelete)).thenReturn(Optional.of(new ShopUser()));
+
+        userService.delete(userIdToDelete);
+
+        verify(userRepository, times(1)).deleteById(userIdToDelete);
+    }
+
+    @Test
+    void delete_userNotFound() {
+        Long userIdToDelete = 1L;
+        when(userRepository.findById(userIdToDelete)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.delete(userIdToDelete));
+
+        verify(userRepository, never()).deleteById(anyLong());
+        assertThrows(UserNotFoundException.class, () -> userService.delete(userIdToDelete));
     }
 }

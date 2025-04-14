@@ -42,10 +42,12 @@ public class ShopUserServiceImpl implements ShopUserService {
 
     @Override
     public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
+        Optional<ShopUser> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            userRepository.deleteById(id);
+        } else {
             throw new UserNotFoundException("Cannot delete user: no user found with id " + id);
         }
-        userRepository.deleteById(id);
     }
 
     @Override

@@ -21,9 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         ShopUser byEmail = shopUserService.getByEmail(email);
-        User user = new User(byEmail.getEmail(), byEmail.getPasswordHash(),
+        return new User(byEmail.getEmail(), byEmail.getPasswordHash(),
                 List.of(new SimpleGrantedAuthority(byEmail.getRole().name())));
-        return user;
     }
 }
 

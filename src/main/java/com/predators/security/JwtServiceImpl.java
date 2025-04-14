@@ -1,6 +1,7 @@
 package com.predators.security;
 
 import com.predators.entity.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -29,6 +30,7 @@ public class JwtServiceImpl implements JwtService {
         return generateToken(claims, user);
     }
 
+
     private String generateToken(Map<String, Object> claims, User shopUser) {
         return Jwts.builder()
                 .claims()
@@ -39,6 +41,25 @@ public class JwtServiceImpl implements JwtService {
                 .and()
                 .signWith(secretKey)
                 .compact();
+    }
+
+    public String extractUserName(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+        Claims claims = extractAllClaims(token);
+        Date expiration = claims.getExpiration();
+        return expiration.after(new Date());
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }
 

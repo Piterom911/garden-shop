@@ -1,6 +1,7 @@
 package com.predators.security;
 
-import com.predators.service.UserService;
+import com.predators.entity.ShopUser;
+import com.predators.service.ShopUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,11 +16,11 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private ShopUserService shopUserService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        com.predators.entity.User byEmail = userService.getByEmail(email);
+        ShopUser byEmail = shopUserService.getByEmail(email);
         User user = new User(byEmail.getEmail(), byEmail.getPasswordHash(),
                 List.of(new SimpleGrantedAuthority(byEmail.getRole().name())));
         return user;

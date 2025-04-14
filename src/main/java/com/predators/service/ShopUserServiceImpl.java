@@ -1,7 +1,7 @@
 package com.predators.service;
 
-import com.predators.entity.User;
-import com.predators.entity.enums.Role;
+import com.predators.entity.ShopUser;
+import com.predators.exception.UserAlreadyExistsException;
 import com.predators.exception.UserNotFoundException;
 import com.predators.repository.UserJpaRepository;
 import org.springframework.stereotype.Service;
@@ -10,29 +10,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class ShopUserServiceImpl implements ShopUserService {
 
     private final UserJpaRepository userRepository;
 
-    public UserServiceImpl(UserJpaRepository userRepository) {
+    public ShopUserServiceImpl(UserJpaRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public List<User> getAll() {
+    public List<ShopUser> getAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public User create(User user) {
-        if (user.getRole() == null) {
-            user.setRole(Role.CLIENT);
+    public ShopUser create(ShopUser shopUser) {
+        Optional<ShopUser> existingUser = userRepository.findByEmail(shopUser.getEmail());
+
+        if (existingUser.isPresent()) {
+            throw new UserAlreadyExistsException("User with such email exists");
         }
-        return userRepository.save(user);
+
+        return userRepository.save(shopUser);
     }
 
     @Override
-    public User getById(Long id) {
+    public ShopUser getById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User with id " + id + " not found"));
     }
@@ -46,9 +49,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByEmail(String email) {
-        return Optional.of(userRepository.findByEmail(email)).orElseThrow(() ->
-                new UserNotFoundException("User with emil " + email + " not found"));
+    public ShopUser getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
     }
 
 }

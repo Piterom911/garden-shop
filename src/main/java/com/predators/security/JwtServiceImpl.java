@@ -1,13 +1,12 @@
 package com.predators.security;
 
-import com.predators.entity.User;
+import com.predators.entity.ShopUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -22,7 +21,7 @@ public class JwtServiceImpl implements JwtService {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jjwtSecretKey));
     }
 
-    public String generateToken(User user) {
+    public String generateToken(ShopUser user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("login", user.getEmail());
@@ -31,7 +30,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
 
-    private String generateToken(Map<String, Object> claims, User shopUser) {
+    private String generateToken(Map<String, Object> claims, ShopUser shopUser) {
         return Jwts.builder()
                 .claims()
                 .issuedAt(new Date())

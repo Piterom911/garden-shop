@@ -1,11 +1,10 @@
 package com.predators.security;
 
-import com.predators.entity.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.predators.entity.ShopUser;
 
-public interface JwtService  {
+public interface JwtService {
 
-    String generateToken(User user);
+    String generateToken(ShopUser user);
 
     String extractUserName(String token);
 

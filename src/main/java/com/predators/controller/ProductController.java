@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/v1/products")
 public class ProductController {
@@ -27,14 +25,7 @@ public class ProductController {
         this.converter = converter;
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> getAll() {
-        List<ProductResponseDto> all =
-                service.getAll().stream().map(converter::toDto).toList();
-        return new ResponseEntity<>(all, HttpStatus.OK);
-    }
-
-    @GetMapping("/filter")
+    @GetMapping()
     public ResponseEntity<Page<ProductResponseDto>> getAll(
             @RequestParam(defaultValue = "0", name = "page") int page,
             @RequestParam(defaultValue = "10", name = "size") int size,
@@ -67,7 +58,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody ProductRequestDto productDto) {
-        Product update = service.update(id,productDto);
+        Product update = service.update(id, productDto);
         return new ResponseEntity<>(converter.toDto(update), HttpStatus.CREATED);
     }
 }

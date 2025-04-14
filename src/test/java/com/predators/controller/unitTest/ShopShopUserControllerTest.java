@@ -1,12 +1,12 @@
 package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.predators.controller.UserController;
-import com.predators.dto.converter.UserConverter;
+import com.predators.controller.ShopUserController;
+import com.predators.dto.converter.ShopUserConverter;
 import com.predators.dto.user.UserRequestDto;
 import com.predators.dto.user.UserResponseDto;
-import com.predators.entity.User;
-import com.predators.service.UserService;
+import com.predators.entity.ShopUser;
+import com.predators.service.ShopUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,33 +30,33 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = UserController.class)
+@WebMvcTest(controllers = ShopUserController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+class ShopShopUserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    private ShopUserService shopUserService;
 
     @MockBean
-    private UserConverter userConverter;
+    private ShopUserConverter shopUserConverter;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private UserRequestDto userRequestDto;
 
-    private User user;
+    private ShopUser user;
 
     @BeforeEach
     public void init() {
         userRequestDto = new UserRequestDto(
                 "Test User", "testuser@mail.com", "+49-151-768-13-91", "password"
         );
-        user = User.builder()
+        user = ShopUser.builder()
                 .id(1L)
                 .name("Test User")
                 .email("testuser@mail.com")
@@ -67,7 +67,7 @@ class UserControllerTest {
 
     @Test
     public void createUser_ReturnCreated() throws Exception {
-        given(userService.create(ArgumentMatchers.any())).willAnswer(invocation -> invocation.getArgument(0));
+        given(shopUserService.create(ArgumentMatchers.any())).willAnswer(invocation -> invocation.getArgument(0));
 
         ResultActions response = mockMvc.perform(post("/v1/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -78,11 +78,11 @@ class UserControllerTest {
 
     @Test
     public void getAllUsers_ReturnsUserList() throws Exception {
-        List<User> userList = Arrays.asList(user);
+        List<ShopUser> userList = Arrays.asList(user);
 
-        given(userService.getAll()).willReturn(userList);
+        given(shopUserService.getAll()).willReturn(userList);
 
-        given(userConverter.toDto(user)).willReturn(
+        given(shopUserConverter.toDto(user)).willReturn(
                 new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber())
         );
 
@@ -97,8 +97,8 @@ class UserControllerTest {
     public void getUserById_ReturnsUser() throws Exception {
         Long userId = 1L;
 
-        given(userService.getById(userId)).willReturn(user);
-        given(userConverter.toDto(user)).willReturn(
+        given(shopUserService.getById(userId)).willReturn(user);
+        given(shopUserConverter.toDto(user)).willReturn(
                 new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber())
         );
 
@@ -115,7 +115,7 @@ class UserControllerTest {
     @Test
     public void deleteUserById_ReturnsOk() throws Exception {
         Long userId = user.getId();
-        willDoNothing().given(userService).delete(userId);
+        willDoNothing().given(shopUserService).delete(userId);
 
         mockMvc.perform(delete("/v1/users/{id}", userId))
                 .andExpect(status().isOk());

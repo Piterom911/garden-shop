@@ -1,9 +1,9 @@
 package com.predators.security;
 
-import com.predators.entity.User;
+import com.predators.entity.ShopUser;
 import com.predators.security.model.SignInRequest;
 import com.predators.security.model.SignInResponse;
-import com.predators.service.UserService;
+import com.predators.service.ShopUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +15,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserService userService;
+    private ShopUserService shopUserService;
 
     @Autowired
     private JwtService jwtService;
@@ -25,7 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 
-        User user = userService.getByEmail(request.email());
+        ShopUser user = shopUserService.getByEmail(request.email());
         String token = jwtService.generateToken(user);
         return new SignInResponse(token);
     }

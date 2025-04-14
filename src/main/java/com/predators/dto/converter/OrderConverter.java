@@ -3,22 +3,22 @@ package com.predators.dto.converter;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.entity.Order;
-import com.predators.entity.User;
+import com.predators.entity.ShopUser;
 import com.predators.entity.enums.OrderStatus;
-import com.predators.service.UserService;
+import com.predators.service.ShopUserService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderConverter implements Converter<OrderRequestDto, OrderResponseDto, Order> {
 
-    private final UserService userService;
+    private final ShopUserService shopUserService;
 
-    public OrderConverter(UserService userService) {
-        this.userService = userService;
+    public OrderConverter(ShopUserService shopUserService) {
+        this.shopUserService = shopUserService;
     }
 
     public Order toEntity(OrderRequestDto dto) {
-        User user = userService.getById(dto.userId());
+        ShopUser user = shopUserService.getById(dto.userId());
         return Order.builder()
                 .user(user)
                 .status(OrderStatus.valueOf(dto.status()))

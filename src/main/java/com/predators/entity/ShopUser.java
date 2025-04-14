@@ -37,5 +37,6 @@ public class ShopUser {
     private List<Favorite> favorites;
 
     @OneToOne(mappedBy = "userId")
-    private Cart carts;
+    @JsonBackReference
+    private Cart cart;
 }

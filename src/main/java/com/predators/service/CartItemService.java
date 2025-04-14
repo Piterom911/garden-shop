@@ -1,10 +1,10 @@
 package com.predators.service;
 
 import com.predators.entity.CartItem;
-import com.predators.entity.Category;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface CartItemService {
@@ -16,5 +16,7 @@ public interface CartItemService {
     CartItem create(CartItem cartItem);
 
     void delete(Long id);
+
+    Optional<CartItem> findByProduct_Id(Long productId);
 }
 

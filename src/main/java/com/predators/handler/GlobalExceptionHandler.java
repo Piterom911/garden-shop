@@ -16,10 +16,7 @@ public class GlobalExceptionHandler {
             UserNotFoundException.class,
             FavoriteNotFoundException.class,
             CategoryNotFoundException.class})
-    public ResponseEntity<Object> handleNotFoundException(Exception ex,
-                                                          HttpHeaders headers,
-                                                          HttpStatusCode status,
-                                                          WebRequest request) {
+    public ResponseEntity<Object> handleNotFoundException(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

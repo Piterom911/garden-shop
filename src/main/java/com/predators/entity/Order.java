@@ -34,6 +34,6 @@ public class Order {
 
     private Timestamp updatedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
-    private List<OrderItem> orderItem;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 }

@@ -4,6 +4,7 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Builder
 public record OrderResponseDto(
@@ -12,5 +13,6 @@ public record OrderResponseDto(
         String status,
         BigDecimal totalAmount,
         Timestamp createdAt,
-        Timestamp updatedAt
-) {}
+        Timestamp updatedAt,
+        List<OrderItemDto> items
+        ) {}

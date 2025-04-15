@@ -21,9 +21,9 @@ public class FavoriteController {
         return favoriteService.getAll();
     }
 
-    @PostMapping
-    public Favorite create(@RequestBody Favorite favorite) {
-        return favoriteService.create(favorite);
+    @PostMapping("/{id}")
+    public Favorite create(@PathVariable(name = "id") Long productId) {
+        return favoriteService.create(productId);
     }
 
     @GetMapping("/{id}")

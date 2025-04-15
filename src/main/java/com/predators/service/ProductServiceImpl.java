@@ -1,13 +1,12 @@
 package com.predators.service;
 
 import com.predators.dto.product.ProductFilterDto;
-import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
-import com.predators.exception.CategoryNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
 import com.predators.specification.ProductSpecification;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,16 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductJpaRepository repository;
-
-    private final CategoryService categoryService;
-
-    public ProductServiceImpl(ProductJpaRepository repository, CategoryService categoryService) {
-        this.repository = repository;
-        this.categoryService = categoryService;
-    }
 
     @Override
     public List<Product> getAll() {
@@ -68,8 +61,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-        Category category = categoryService.getById(product.getCategory().getId());
-        product.setCategory(category);
         product.setCreatedAt(Timestamp.from(Instant.now()));
         return repository.save(product);
     }
@@ -86,17 +77,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(Long id, ProductRequestDto productDto) {
-        Category category = categoryService.getById(productDto.categoryId());
-        if (category == null) {
-            throw new CategoryNotFoundException("Category with " + id + " Not Found");
-        }
-        Product product = getById(id);
-        product.setName(productDto.name());
-        product.setDescription(productDto.description());
-        product.setPrice(productDto.price());
-        product.setCategory(category);
+    public Product update(Product product) {
         product.setUpdatedAt(Timestamp.from(Instant.now()));
         return repository.save(product);
     }
+
+    @Override
+    public void updateCategory(Long id, Category category) {
+        Product product = getById(id);
+        product.setCategory(category);
+        repository.save(product);
+    }
+
+    @Override
+    public List<Product> findByCategoryId(Long categoryId) {
+        return repository.findByCategory_Id(categoryId);
+    }
+
+
 }

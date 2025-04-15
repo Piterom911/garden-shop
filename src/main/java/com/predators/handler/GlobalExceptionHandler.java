@@ -21,4 +21,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handlerAlreadyExistsException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler({CartIsEmptyException.class})
+    public ResponseEntity<Object> handlerEntityIsEmptyException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({NotCurrentClientCartException.class})
+    public ResponseEntity<Object> handlerNotCurrentClientCartException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
 }

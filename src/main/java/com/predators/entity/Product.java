@@ -1,5 +1,6 @@
 package com.predators.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,4 +41,8 @@ public class Product {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
     private List<OrderItem> orderItem;
+
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "product")
+    @JsonBackReference
+    private List<Favorite> favorites;
 }

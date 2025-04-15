@@ -8,13 +8,12 @@ import com.predators.service.CategoryService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductConverter implements Converter<ProductRequestDto,ProductResponseDto, Product> {
+public class ProductConverter implements Converter<ProductRequestDto, ProductResponseDto, Product> {
     private final CategoryService categoryService;
 
     public ProductConverter(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
-
 
     public Product toEntity(ProductRequestDto productDto) {
         Category category = categoryService.getById(productDto.categoryId());
@@ -34,7 +33,7 @@ public class ProductConverter implements Converter<ProductRequestDto,ProductResp
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
-                .categoryId(product.getCategory() == null? null:product.getCategory().getId())
+                .categoryId(product.getCategory() == null ? null : product.getCategory().getId())
                 .image(product.getImageUrl())
                 .discountPrice(product.getDiscountPrice())
                 .createdAt(product.getCreatedAt())

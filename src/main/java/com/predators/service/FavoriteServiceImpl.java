@@ -30,6 +30,15 @@ public class FavoriteServiceImpl implements FavoriteService {
     public Favorite create(Long productId) {
         ShopUser currentUser = shopUserService.getCurrentUser();
         Product byId = productService.getById(productId);
+        List<Favorite> favorites = currentUser.getFavorites();
+
+        for (Favorite favorite : favorites) {
+            Long favoriteProductId = favorite.getProduct().getId();
+            if (favoriteProductId.equals(productId)) {
+                return favoriteRepository.save(favorite);
+            }
+        }
+
         Favorite favorite = Favorite.builder()
                 .user(currentUser)
                 .product(byId)
@@ -47,6 +56,4 @@ public class FavoriteServiceImpl implements FavoriteService {
     public void delete(Long id) {
         favoriteRepository.deleteById(id);
     }
-
-
 }

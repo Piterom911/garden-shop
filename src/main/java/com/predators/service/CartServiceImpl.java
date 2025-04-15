@@ -6,12 +6,16 @@ import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;
+import com.predators.exception.CartIsEmptyException;
+import com.predators.exception.NotCurrentClientCartException;
 import com.predators.repository.CartJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,16 +36,20 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public List<Product> getAllProducts() {
+        ShopUser currentUser = shopUserService.getCurrentUser();
+        if (currentUser.getCart() == null) {
+            throw new CartIsEmptyException("Cart is empty.");
+        }
+
+        return currentUser.getCart().getCartItems().stream().map(CartItem::getProduct).toList();
+    }
+
+    @Override
     @Transactional
     public CartItem addProduct(ProductToCartRequestDto productToCartRequestDto) {
         ShopUser currentUser = shopUserService.getCurrentUser();
-        if (currentUser.getCart() == null) {
-            Cart cart = Cart.builder()
-                    .userId(currentUser)
-                    .build();
-            repository.save(cart);
-            currentUser.setCart(cart);
-        }
+        createCartIfNotExists(currentUser);
         Product product = productService.getById(productToCartRequestDto.productId());
         Optional<CartItem> byProductId = cartItemService.findByProduct_Id(productToCartRequestDto.productId());
         if (byProductId.isPresent()) {
@@ -56,14 +64,32 @@ public class CartServiceImpl implements CartService {
                 .build());
     }
 
+    private void createCartIfNotExists(ShopUser currentUser) {
+        if (currentUser.getCart() == null) {
+            List<CartItem> cartItems = new ArrayList<>();
+            Cart cart = Cart.builder()
+                    .userId(currentUser)
+                    .cartItems(cartItems)
+                    .build();
+            repository.save(cart);
+            currentUser.setCart(cart);
+        }
+    }
+
     @Override
     public void deleteProduct(Long productId) {
-        ShopUser user = shopUserService.getCurrentUser();
-        Optional<CartItem> byProductId = cartItemService.findByProduct_Id(productId);
-        if (byProductId.isEmpty()) {
+        Optional<CartItem> cartItemByProduct = cartItemService.findByProduct_Id(productId);
+        if (cartItemByProduct.isEmpty()) {
             throw new PathNotFoundException("Product with id " + productId + " not found");
         }
-        cartItemService.delete(byProductId.get().getId());
+
+        ShopUser user = shopUserService.getCurrentUser();
+        Cart cart = cartItemByProduct.get().getCart();
+        if (!Objects.equals(user.getCart().getId(), cart.getId())) {
+            throw new NotCurrentClientCartException("This is not your Cart. Finger weg!");
+        }
+
+        cartItemService.delete(cartItemByProduct.get().getId());
     }
 
 }

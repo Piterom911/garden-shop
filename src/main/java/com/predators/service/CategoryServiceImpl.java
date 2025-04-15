@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public void delete(Long id) {
         if (!repository.existsById(id)) {
             throw new CategoryNotFoundException("Category not found with id: " + id);

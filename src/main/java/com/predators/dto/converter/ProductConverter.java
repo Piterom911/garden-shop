@@ -7,8 +7,6 @@ import com.predators.entity.Product;
 import com.predators.service.CategoryService;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-
 @Component
 public class ProductConverter implements Converter<ProductRequestDto,ProductResponseDto, Product> {
     private final CategoryService categoryService;

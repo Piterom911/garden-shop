@@ -1,10 +1,8 @@
 package com.predators.service;
 
 import com.predators.dto.product.ProductFilterDto;
-import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
-import com.predators.exception.CategoryNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
 import com.predators.specification.ProductSpecification;

@@ -1,6 +1,7 @@
 package com.predators.service;
 
 import com.predators.entity.Favorite;
+
 import java.util.List;
 
 public interface FavoriteService {

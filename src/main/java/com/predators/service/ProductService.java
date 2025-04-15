@@ -1,7 +1,6 @@
 package com.predators.service;
 
 import com.predators.dto.product.ProductFilterDto;
-import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
 import org.apache.coyote.BadRequestException;

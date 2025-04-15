@@ -7,7 +7,6 @@ import com.predators.entity.ShopUser;
 import com.predators.exception.FavoriteNotFoundException;
 import com.predators.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public Favorite getById(Long id) {
         return favoriteRepository.findById(id)
-                .orElseThrow(()-> new FavoriteNotFoundException("Favorite not found with id: " + id));
+                .orElseThrow(() -> new FavoriteNotFoundException("Favorite not found with id: " + id));
     }
 
     @Override

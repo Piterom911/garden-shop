@@ -2,6 +2,7 @@ package com.predators.service;
 
 import com.predators.dto.product.ProductFilterDto;
 import com.predators.dto.product.ProductRequestDto;
+import com.predators.entity.Category;
 import com.predators.entity.Product;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
@@ -20,5 +21,9 @@ public interface ProductService {
 
     void delete(Long id);
 
-    Product update(Long id, ProductRequestDto productDto);
+    Product update(Product product);
+
+    void updateCategory(Long id, Category category);
+
+    List<Product> findByCategoryId(Long categoryId);
 }

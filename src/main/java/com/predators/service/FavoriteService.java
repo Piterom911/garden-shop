@@ -7,7 +7,7 @@ public interface FavoriteService {
 
     List<Favorite> getAll();
 
-    Favorite create(Favorite favorite);
+    Favorite create(Long productId);
 
     Favorite getById(Long id);
 

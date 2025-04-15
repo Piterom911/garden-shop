@@ -20,7 +20,7 @@ public class Category {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     @JsonBackReference
     private List<Product> products;
 }

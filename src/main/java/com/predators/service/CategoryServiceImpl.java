@@ -1,8 +1,10 @@
 package com.predators.service;
 
 import com.predators.entity.Category;
+import com.predators.entity.Product;
 import com.predators.exception.CategoryNotFoundException;
 import com.predators.repository.CategoryJpaRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,29 +14,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryJpaRepository categoryJpaRepository;
+    private final CategoryJpaRepository repository;
+
+    private final ProductService productService;
 
     @Override
     public List<Category> getAll() {
-        return categoryJpaRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public Category getById(Long id) {
-        return categoryJpaRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + id));
     }
 
     @Override
     public Category create(Category category) {
-        return categoryJpaRepository.save(category);
+        return repository.save(category);
     }
 
     @Override
+//    @Transactional
     public void delete(Long id) {
-        if (!categoryJpaRepository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw new CategoryNotFoundException("Category not found with id: " + id);
         }
-        categoryJpaRepository.deleteById(id);
+        List<Product> byCategoryId = productService.findByCategoryId(id);
+        byCategoryId.forEach(product -> {
+            productService.updateCategory(product.getId(), null);
+        });
+        repository.deleteById(id);
     }
 }

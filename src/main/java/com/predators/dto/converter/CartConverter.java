@@ -1,12 +1,12 @@
 package com.predators.dto.converter;
 
-import com.predators.dto.cart.ProductToCartRequestDto;
+import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.cart.CartResponseDto;
 import com.predators.entity.Cart;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CartConverter implements Converter<ProductToCartRequestDto, CartResponseDto, Cart> {
+public class CartConverter implements Converter<ProductToItemDto, CartResponseDto, Cart> {
 
     @Override
     public CartResponseDto toDto(Cart cart) {
@@ -14,7 +14,7 @@ public class CartConverter implements Converter<ProductToCartRequestDto, CartRes
     }
 
     @Override
-    public Cart toEntity(ProductToCartRequestDto productToCartRequestDto) {
+    public Cart toEntity(ProductToItemDto productToItemDto) {
 
         return null;
     }

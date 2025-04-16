@@ -1,10 +1,10 @@
 package com.predators.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.predators.entity.enums.DeliveryMethod;
 import com.predators.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -28,12 +28,18 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private BigDecimal totalAmount;
-
     private Timestamp createdAt;
+
+    private String deliveryAddress;
+
+    @Enumerated(EnumType.STRING)
+    private DeliveryMethod deliveryMethod;
+
+    private String contactPhone;
 
     private Timestamp updatedAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
-    private List<OrderItem> orderItem;
+    @JsonBackReference
+    private List<OrderItem> orderItems;
 }

@@ -4,9 +4,12 @@ import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.entity.Order;
 import com.predators.entity.ShopUser;
+import com.predators.entity.enums.DeliveryMethod;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.ShopUserService;
 import org.springframework.stereotype.Component;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Component
 public class OrderConverter implements Converter<OrderRequestDto, OrderResponseDto, Order> {
@@ -18,11 +21,14 @@ public class OrderConverter implements Converter<OrderRequestDto, OrderResponseD
     }
 
     public Order toEntity(OrderRequestDto dto) {
-        ShopUser user = shopUserService.getById(dto.userId());
+        ShopUser user = shopUserService.getCurrentUser();
         return Order.builder()
                 .user(user)
-                .status(OrderStatus.valueOf(dto.status()))
-                .totalAmount(dto.totalAmount())
+                .deliveryAddress(dto.deliveryAddress())
+                .deliveryMethod(Enum.valueOf(DeliveryMethod.class, dto.deliveryMethod().toUpperCase()))
+                .createdAt(Timestamp.from(Instant.now()))
+                .contactPhone(user.getPhoneNumber())
+                .status(OrderStatus.CREATED)
                 .build();
     }
 
@@ -31,7 +37,10 @@ public class OrderConverter implements Converter<OrderRequestDto, OrderResponseD
                 .id(order.getId())
                 .userId(order.getUser().getId())
                 .status(order.getStatus().name())
-                .totalAmount(order.getTotalAmount())
+                .deliveryAddress(order.getDeliveryAddress())
+                .deliveryMethod(order.getDeliveryMethod())
+                .contactPhone(order.getContactPhone())
+                .items(order.getOrderItems())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .build();

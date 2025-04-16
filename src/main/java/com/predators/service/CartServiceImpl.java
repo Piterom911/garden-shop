@@ -1,7 +1,7 @@
 package com.predators.service;
 
 import com.jayway.jsonpath.PathNotFoundException;
-import com.predators.dto.cart.ProductToCartRequestDto;
+import com.predators.dto.cart.ProductToItemDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
@@ -12,7 +12,6 @@ import com.predators.repository.CartJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -47,20 +46,20 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public CartItem addProduct(ProductToCartRequestDto productToCartRequestDto) {
+    public CartItem addProduct(ProductToItemDto productToItemDto) {
         ShopUser currentUser = shopUserService.getCurrentUser();
         createCartIfNotExists(currentUser);
-        Product product = productService.getById(productToCartRequestDto.productId());
-        Optional<CartItem> byProductId = cartItemService.findByProduct_Id(productToCartRequestDto.productId());
+        Product product = productService.getById(productToItemDto.productId());
+        Optional<CartItem> byProductId = cartItemService.findByProduct_Id(productToItemDto.productId());
         if (byProductId.isPresent()) {
             CartItem cartItem = byProductId.get();
-            cartItem.setQuantity(productToCartRequestDto.quantity());
+            cartItem.setQuantity(productToItemDto.quantity());
             return cartItemService.create(cartItem);
         }
         return cartItemService.create(CartItem.builder()
                 .cart(currentUser.getCart())
                 .product(product)
-                .quantity(productToCartRequestDto.quantity())
+                .quantity(productToItemDto.quantity())
                 .build());
     }
 
@@ -91,5 +90,4 @@ public class CartServiceImpl implements CartService {
 
         cartItemService.delete(cartItemByProduct.get().getId());
     }
-
 }

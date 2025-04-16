@@ -4,6 +4,7 @@ import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.entity.Order;
+import com.predators.entity.enums.OrderStatus;
 import com.predators.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,11 +46,18 @@ public class OrderController {
         return ResponseEntity.ok(converter.toDto(order));
     }
 
+
+
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderResponseDto> updateStatus(@PathVariable Long id,
                                                               @RequestParam String status) {
         Order updated = orderService.updateStatus(id, status);
         return ResponseEntity.ok(converter.toDto(updated));
+    }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<String> getStatus(@PathVariable Long id) {
+       return ResponseEntity.ok(orderService.getStatus(id));
     }
 
     @DeleteMapping("/{id}")

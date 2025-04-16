@@ -3,13 +3,13 @@ package com.predators.service;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.dto.order.OrderRequestDto;
-import com.predators.entity.Cart;
 import com.predators.entity.Order;
 import com.predators.entity.OrderItem;
 import com.predators.entity.Product;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.OrderNotFoundException;
 import com.predators.repository.OrderRepository;
+import com.predators.util.OrderScheduler;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderConverter orderConverter;
 
     private final ProductService productService;
+
+    private final OrderScheduler orderScheduler;
 
     @Override
     public List<Order> getAll() {
@@ -65,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
             items.add(orderItem);
         }
         savedOrder.setOrderItems(items);
-
+        orderScheduler.changeStatusToPending(savedOrder);
 
         return savedOrder;
     }
@@ -81,6 +83,11 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.valueOf(newStatus));
         order.setUpdatedAt(Timestamp.from(Instant.now()));
         return orderRepository.save(order);
+    }
+
+    @Override
+    public String getStatus(Long id) {
+        return orderRepository.getById(id).getStatus().toString();
     }
 
 }

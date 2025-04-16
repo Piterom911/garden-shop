@@ -34,7 +34,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderResponseDto> create(@RequestBody OrderRequestDto dto) {
-        Order created = orderService.create(converter.toEntity(dto));
+        Order created = orderService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(converter.toDto(created));
     }

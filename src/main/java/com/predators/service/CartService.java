@@ -1,10 +1,9 @@
 package com.predators.service;
 
-import com.predators.dto.cart.ProductToCartRequestDto;
+import com.predators.dto.cart.ProductToItemDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
-
 import java.util.List;
 
 public interface CartService {
@@ -13,7 +12,7 @@ public interface CartService {
 
     List<Product> getAllProducts();
 
-    CartItem addProduct(ProductToCartRequestDto productToCartRequestDto);
+    CartItem addProduct(ProductToItemDto productToItemDto);
 
     void deleteProduct(Long productId);
 }

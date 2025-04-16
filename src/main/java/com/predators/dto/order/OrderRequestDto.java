@@ -1,12 +1,13 @@
 package com.predators.dto.order;
 
+import com.predators.dto.cart.ProductToItemDto;
 import lombok.Builder;
-
-import java.math.BigDecimal;
+import java.util.List;
 
 @Builder
 public record OrderRequestDto(
-        Long userId,
-        String status,
-        BigDecimal totalAmount
-) {}
+        List<ProductToItemDto> items,
+        String deliveryAddress,
+        String deliveryMethod
+) {
+}

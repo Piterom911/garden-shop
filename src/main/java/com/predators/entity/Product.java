@@ -3,7 +3,6 @@ package com.predators.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,6 +39,7 @@ public class Product {
     private Timestamp updatedAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
+    @JsonBackReference
     private List<OrderItem> orderItem;
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "product")

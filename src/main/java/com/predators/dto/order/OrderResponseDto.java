@@ -1,16 +1,20 @@
 package com.predators.dto.order;
 
+import com.predators.entity.OrderItem;
+import com.predators.entity.enums.DeliveryMethod;
 import lombok.Builder;
-
-import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Builder
 public record OrderResponseDto(
         Long id,
         Long userId,
         String status,
-        BigDecimal totalAmount,
+        String contactPhone,
+        String deliveryAddress,
+        DeliveryMethod deliveryMethod,
+        List<OrderItem> items,
         Timestamp createdAt,
         Timestamp updatedAt
 ) {}

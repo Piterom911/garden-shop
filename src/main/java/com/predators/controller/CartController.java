@@ -1,6 +1,6 @@
 package com.predators.controller;
 
-import com.predators.dto.cart.ProductToCartRequestDto;
+import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.converter.ProductConverter;
 import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.CartItem;
@@ -8,7 +8,6 @@ import com.predators.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -28,8 +27,8 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<CartItem> addProduct(@RequestBody ProductToCartRequestDto productToCartRequestDto) {
-        return ResponseEntity.ok(service.addProduct(productToCartRequestDto));
+    public ResponseEntity<CartItem> addProduct(@RequestBody ProductToItemDto productToItemDto) {
+        return ResponseEntity.ok(service.addProduct(productToItemDto));
     }
 
     @DeleteMapping("/{id}")

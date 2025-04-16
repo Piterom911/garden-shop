@@ -1,10 +1,8 @@
 package com.predators.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,6 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "order_items")
 public class OrderItem {
 
@@ -20,7 +19,8 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id",referencedColumnName = "id")
+    @JsonBackReference
     private Order order;
 
     @ManyToOne

@@ -50,12 +50,14 @@ public class CartServiceImpl implements CartService {
         ShopUser currentUser = shopUserService.getCurrentUser();
         createCartIfNotExists(currentUser);
         Product product = productService.getById(productToItemDto.productId());
-        Optional<CartItem> byProductId = cartItemService.findByProduct_Id(productToItemDto.productId());
-        if (byProductId.isPresent()) {
-            CartItem cartItem = byProductId.get();
-            cartItem.setQuantity(productToItemDto.quantity());
-            return cartItemService.create(cartItem);
-        }
+        List<CartItem> cartItems = currentUser.getCart().getCartItems();
+       for (CartItem cartItem : cartItems) {
+           boolean equals = cartItem.getProduct().getId().equals(productToItemDto.productId());
+           if (equals) {
+               cartItem.setQuantity(productToItemDto.quantity());
+               return cartItemService.create(cartItem);
+           }
+       }
         return cartItemService.create(CartItem.builder()
                 .cart(currentUser.getCart())
                 .product(product)

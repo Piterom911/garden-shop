@@ -3,6 +3,7 @@ package com.predators.service;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.dto.order.OrderRequestDto;
+import com.predators.entity.Cart;
 import com.predators.entity.Order;
 import com.predators.entity.OrderItem;
 import com.predators.entity.Product;
@@ -64,6 +65,8 @@ public class OrderServiceImpl implements OrderService {
             items.add(orderItem);
         }
         savedOrder.setOrderItems(items);
+
+
         return savedOrder;
     }
 
@@ -79,4 +82,5 @@ public class OrderServiceImpl implements OrderService {
         order.setUpdatedAt(Timestamp.from(Instant.now()));
         return orderRepository.save(order);
     }
+
 }

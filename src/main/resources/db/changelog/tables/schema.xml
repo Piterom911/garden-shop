@@ -104,7 +104,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="product_id" type="BIGINT">
-                <constraints unique="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="quantity" type="INT">
                 <constraints nullable="false"/>

@@ -4,10 +4,12 @@ import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.entity.Order;
+import com.predators.entity.enums.OrderStatus;
 import com.predators.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,11 @@ public class OrderController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/get-status/{status}")
+    public ResponseEntity<List<Order>> getStatus(@PathVariable String status) {
+        return ResponseEntity.ok(orderService.getAllByStatus(OrderStatus.valueOf(status.toUpperCase())));
+    }
+
     @PostMapping
     public ResponseEntity<OrderResponseDto> create(@RequestBody OrderRequestDto dto) {
         Order created = orderService.create(dto);
@@ -47,9 +54,14 @@ public class OrderController {
 
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderResponseDto> updateStatus(@PathVariable Long id,
-                                                              @RequestParam String status) {
-        Order updated = orderService.updateStatus(id, status);
+                                                         @RequestParam String status) {
+        Order updated = orderService.updateStatus(id, OrderStatus.valueOf(status.toUpperCase()));
         return ResponseEntity.ok(converter.toDto(updated));
+    }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<String> getStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.getStatus(id));
     }
 
     @DeleteMapping("/{id}")

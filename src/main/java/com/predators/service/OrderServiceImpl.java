@@ -74,11 +74,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order updateStatus(Long id, String newStatus) {
+    public Order updateStatus(Long id, OrderStatus newStatus) {
         Order order = getById(id);
-        order.setStatus(OrderStatus.valueOf(newStatus));
+        order.setStatus(newStatus);
         order.setUpdatedAt(Timestamp.from(Instant.now()));
         return orderRepository.save(order);
     }
 
+    @Override
+    public String getStatus(Long id) {
+        return "";
+    }
+
+    @Override
+    public List<Order> getAllByStatus(OrderStatus status) {
+        return orderRepository.findAllByStatus(status);
+    }
 }

@@ -20,9 +20,8 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private ShopUser userId;
+    @JoinColumn(name="user_id",referencedColumnName = "id")
+    private ShopUser user;
 
     @OneToMany(mappedBy = "cart")
     @JsonBackReference

@@ -69,7 +69,7 @@ public class CartServiceImpl implements CartService {
         if (currentUser.getCart() == null) {
             List<CartItem> cartItems = new ArrayList<>();
             Cart cart = Cart.builder()
-                    .userId(currentUser)
+                    //.user(currentUser)
                     .cartItems(cartItems)
                     .build();
             repository.save(cart);

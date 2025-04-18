@@ -9,10 +9,11 @@ import com.predators.entity.Product;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.OrderNotFoundException;
 import com.predators.repository.OrderRepository;
-import com.predators.util.OrderScheduler;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -21,17 +22,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final OrderItemService orderItemService;
-
     private final OrderConverter orderConverter;
 
     private final ProductService productService;
-
-    private final OrderScheduler orderScheduler;
 
     @Override
     public List<Order> getAll() {
@@ -47,29 +45,27 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order create(OrderRequestDto dto) {
-        Order entity = orderConverter.toEntity(dto);
-        Order savedOrder = orderRepository.save(entity);
+        Order order = orderConverter.toEntity(dto);
 
         List<OrderItem> items = new ArrayList<>();
         for (ProductToItemDto productDto : dto.items()) {
             Product product = productService.getById(productDto.productId());
             BigDecimal discount = product.getDiscountPrice() == null ? BigDecimal.ZERO : product.getDiscountPrice();
             OrderItem orderItem = OrderItem.builder()
-                    .order(savedOrder)
                     .product(product)
                     .quantity(productDto.quantity())
                     .priceAtPurchase(product.getPrice()
                             .subtract(discount)
                             .multiply(BigDecimal.valueOf(productDto.quantity())))
                     .build();
-
-            orderItemService.create(orderItem);
             items.add(orderItem);
         }
-        savedOrder.setOrderItems(items);
-        orderScheduler.changeStatusToPending(savedOrder);
 
-        return savedOrder;
+        order.setOrderItems(items);
+        Order entity = orderRepository.save(order);
+        log.debug("Created order: " + entity);
+
+        return entity;
     }
 
     @Override
@@ -83,11 +79,6 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.valueOf(newStatus));
         order.setUpdatedAt(Timestamp.from(Instant.now()));
         return orderRepository.save(order);
-    }
-
-    @Override
-    public String getStatus(Long id) {
-        return orderRepository.getById(id).getStatus().toString();
     }
 
 }

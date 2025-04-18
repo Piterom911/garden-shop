@@ -1,10 +1,10 @@
 package com.predators.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.predators.entity.enums.DeliveryMethod;
 import com.predators.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class Order {
 
     private Timestamp updatedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")
-    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
     private List<OrderItem> orderItems;
 }

@@ -44,7 +44,7 @@ public class CategoryController {
     public ResponseEntity<CategoryResponseDto> create(@RequestBody CategoryRequestDto categoryDto) {
         Category category = converter.toEntity(categoryDto);
         Category createdCategory = service.create(category);
-        return ResponseEntity.ok(converter.toDto(createdCategory));
+        return new ResponseEntity<>(converter.toDto(createdCategory),HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

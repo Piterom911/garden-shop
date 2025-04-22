@@ -19,15 +19,27 @@ class ProductControllerTest {
     @LocalServerPort
     private int port;
 
+    private String token;
+
     @BeforeEach
     public void init() {
         RestAssured.baseURI = "http://localhost";
+        token = given()
+                .contentType("application/json")
+                .body("{\"email\":\"test\", \"password\":\"12345\"}")
+                .when()
+                .post("v1/users/login")
+                .then()
+                .statusCode(200)
+                .extract()
+                .path("token");
     }
 
     @Test
     void testGetAll() {
         given()
                 .port(port)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("v1/products")
                 .then()
@@ -35,9 +47,10 @@ class ProductControllerTest {
     }
 
     @Test
-    void testGetById(){
+    void testGetById() {
         given()
                 .port(port)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("v1/products/1")
                 .then()
@@ -46,7 +59,7 @@ class ProductControllerTest {
 
     @Test
     void testCreate() {
-        String user = """
+        String product = """
                 {
                   "name": "one",
                   "description": "one description",
@@ -57,7 +70,8 @@ class ProductControllerTest {
         given()
                 .port(port)
                 .contentType(ContentType.JSON)
-                .body(user)
+                .body(product)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .post("v1/products")
                 .then()
@@ -66,7 +80,7 @@ class ProductControllerTest {
 
     @Test
     void testUpdate() {
-        String user = """
+        String product = """
                 {
                   "name": "one",
                   "description": "one description",
@@ -77,7 +91,8 @@ class ProductControllerTest {
         given()
                 .port(port)
                 .contentType(ContentType.JSON)
-                .body(user)
+                .body(product)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .put("v1/products/1")
                 .then()
@@ -90,6 +105,7 @@ class ProductControllerTest {
     void testDelete() {
         given()
                 .port(port)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("v1/products/2")
                 .then()

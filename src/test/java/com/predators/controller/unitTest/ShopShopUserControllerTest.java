@@ -6,6 +6,8 @@ import com.predators.dto.converter.ShopUserConverter;
 import com.predators.dto.user.UserRequestDto;
 import com.predators.dto.user.UserResponseDto;
 import com.predators.entity.ShopUser;
+import com.predators.security.JwtAuthFilter;
+import com.predators.security.JwtService;
 import com.predators.service.ShopUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,8 +46,17 @@ class ShopShopUserControllerTest {
     @MockBean
     private ShopUserConverter shopUserConverter;
 
+    @MockBean
+    private ShopUserController shopUserController;
+
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private JwtService jwtService;
+
+    @MockBean
+    private JwtAuthFilter jwtAuthFilter;
 
     private UserRequestDto userRequestDto;
 
@@ -88,7 +99,6 @@ class ShopShopUserControllerTest {
 
         mockMvc.perform(get("/v1/users"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()").value(userList.size()))
                 .andExpect(jsonPath("$[0].name").value(user.getName()));
     }

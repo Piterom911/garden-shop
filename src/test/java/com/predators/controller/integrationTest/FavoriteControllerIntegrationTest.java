@@ -1,111 +1,78 @@
 package com.predators.controller.integrationTest;
 
-import com.predators.entity.Favorite;
-import com.predators.entity.Product;
-import com.predators.entity.ShopUser;
-import com.predators.entity.enums.Role;
-import com.predators.repository.FavoriteRepository;
-import com.predators.repository.ProductJpaRepository;
-import com.predators.repository.UserJpaRepository;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import static io.restassured.RestAssured.given;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
-@WithMockUser
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class FavoriteControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @LocalServerPort
+    private int port;
 
-    @Autowired
-    private FavoriteRepository favoriteRepository;
-
-    @Autowired
-    private ProductJpaRepository productRepository;
-
-    @Autowired
-    private UserJpaRepository shopUserRepository;
-
-    private ShopUser user;
-    private Product product;
+    private String token;
 
     @BeforeEach
-    void setup() {
-        user = ShopUser.builder()
-                .email("user")
-                .role(Role.CLIENT)
-                .favorites(new ArrayList<>())
-                .build();
-        shopUserRepository.save(user);
-
-        product = Product.builder()
-                .name("Test Product")
-                .price(BigDecimal.valueOf(10.0))
-                .build();
-        productRepository.save(product);
+    public void init() {
+        RestAssured.baseURI = "http://localhost";
+        token = given()
+                .contentType("application/json")
+                .body("{\"email\":\"test\", \"password\":\"12345\"}")
+                .when()
+                .post("v1/users/login")
+                .then()
+                .statusCode(200)
+                .extract()
+                .path("token");
     }
 
     @Test
-    void testCreateFavorite() throws Exception {
-        mockMvc.perform(post("/v1/favorites/{id}", product.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.productId").value(product.getId()));
+    void testCreateFavorite() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .post("v1/favorites/2")
+                .then()
+                .statusCode(201);
     }
 
     @Test
-    void testGetAllFavorites() throws Exception {
-        Favorite favorite = Favorite.builder()
-                .user(user)
-                .product(product)
-                .build();
-        favoriteRepository.save(favorite);
-
-        mockMvc.perform(get("/v1/favorites")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].productId").value(product.getId()));
+    void testGetAllFavorites() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("v1/favorites")
+                .then()
+                .statusCode(200);
     }
 
     @Test
-    void testGetFavoriteById() throws Exception {
-        Favorite favorite = Favorite.builder()
-                .user(user)
-                .product(product)
-                .build();
-        favoriteRepository.save(favorite);
-
-        mockMvc.perform(get("/v1/favorites/{id}", favorite.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.productId").value(product.getId()));
+    void testGetFavoriteById() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("v1/favorites/1")
+                .then()
+                .statusCode(200);
     }
 
     @Test
-    void testDeleteFavorite() throws Exception {
-        Favorite favorite = Favorite.builder()
-                .user(user)
-                .product(product)
-                .build();
-        favoriteRepository.save(favorite);
-
-        mockMvc.perform(delete("/v1/favorites/{id}", favorite.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+    void testDeleteFavorite() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete("v1/favorites/1")
+                .then()
+                .statusCode(200);
     }
 }

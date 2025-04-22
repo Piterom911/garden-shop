@@ -1,20 +1,16 @@
 package com.predators.controller.integrationTest;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-
 import static io.restassured.RestAssured.given;
-
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class ProductControllerTest {
+public class CategoryTest {
 
     @LocalServerPort
     private int port;
@@ -41,9 +37,10 @@ class ProductControllerTest {
                 .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get("v1/products")
+                .get("v1/categories")
                 .then()
                 .statusCode(200);
+
     }
 
     @Test
@@ -52,64 +49,32 @@ class ProductControllerTest {
                 .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get("v1/products/1")
+                .get("v1/categories/1")
                 .then()
                 .statusCode(200);
     }
 
     @Test
     void testCreate() {
-        String product = """
-                {
-                  "name": "one",
-                  "description": "one description",
-                  "price": "20.89",
-                  "categoryId": "1",
-                  "image": "http/"
-                }""";
         given()
                 .port(port)
-                .contentType(ContentType.JSON)
-                .body(product)
+                .contentType("application/json")
+                .body("{\"name\":\"Garden Tools\"}")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .post("v1/products")
+                .post("v1/categories")
                 .then()
                 .statusCode(201);
     }
 
     @Test
-    void testUpdate() {
-        String product = """
-                {
-                  "name": "one",
-                  "description": "one description",
-                  "price": "10.12",
-                  "categoryId": "1",
-                  "image": "http/"
-                }""";
-        given()
-                .port(port)
-                .contentType(ContentType.JSON)
-                .body(product)
-                .header("Authorization", "Bearer " + token)
-                .when()
-                .put("v1/products/1")
-                .then()
-                .statusCode(201);
-    }
-
-
-    @Test
-    @Transactional
     void testDelete() {
         given()
                 .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete("v1/products/2")
+                .delete("v1/categories/1")
                 .then()
                 .statusCode(200);
     }
-
 }

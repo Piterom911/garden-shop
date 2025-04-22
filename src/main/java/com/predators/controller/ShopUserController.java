@@ -34,6 +34,7 @@ public class ShopUserController {
     }
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponseDto> create(@RequestBody UserRequestDto userDto) {
         ShopUser user = shopUserConverter.toEntity(userDto);
         UserResponseDto dto = shopUserConverter.toDto(shopUserService.create(user));

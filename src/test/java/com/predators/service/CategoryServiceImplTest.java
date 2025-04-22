@@ -23,6 +23,9 @@ class CategoryServiceImplTest {
     @Mock
     private CategoryJpaRepository categoryJpaRepository;
 
+    @Mock
+    private ProductService productService;
+
     @InjectMocks
     private CategoryServiceImpl categoryService;
 
@@ -72,6 +75,7 @@ class CategoryServiceImplTest {
     @Test
     void testDelete_WhenCategoryExists() {
         when(categoryJpaRepository.existsById(1L)).thenReturn(true);
+        when(productService.findByCategoryId(1L)).thenReturn(List.of()); // Добавлено поведение мока
         doNothing().when(categoryJpaRepository).deleteById(1L);
 
         assertDoesNotThrow(() -> categoryService.delete(1L));

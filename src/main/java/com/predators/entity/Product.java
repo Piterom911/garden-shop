@@ -28,6 +28,7 @@ public class Product {
 
     @ManyToOne()
     @JoinColumn(name = "category_id")
+    @JsonBackReference
     private Category category;
 
     private String imageUrl;

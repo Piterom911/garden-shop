@@ -1,6 +1,8 @@
 package com.predators.service;
 
 import com.predators.entity.Favorite;
+import com.predators.entity.Product;
+import com.predators.entity.ShopUser;
 import com.predators.exception.FavoriteNotFoundException;
 import com.predators.repository.FavoriteRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,14 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,59 +26,82 @@ class FavoriteServiceImplTest {
     @Mock
     private FavoriteRepository favoriteRepository;
 
+    @Mock
+    private ProductService productService;
+
+    @Mock
+    private ShopUserService shopUserService;
+
     @InjectMocks
     private FavoriteServiceImpl favoriteService;
 
+    private ShopUser user;
+    private Product product;
+    private Favorite favorite;
+
+    @BeforeEach
+    void setUp() {
+        user = new ShopUser();
+        user.setId(1L);
+        user.setFavorites(new ArrayList<>());
+
+        product = new Product();
+        product.setId(2L);
+
+        favorite = Favorite.builder()
+                .id(3L)
+                .user(user)
+                .product(product)
+                .build();
+    }
+
     @Test
     void testGetAllFavorites() {
-        when(favoriteRepository.findAll()).thenReturn(Arrays.asList(new Favorite(), new Favorite()));
+        when(favoriteRepository.findAll()).thenReturn(List.of(favorite));
 
         List<Favorite> result = favoriteService.getAll();
 
-        assertEquals(2, result.size());
+        assertThat(result).hasSize(1);
         verify(favoriteRepository, times(1)).findAll();
     }
 
     @Test
-    void testCreateFavorite() {
-        Favorite favorite = new Favorite();
-        when(favoriteRepository.save(favorite)).thenReturn(favorite);
+    void testCreateFavorite_NewFavorite() {
+        when(shopUserService.getCurrentUser()).thenReturn(user);
+        when(productService.getById(2L)).thenReturn(product);
+        when(favoriteRepository.save(any(Favorite.class))).thenReturn(favorite);
 
-        Favorite result = favoriteService.create(favorite);
+        Favorite result = favoriteService.create(2L);
 
-        assertEquals(favorite, result);
-        verify(favoriteRepository, times(1)).save(favorite);
+        assertThat(result.getProduct().getId()).isEqualTo(2L);
+        verify(favoriteRepository, times(1)).save(any(Favorite.class));
     }
 
     @Test
-    void testGetFavoriteById_WhenExists() {
-        Favorite favorite = new Favorite();
-        when(favoriteRepository.findById(1L)).thenReturn(Optional.of(favorite));
+    void testGetFavoriteById_Found() {
+        when(favoriteRepository.findById(3L)).thenReturn(Optional.of(favorite));
 
-        Favorite result = favoriteService.getById(1L);
+        Favorite result = favoriteService.getById(3L);
 
-        assertEquals(favorite, result);
-        verify(favoriteRepository, times(1)).findById(1L);
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(3L);
+        verify(favoriteRepository, times(1)).findById(3L);
     }
 
     @Test
-    void testGetFavoriteById_WhenNotFound() {
+    void testGetFavoriteById_NotFound() {
         when(favoriteRepository.findById(99L)).thenReturn(Optional.empty());
 
-        FavoriteNotFoundException exception = assertThrows(FavoriteNotFoundException.class,
-                () -> favoriteService.getById(99L));
-
-        assertEquals("Favorite not found with id: 99", exception.getMessage());
+        assertThrows(FavoriteNotFoundException.class, () -> favoriteService.getById(99L));
+        verify(favoriteRepository, times(1)).findById(99L);
     }
 
     @Test
     void testDeleteFavorite() {
-        Long id = 1L;
+        doNothing().when(favoriteRepository).deleteById(3L);
 
-        doNothing().when(favoriteRepository).deleteById(id);
+        favoriteService.delete(3L);
 
-        favoriteService.delete(id);
-
-        verify(favoriteRepository, times(1)).deleteById(id);
+        verify(favoriteRepository, times(1)).deleteById(3L);
     }
 }

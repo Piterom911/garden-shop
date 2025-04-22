@@ -1,6 +1,5 @@
 package com.predators.service;
 
-
 import com.predators.entity.Favorite;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;

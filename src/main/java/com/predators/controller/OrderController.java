@@ -1,8 +1,8 @@
 package com.predators.controller;
 
+import com.predators.dto.converter.OrderConverter;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
-import com.predators.dto.converter.OrderConverter;
 import com.predators.entity.Order;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.OrderService;
@@ -67,6 +67,6 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

@@ -31,4 +31,24 @@
             INSERT INTO favorites(user_id, product_id) values (1, 3);
          </sql>
     </changeSet>
+
+    <changeSet id="3" author="kostya">
+        <sql>
+            INSERT INTO carts (user_id) values (1);
+            INSERT INTO carts (user_id) values (2);
+
+            INSERT INTO cart_items (cart_id, product_id, quantity) values (1,1,12);
+            INSERT INTO cart_items (cart_id, product_id, quantity) values (2,2,15);
+        </sql>
+    </changeSet>
+
+    <changeSet id="4" author="kostya">
+        <sql>
+            INSERT INTO orders (user_id, status) values (1, 'CANCELLED');
+            INSERT INTO orders (user_id, status) values (2, 'CREATED');
+
+            INSERT INTO order_items (order_id, product_id) values (1,1);
+            INSERT INTO order_items (order_id, product_id) values (2,2);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

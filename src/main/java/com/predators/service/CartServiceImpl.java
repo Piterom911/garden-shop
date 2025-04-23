@@ -12,6 +12,7 @@ import com.predators.repository.CartJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -69,7 +70,7 @@ public class CartServiceImpl implements CartService {
         if (currentUser.getCart() == null) {
             List<CartItem> cartItems = new ArrayList<>();
             Cart cart = Cart.builder()
-                    //.user(currentUser)
+                    .user(currentUser)
                     .cartItems(cartItems)
                     .build();
             repository.save(cart);
@@ -91,5 +92,14 @@ public class CartServiceImpl implements CartService {
         }
 
         cartItemService.delete(cartItemByProduct.get().getId());
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        Optional<Cart> cartIf = repository.findById(id);
+        if (cartIf.isPresent()) {
+            repository.delete(cartIf.get());
+        }
     }
 }

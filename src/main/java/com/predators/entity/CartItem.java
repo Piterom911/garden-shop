@@ -1,5 +1,6 @@
 package com.predators.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,10 +18,12 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
+    @JsonBackReference
     private Cart cart;
 
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id" )
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     private Integer quantity;

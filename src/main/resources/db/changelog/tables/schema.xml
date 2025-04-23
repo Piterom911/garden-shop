@@ -76,14 +76,16 @@
         <addForeignKeyConstraint baseTableName="favorites" baseColumnNames="product_id"
                                  constraintName="product_id_favorite_key"
                                  referencedTableName="products"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="sprint1-add fk for favorites and users" author="anton">
         <addForeignKeyConstraint baseTableName="favorites" baseColumnNames="user_id"
                                  constraintName="user_id_fkey"
                                  referencedTableName="users"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="sprint2 create table Cart" author="konstantin">
@@ -116,21 +118,24 @@
                 baseColumnNames="product_id"
                 constraintName="fk_cartitems_product"
                 referencedTableName="products"
-                referencedColumnNames="id"/>
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
 
         <addForeignKeyConstraint
                 baseTableName="cart_items"
                 baseColumnNames="cart_id"
                 constraintName="fk_cartitems_cart"
                 referencedTableName="carts"
-                referencedColumnNames="id"/>
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="sprint2-add fk for cart and user" author="konstantin">
         <addForeignKeyConstraint baseTableName="carts" baseColumnNames="user_id"
                                  constraintName="cart_id_fkey"
                                  referencedTableName="users"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="sprint2-create-orders-table" author="anton">
@@ -156,7 +161,8 @@
                 baseColumnNames="user_id"
                 constraintName="fk_orders_user"
                 referencedTableName="users"
-                referencedColumnNames="id"/>
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="sprint2-create-order-items-table" author="roman">
@@ -173,12 +179,14 @@
         <addForeignKeyConstraint baseTableName="order_items" baseColumnNames="order_id"
                                  constraintName="order_id_fkey"
                                  referencedTableName="orders"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
 
         <addForeignKeyConstraint baseTableName="order_items" baseColumnNames="product_id"
                                  constraintName="product_id_fkey"
                                  referencedTableName="products"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -78,7 +78,7 @@ public class CategoryControllerTest {
 
         ResponseEntity<CategoryResponseDto> response = categoryController.create(requestDto);
 
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(201, response.getStatusCodeValue());
         assertEquals(responseDto, response.getBody());
         verify(categoryService).create(category);
     }

@@ -20,10 +20,11 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
     private ShopUser user;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE)
     @JsonBackReference
     private List<CartItem> cartItems;
 }

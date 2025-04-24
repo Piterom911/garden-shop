@@ -34,6 +34,17 @@ public class OrderController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/history")
+    public ResponseEntity<List<OrderResponseDto>> getOrderHistory() {
+        List<OrderResponseDto> list = orderService.getHistory()
+                .stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(list);
+    }
+
+
+
     @GetMapping("/get-status/{status}")
     public ResponseEntity<List<Order>> getStatus(@PathVariable String status) {
         return ResponseEntity.ok(orderService.getAllByStatus(OrderStatus.valueOf(status.toUpperCase())));

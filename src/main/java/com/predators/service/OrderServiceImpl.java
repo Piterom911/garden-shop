@@ -6,6 +6,7 @@ import com.predators.dto.order.OrderRequestDto;
 import com.predators.entity.Order;
 import com.predators.entity.OrderItem;
 import com.predators.entity.Product;
+import com.predators.entity.ShopUser;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.OrderNotFoundException;
 import com.predators.repository.OrderRepository;
@@ -30,6 +31,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderConverter orderConverter;
 
     private final ProductService productService;
+
+    private final ShopUserService shopUserService;
 
     @Override
     public List<Order> getAll() {
@@ -89,5 +92,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllByStatus(OrderStatus status) {
         return orderRepository.findAllByStatus(status);
+    }
+
+    @Override
+    public List<Order> getHistory() {
+        ShopUser currentUser = shopUserService.getCurrentUser();
+        return orderRepository.findAllByUser_Id(currentUser.getId());
     }
 }

@@ -21,4 +21,6 @@ public interface OrderService {
     String getStatus(Long id);
 
     List<Order> getAllByStatus(OrderStatus status);
+
+    List<Order> getHistory();
 }

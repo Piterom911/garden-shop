@@ -25,7 +25,6 @@ public class CategoryConverter implements Converter<CategoryRequestDto, Category
         return CategoryResponseDto.builder()
                 .id(category.getId())
                 .name(category.getName())
-                .products(category.getProducts())
                 .build();
     }
 }

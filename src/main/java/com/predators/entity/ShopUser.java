@@ -30,7 +30,7 @@ public class ShopUser {
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.CLIENT;
+    private Role role = Role.ROLE_CLIENT;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference

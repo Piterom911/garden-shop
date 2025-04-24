@@ -10,7 +10,10 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/v1/products")
@@ -65,5 +68,10 @@ public class ProductController {
         return new ResponseEntity<>(converter.toDto(update), HttpStatus.CREATED);
     }
 
-
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ProductResponseDto> setDiscount(@PathVariable Long id, @RequestParam BigDecimal discount) {
+        Product product = service.setDiscount(id, discount);
+        return new ResponseEntity<>(converter.toDto(product), HttpStatus.ACCEPTED);
+    }
 }

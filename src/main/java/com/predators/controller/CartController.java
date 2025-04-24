@@ -9,6 +9,7 @@ import com.predators.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CartController {
     private final ProductConverter productConverter;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<Cart>> getAllCarts() {
         List<Cart> allCarts = service.getAll();
         return new ResponseEntity<>(allCarts, HttpStatus.OK);

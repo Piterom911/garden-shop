@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -94,5 +95,11 @@ public class ProductServiceImpl implements ProductService {
         return repository.findByCategory_Id(categoryId);
     }
 
+    @Override
+    public Product setDiscount(Long id, BigDecimal discount) {
+        Product product = getById(id);
+        product.setDiscountPrice(discount);
+        return create(product);
+    }
 
 }

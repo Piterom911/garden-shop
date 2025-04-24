@@ -46,4 +46,11 @@ public class CategoryServiceImpl implements CategoryService {
         });
         repository.deleteById(id);
     }
+
+    @Override
+    public Category update(Long id, String name) {
+        Category category = getById(id);
+        category.setName(name);
+        return create(category);
+    }
 }

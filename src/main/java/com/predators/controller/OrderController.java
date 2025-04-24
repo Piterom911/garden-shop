@@ -8,6 +8,7 @@ import com.predators.entity.enums.OrderStatus;
 import com.predators.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +52,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<OrderResponseDto> create(@RequestBody OrderRequestDto dto) {
         Order created = orderService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -64,6 +66,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<OrderResponseDto> updateStatus(@PathVariable Long id,
                                                          @RequestParam String status) {
         Order updated = orderService.updateStatus(id, OrderStatus.valueOf(status.toUpperCase()));
@@ -76,6 +79,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         orderService.delete(id);
         return ResponseEntity.ok().build();

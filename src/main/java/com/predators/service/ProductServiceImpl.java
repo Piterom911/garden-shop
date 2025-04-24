@@ -3,6 +3,7 @@ package com.predators.service;
 import com.predators.dto.product.ProductFilterDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
+import com.predators.exception.DiscountNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
 import com.predators.specification.ProductSpecification;
@@ -19,6 +20,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -102,4 +104,27 @@ public class ProductServiceImpl implements ProductService {
         return create(product);
     }
 
+    @Override
+    public Product getDayProduct() {
+        List<Product> productWithDiscount = repository.findProductWithDiscount();
+        if (productWithDiscount.isEmpty()) {
+           throw  new DiscountNotFoundException("Product with discount is not found");
+        }
+        BigDecimal greatestDiscount = new BigDecimal(0);
+        for (Product product : productWithDiscount) {
+            if (product.getDiscountPrice().compareTo(greatestDiscount) > 0) {
+                greatestDiscount = product.getDiscountPrice();
+            }
+        }
+        List<Product> discountedProducts = new ArrayList<>();
+        for (Product product : productWithDiscount) {
+            if (product.getDiscountPrice() == greatestDiscount) {
+                discountedProducts.add(product);
+            }
+        }
+        Random random = new Random();
+        int index = random.nextInt(0,discountedProducts.size());
+        return discountedProducts.get(index);
+    }
 }
+

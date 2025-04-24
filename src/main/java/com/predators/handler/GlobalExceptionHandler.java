@@ -12,7 +12,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ProductNotFoundException.class,
             UserNotFoundException.class,
             FavoriteNotFoundException.class,
-            CategoryNotFoundException.class})
+            CategoryNotFoundException.class,
+            DiscountNotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }

@@ -29,7 +29,6 @@ public class JwtServiceImpl implements JwtService {
         return generateToken(claims, user);
     }
 
-
     private String generateToken(Map<String, Object> claims, ShopUser shopUser) {
         return Jwts.builder()
                 .claims()

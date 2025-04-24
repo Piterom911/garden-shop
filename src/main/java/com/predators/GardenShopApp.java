@@ -14,3 +14,4 @@ public class GardenShopApp {
         SpringApplication.run(GardenShopApp.class, args);
     }
 }
+//PS C:\Users\jackp\IdeaProjects\finalproject> mvn liquibase:clearCheckSums "-Dliquibase.url=jdbc:postgresql://localhost:5432/garden-shop" "-Dliquibase.username=postgres" "-Dliquibase.password=predators" "-Dliquibase.changeLogFile=src/main/resources/db/db.changelog-master.xml"

@@ -74,4 +74,10 @@ public class ProductController {
         Product product = service.setDiscount(id, discount);
         return new ResponseEntity<>(converter.toDto(product), HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/day-product")
+    public ResponseEntity<ProductResponseDto> getDayProduct() {
+        Product dayProduct = service.getDayProduct();
+        return new ResponseEntity<>(converter.toDto(dayProduct), HttpStatus.OK);
+    }
 }

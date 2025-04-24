@@ -7,6 +7,7 @@ import com.predators.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class FavoriteController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<FavoriteResponseDto> create(@PathVariable(name = "id") Long productId) {
         Favorite favorite = favoriteService.create(productId);
         return new ResponseEntity<>(favoriteConverter.toDto(favorite), HttpStatus.CREATED);
@@ -39,6 +41,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     public void delete(@PathVariable Long id) {
         favoriteService.delete(id);
     }

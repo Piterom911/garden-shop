@@ -28,4 +28,6 @@ public interface ProductService {
     List<Product> findByCategoryId(Long categoryId);
 
     Product setDiscount(Long id, BigDecimal discount);
+
+    Product getDayProduct();
 }

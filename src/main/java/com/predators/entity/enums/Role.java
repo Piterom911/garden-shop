@@ -2,6 +2,6 @@ package com.predators.entity.enums;
 
 public enum Role {
 
-    CLIENT,
-    ADMIN
+    ROLE_CLIENT,
+    ROLE_ADMIN
 }

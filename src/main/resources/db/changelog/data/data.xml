@@ -6,9 +6,9 @@
 
     <changeSet id="1" author="konstantin">
         <sql>
-            INSERT INTO users( name, email, phone_number, password_hash, role) values ('test','test','2548796','$2a$10$c/mM34wFCiCnuxmNKcvFhu/sq/ByiL.hWGo1VafcolmxNBbV78tr2','CLIENT');
-            INSERT INTO users( name, email, phone_number, password_hash, role) values ('test2','test2','2548796','$2a$10$c/mM34wFCiCnuxmNKcvFhu/sq/ByiL.hWGo1VafcolmxNBbV78tr2','CLIENT');
-            INSERT INTO users( name, email, phone_number, password_hash, role) values ('test3','test3','26988723','$2a$10$c/mM34wFCiCnuxmNKcvFhu/sq/ByiL.hWGo1VafcolmxNBbV78tr2','CLIENT');
+            INSERT INTO users( name, email, phone_number, password_hash, role) values ('test','test','2548796','$2a$10$c/mM34wFCiCnuxmNKcvFhu/sq/ByiL.hWGo1VafcolmxNBbV78tr2','ROLE_ADMIN');
+            INSERT INTO users( name, email, phone_number, password_hash, role) values ('test2','test2','2548796','$2a$10$c/mM34wFCiCnuxmNKcvFhu/sq/ByiL.hWGo1VafcolmxNBbV78tr2','ROLE_ADMIN');
+            INSERT INTO users( name, email, phone_number, password_hash, role) values ('test3','test3','26988723','$2a$10$c/mM34wFCiCnuxmNKcvFhu/sq/ByiL.hWGo1VafcolmxNBbV78tr2','ROLE_CLIENT');
             INSERT INTO categories( name) values ('Fertilizer');
             INSERT INTO categories( name) values ('Protective products and septic tanks');
             INSERT INTO categories( name) values ('Planting material');

@@ -20,7 +20,7 @@ public class ShopUserConverter implements Converter<UserRequestDto, UserResponse
                 .name(userDto.name())
                 .email(userDto.email())
                 .phoneNumber(userDto.phone())
-                .role(Role.CLIENT)
+                .role(Role.ROLE_CLIENT)
                 .passwordHash(passwordEncoder.encode(userDto.password()))
                 .build();
     }

@@ -11,6 +11,7 @@ import com.predators.service.ShopUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class ShopUserController {
     private final AuthenticationService authenticationService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<ShopUser> users = shopUserService.getAll();
         List<UserResponseDto> usersDto = users.stream().map(shopUserConverter::toDto).toList();
@@ -47,6 +49,7 @@ public class ShopUserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserResponseDto> getById(@PathVariable(name = "id") Long id) {
         ShopUser user = shopUserService.getById(id);
         UserResponseDto userDto = shopUserConverter.toDto(user);

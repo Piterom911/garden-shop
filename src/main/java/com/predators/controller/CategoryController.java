@@ -7,6 +7,7 @@ import com.predators.entity.Category;
 import com.predators.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,13 +42,22 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CategoryResponseDto> create(@RequestBody CategoryRequestDto categoryDto) {
         Category category = converter.toEntity(categoryDto);
         Category createdCategory = service.create(category);
-        return new ResponseEntity<>(converter.toDto(createdCategory),HttpStatus.CREATED);
+        return new ResponseEntity<>(converter.toDto(createdCategory), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<CategoryResponseDto> update(@PathVariable(name = "id") Long id, @RequestParam String name) {
+        Category category = service.update(id, name);
+        return new ResponseEntity<>(converter.toDto(category), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

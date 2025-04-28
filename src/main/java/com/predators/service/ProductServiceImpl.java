@@ -1,6 +1,7 @@
 package com.predators.service;
 
 import com.predators.dto.product.ProductFilterDto;
+import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
 import com.predators.exception.DiscountNotFoundException;
@@ -27,6 +28,7 @@ import java.util.Random;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductJpaRepository repository;
+    private final CategoryService categoryService;
 
     @Override
     public List<Product> getAll() {
@@ -80,9 +82,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product update(Product product) {
-        product.setUpdatedAt(Timestamp.from(Instant.now()));
-        return repository.save(product);
+    public Product update(Long id, ProductRequestDto product) {
+        Product productByDB = getById(id);
+        if (product.name() != null && !product.name().isBlank()) {
+            productByDB.setName(product.name());
+        }
+        if (product.description() != null && !product.description().isBlank()) {
+            productByDB.setDescription(product.description());
+        }
+        if (product.price() != null) {
+            productByDB.setPrice(product.price());
+        }
+        if (product.image() != null) {
+            productByDB.setImageUrl(product.image());
+        }
+        if (product.categoryId() != null) {
+            Category categoryById = categoryService.getById(product.categoryId());
+            updateCategory(id, categoryById);
+        }
+        productByDB.setUpdatedAt(Timestamp.from(Instant.now()));
+        return repository.save(productByDB);
     }
 
     @Override

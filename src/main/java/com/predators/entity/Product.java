@@ -3,6 +3,9 @@ package com.predators.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,6 +30,7 @@ public class Product {
     private BigDecimal price;
 
     @ManyToOne()
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "category_id")
     @JsonBackReference
     private Category category;

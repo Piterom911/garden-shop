@@ -32,4 +32,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handlerNotCurrentClientCartException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler({PermissionDeniedException.class})
+    public ResponseEntity<Object> handlerPermissionDeniedException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
 }

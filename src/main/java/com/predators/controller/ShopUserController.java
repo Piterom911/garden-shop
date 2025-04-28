@@ -61,4 +61,11 @@ public class ShopUserController {
         shopUserService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public ResponseEntity<UserResponseDto> update(@RequestBody UserRequestDto userDto) {
+        ShopUser update = shopUserService.update(userDto);
+        return new ResponseEntity<>(shopUserConverter.toDto(update), HttpStatus.ACCEPTED);
+    }
 }

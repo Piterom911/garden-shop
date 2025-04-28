@@ -22,7 +22,9 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public List<Favorite> getAll() {
-        return favoriteRepository.findAll();
+        ShopUser currentUser = shopUserService.getCurrentUser();
+
+        return favoriteRepository.findAllByUser(currentUser);
     }
 
     @Override

@@ -41,6 +41,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto productDto) {
         Product product = converter.toEntity(productDto);
         Product createdProd = service.create(product);
@@ -61,9 +62,9 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody ProductRequestDto productDto) {
-        Product entity = converter.toEntity(productDto);
-        entity.setId(id);
-        Product update = service.update(entity);
+
+
+        Product update = service.update(id, productDto);
 
         return new ResponseEntity<>(converter.toDto(update), HttpStatus.CREATED);
     }

@@ -16,8 +16,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryJpaRepository repository;
 
-    private final ProductService productService;
-
     @Override
     public List<Category> getAll() {
         return repository.findAll();
@@ -40,10 +38,6 @@ public class CategoryServiceImpl implements CategoryService {
         if (!repository.existsById(id)) {
             throw new CategoryNotFoundException("Category not found with id: " + id);
         }
-        List<Product> byCategoryId = productService.findByCategoryId(id);
-        byCategoryId.forEach(product -> {
-            productService.updateCategory(product.getId(), null);
-        });
         repository.deleteById(id);
     }
 

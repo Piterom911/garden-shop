@@ -1,9 +1,13 @@
 package com.predators.service;
 
+import com.predators.dto.user.UserRequestDto;
 import com.predators.entity.ShopUser;
+import com.predators.entity.enums.Role;
+import com.predators.exception.PermissionDeniedException;
 import com.predators.exception.UserAlreadyExistsException;
 import com.predators.exception.UserNotFoundException;
 import com.predators.repository.UserJpaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -44,11 +48,16 @@ public class ShopUserServiceImpl implements ShopUserService {
 
     @Override
     public void delete(Long id) {
-        Optional<ShopUser> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            userRepository.deleteById(id);
+        ShopUser currentUser = getCurrentUser();
+        if (currentUser.getId().equals(id) || currentUser.getRole().equals(Role.ROLE_ADMIN)) {
+            Optional<ShopUser> userOptional = userRepository.findById(id);
+            if (userOptional.isPresent()) {
+                userRepository.deleteById(id);
+            } else {
+                throw new UserNotFoundException("Cannot delete user: no user found with id " + id);
+            }
         } else {
-            throw new UserNotFoundException("Cannot delete user: no user found with id " + id);
+            throw new PermissionDeniedException("You are not an admin, or this account " + id + " does not belong to you");
         }
     }
 
@@ -64,6 +73,25 @@ public class ShopUserServiceImpl implements ShopUserService {
                 .getAuthentication();
         String email = authentication.getName();
         return getByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public ShopUser update(UserRequestDto userDto) {
+        ShopUser currentUser = getCurrentUser();
+        if (userDto.name() != null) {
+            currentUser.setName(userDto.name());
+        }
+        if (userDto.email() != null) {
+            if (userRepository.findByEmail(userDto.email()).isPresent()) {
+                throw new UserAlreadyExistsException("User with such email exists");
+            }
+            currentUser.setEmail(userDto.email());
+        }
+        if (userDto.phone() != null) {
+            currentUser.setPhoneNumber(userDto.phone());
+        }
+        return userRepository.save(currentUser);
     }
 
 }

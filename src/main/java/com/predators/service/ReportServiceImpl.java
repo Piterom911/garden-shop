@@ -6,6 +6,8 @@ import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.OrderNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +20,9 @@ import java.util.Map;
 public class ReportServiceImpl implements ReportService {
 
     private final OrderService orderService;
+
+    @Value("${orders.top.limit:10}")
+    private int topLimit;
 
     @Override
     public List<Product> topPaidItems() {
@@ -38,7 +43,7 @@ public class ReportServiceImpl implements ReportService {
         sortedList.sort(Map.Entry.<Product, Integer>comparingByValue().reversed());
 
         List<Product> topProducts = new ArrayList<>();
-        int limit = Math.min(10, sortedList.size());
+        int limit = Math.min(topLimit, sortedList.size());
         for (int i = 0; i < limit; i++) {
             topProducts.add(sortedList.get(i).getKey());
         }

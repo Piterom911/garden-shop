@@ -24,7 +24,7 @@ public class ProductSpecification {
                 }
 
                 if (filter.maxPrice() != null) {
-                    predicates.add(cb.greaterThanOrEqualTo(root.get("price"), filter.maxPrice()));
+                    predicates.add(cb.lessThanOrEqualTo(root.get("price"), filter.maxPrice()));
                 }
 
                 if (filter.categoryId() != null) {
@@ -33,7 +33,15 @@ public class ProductSpecification {
                 }
 
                 if (Boolean.TRUE.equals(filter.discount())) {
-                    predicates.add(cb.equal(root.get("discount"), true));
+                    predicates.add(cb.isNotNull(root.get("discountPrice")));
+                    predicates.add(cb.lessThan(root.get("discountPrice"), root.get("price")));
+                } else if (Boolean.FALSE.equals(filter.discount())) {
+                    predicates.add(
+                            cb.or(
+                                    cb.isNull(root.get("discountPrice")),
+                                    cb.greaterThanOrEqualTo(root.get("discountPrice"), root.get("price"))
+                            )
+                    );
                 }
             }
 

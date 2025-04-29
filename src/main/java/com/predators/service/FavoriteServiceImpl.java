@@ -49,8 +49,13 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public Favorite getById(Long id) {
-        return favoriteRepository.findById(id)
+        ShopUser currentUser = shopUserService.getCurrentUser();
+        Favorite favorite = favoriteRepository.findById(id)
                 .orElseThrow(() -> new FavoriteNotFoundException("Favorite not found with id: " + id));
+        if (favorite.getUser().getId().equals(currentUser.getId())) {
+            return favorite;
+        }
+        throw new FavoriteNotFoundException("Favorite not found with id: " + id);
     }
 
     @Override

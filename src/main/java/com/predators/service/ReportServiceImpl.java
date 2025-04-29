@@ -3,6 +3,7 @@ package com.predators.service;
 import com.predators.entity.Order;
 import com.predators.entity.Product;
 import com.predators.entity.enums.OrderStatus;
+import com.predators.exception.OrderNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class ReportServiceImpl implements ReportService {
     public List<Product> topPaidItems() {
         List<Order> paidOrders = orderService.getAllByStatus(OrderStatus.COMPLETED);
         if (paidOrders.isEmpty()) {
-            throw  new ProductNotFoundException("List of paid orders is empty");
+            throw  new OrderNotFoundException("List of paid orders is empty");
         }
 
         Map<Product, Integer> productCounts = new HashMap<>();

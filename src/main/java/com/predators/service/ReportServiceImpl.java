@@ -3,10 +3,11 @@ package com.predators.service;
 import com.predators.entity.Order;
 import com.predators.entity.Product;
 import com.predators.entity.enums.OrderStatus;
-import com.predators.exception.ProductNotFoundException;
+import com.predators.exception.OrderNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,15 +19,18 @@ public class ReportServiceImpl implements ReportService {
 
     private final OrderService orderService;
 
+    @Value("${orders.top.limit:10}")
+    private int topLimit;
+
     @Override
-    public List<Product> topPaidItems() {
-        List<Order> paidOrders = orderService.getAllByStatus(OrderStatus.COMPLETED);
-        if (paidOrders.isEmpty()) {
-            throw  new ProductNotFoundException("List of paid orders is empty");
+    public List<Product> topItems(OrderStatus status) {
+        List<Order> orders = orderService.getAllByStatus(status);
+        if (orders.isEmpty()) {
+            throw  new OrderNotFoundException("List of orders is empty");
         }
 
         Map<Product, Integer> productCounts = new HashMap<>();
-        paidOrders.forEach(order -> {
+        orders.forEach(order -> {
             order.getOrderItems().forEach(item -> {
                 Product product = item.getProduct();
                 productCounts.put(product, productCounts.getOrDefault(product, 0) + 1);
@@ -37,7 +41,7 @@ public class ReportServiceImpl implements ReportService {
         sortedList.sort(Map.Entry.<Product, Integer>comparingByValue().reversed());
 
         List<Product> topProducts = new ArrayList<>();
-        int limit = Math.min(10, sortedList.size());
+        int limit = Math.min(topLimit, sortedList.size());
         for (int i = 0; i < limit; i++) {
             topProducts.add(sortedList.get(i).getKey());
         }

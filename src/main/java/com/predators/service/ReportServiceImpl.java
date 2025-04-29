@@ -4,12 +4,10 @@ import com.predators.entity.Order;
 import com.predators.entity.Product;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.OrderNotFoundException;
-import com.predators.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,14 +23,14 @@ public class ReportServiceImpl implements ReportService {
     private int topLimit;
 
     @Override
-    public List<Product> topPaidItems() {
-        List<Order> paidOrders = orderService.getAllByStatus(OrderStatus.COMPLETED);
-        if (paidOrders.isEmpty()) {
-            throw  new OrderNotFoundException("List of paid orders is empty");
+    public List<Product> topItems(OrderStatus status) {
+        List<Order> orders = orderService.getAllByStatus(status);
+        if (orders.isEmpty()) {
+            throw  new OrderNotFoundException("List of orders is empty");
         }
 
         Map<Product, Integer> productCounts = new HashMap<>();
-        paidOrders.forEach(order -> {
+        orders.forEach(order -> {
             order.getOrderItems().forEach(item -> {
                 Product product = item.getProduct();
                 productCounts.put(product, productCounts.getOrDefault(product, 0) + 1);

@@ -91,7 +91,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllByStatus(OrderStatus status) {
-        return orderRepository.findAllByStatus(status);
+        List<Order> orders = orderRepository.findAllByStatus(status);
+        if (orders.isEmpty()) {
+            throw new OrderNotFoundException("List of orders is empty");
+        }
+        return orders;
     }
 
     @Override

@@ -57,7 +57,7 @@ class FavoriteServiceImplTest {
 
     @Test
     void testGetAllFavorites() {
-        when(shopUserService.getCurrentUser()).thenReturn(user); // не забудь это
+        when(shopUserService.getCurrentUser()).thenReturn(user);
         when(favoriteRepository.findAllByUser(user)).thenReturn(List.of(favorite));
 
         List<Favorite> result = favoriteService.getAll();

@@ -22,5 +22,7 @@ public interface OrderService {
 
     List<Order> getAllByStatus(OrderStatus status);
 
+    List<Order> getAllByStatusWithException (OrderStatus status);
+
     List<Order> getHistory();
 }

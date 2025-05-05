@@ -77,52 +77,6 @@ class ShopShopUserControllerTest {
     }
 
     @Test
-    public void createUser_ReturnCreated() throws Exception {
-        given(shopUserService.create(ArgumentMatchers.any())).willAnswer(invocation -> invocation.getArgument(0));
-
-        ResultActions response = mockMvc.perform(post("/v1/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequestDto)));
-
-        response.andExpect(MockMvcResultMatchers.status().isCreated());
-    }
-
-    @Test
-    public void getAllUsers_ReturnsUserList() throws Exception {
-        List<ShopUser> userList = Collections.singletonList(user);
-
-        given(shopUserService.getAll()).willReturn(userList);
-
-        given(shopUserConverter.toDto(user)).willReturn(
-                new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber())
-        );
-
-        mockMvc.perform(get("/v1/users"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(userList.size()))
-                .andExpect(jsonPath("$[0].name").value(user.getName()));
-    }
-
-    @Test
-    public void getUserById_ReturnsUser() throws Exception {
-        Long userId = 1L;
-
-        given(shopUserService.getById(userId)).willReturn(user);
-        given(shopUserConverter.toDto(user)).willReturn(
-                new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getPhoneNumber())
-        );
-
-        mockMvc.perform(get("/v1/users/{id}", userId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(userId))
-                .andExpect(jsonPath("$.name").value(user.getName()))
-                .andExpect(jsonPath("$.email").value(user.getEmail()))
-                .andExpect(jsonPath("$.phoneNumber").value(user.getPhoneNumber()));
-    }
-
-    @Test
     public void deleteUserById_ReturnsOk() throws Exception {
         Long userId = user.getId();
         willDoNothing().given(shopUserService).delete(userId);

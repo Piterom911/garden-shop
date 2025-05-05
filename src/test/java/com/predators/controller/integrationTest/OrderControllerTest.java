@@ -19,6 +19,7 @@ class OrderControllerTest {
     private int port;
 
     private String token;
+
     @BeforeEach
     public void init() {
         RestAssured.baseURI = "http://localhost";

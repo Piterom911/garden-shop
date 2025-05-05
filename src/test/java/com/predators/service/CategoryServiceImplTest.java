@@ -75,10 +75,11 @@ class CategoryServiceImplTest {
     @Test
     void testDelete_WhenCategoryExists() {
         when(categoryJpaRepository.existsById(1L)).thenReturn(true);
-        when(productService.findByCategoryId(1L)).thenReturn(List.of()); // Добавлено поведение мока
+        when(productService.findByCategoryId(1L)).thenReturn(List.of());
         doNothing().when(categoryJpaRepository).deleteById(1L);
 
         assertDoesNotThrow(() -> categoryService.delete(1L));
+        assertDoesNotThrow(() -> productService.findByCategoryId(1L));
     }
 
     @Test

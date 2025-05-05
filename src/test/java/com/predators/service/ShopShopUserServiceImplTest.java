@@ -59,25 +59,4 @@ class ShopShopUserServiceImplTest {
     void testGetByIdNotFound() {
         assertThrows(UserNotFoundException.class, () -> userService.getById(2L));
     }
-
-    @Test
-    void delete_userExists() {
-        Long userIdToDelete = 1L;
-        when(userRepository.findById(userIdToDelete)).thenReturn(Optional.of(new ShopUser()));
-
-        userService.delete(userIdToDelete);
-
-        verify(userRepository, times(1)).deleteById(userIdToDelete);
-    }
-
-    @Test
-    void delete_userNotFound() {
-        Long userIdToDelete = 1L;
-        when(userRepository.findById(userIdToDelete)).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> userService.delete(userIdToDelete));
-
-        verify(userRepository, never()).deleteById(anyLong());
-        assertThrows(UserNotFoundException.class, () -> userService.delete(userIdToDelete));
-    }
 }

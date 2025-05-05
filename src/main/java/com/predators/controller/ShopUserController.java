@@ -13,11 +13,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -46,7 +48,7 @@ public class ShopUserController {
     @Operation(summary = "Create user", description = "Returns new user.")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User to be created",
             required = true, content = @Content(schema = @Schema(implementation = UserRequestDto.class)))
-    public ResponseEntity<UserResponseDto> create(@RequestBody UserRequestDto userDto) {
+    public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto userDto) {
         ShopUser user = shopUserConverter.toEntity(userDto);
         UserResponseDto dto = shopUserConverter.toDto(shopUserService.create(user));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
@@ -56,7 +58,7 @@ public class ShopUserController {
     @Operation(summary = "Authentication user", description = "Authentication user and get Jwt Token")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Get Jwt Token",
             required = true, content = @Content(schema = @Schema(implementation = SignInRequest.class)))
-    public SignInResponse login(@RequestBody SignInRequest request) {
+    public SignInResponse login(@Valid @RequestBody SignInRequest request) {
         return authenticationService.authenticate(request);
     }
 

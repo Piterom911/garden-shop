@@ -59,7 +59,6 @@ public class OrderController {
     }
 
 
-
     @GetMapping("/get-status/{status}")
     @Operation(summary = "Get orders by status", description = "Retrieves orders filtered by their status")
     @Parameter(name = "status", description = "Order status to filter by (e.g., CREATED, PENDING, COMPLETED)",
@@ -72,7 +71,6 @@ public class OrderController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_CLIENT')")
     @Operation(summary = "Create new order", description = "Creates a new order. Requires CLIENT role.")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Order details", required = true,
             content = @Content(schema = @Schema(implementation = OrderRequestDto.class)))

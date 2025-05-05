@@ -3,9 +3,7 @@ package com.predators.service;
 import com.predators.entity.Order;
 import com.predators.entity.Product;
 import com.predators.entity.enums.OrderStatus;
-import com.predators.exception.OrderNotFoundException;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,6 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Product> topItems(OrderStatus status) {
         List<Order> orders = orderService.getAllByStatus(status);
-
 
         Map<Product, Integer> productCounts = new HashMap<>();
         orders.forEach(order -> {
@@ -65,5 +62,6 @@ public class ReportServiceImpl implements ReportService {
         }
         return products;
     }
+
 
 }

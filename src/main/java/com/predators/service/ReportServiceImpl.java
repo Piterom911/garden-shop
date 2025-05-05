@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +25,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Product> topItems(OrderStatus status) {
         List<Order> orders = orderService.getAllByStatus(status);
-        if (orders.isEmpty()) {
-            throw  new OrderNotFoundException("List of orders is empty");
-        }
+
 
         Map<Product, Integer> productCounts = new HashMap<>();
         orders.forEach(order -> {
@@ -47,4 +45,25 @@ public class ReportServiceImpl implements ReportService {
         }
         return topProducts;
     }
+
+    @Override
+    public Set<Product> waitingPaymentMoreNDays(Long days) {
+        List<Order> orders = orderService.getAllByStatus(OrderStatus.PENDING);
+
+        Set<Product> products = new HashSet<>();
+        for (Order order : orders) {
+            Timestamp updatedAt = order.getUpdatedAt();
+            LocalDateTime dateTime = updatedAt.toLocalDateTime();
+            LocalDateTime daysPlusN = dateTime.plusDays(days);
+            LocalDateTime now = LocalDateTime.now();
+            if (daysPlusN.isBefore(now)) {
+                order.getOrderItems().forEach(item -> {
+                    Product product = item.getProduct();
+                    products.add(product);
+                });
+            }
+        }
+        return products;
+    }
+
 }

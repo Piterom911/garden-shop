@@ -120,7 +120,6 @@ public class ProductController {
             schema = @Schema(type = "number", format = "decimal", example = "15.99"))
     @ApiResponse(responseCode = "202", description = "Discount set successfully",
             content = @Content(schema = @Schema(implementation = ProductResponseDto.class)))
-//    @ApiResponse(responseCode = "400", description = "Invalid discount value")
     @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN role")
     @ApiResponse(responseCode = "404", description = "Product not found")
     public ResponseEntity<ProductResponseDto> setDiscount(@PathVariable Long id, @RequestParam BigDecimal discount) {

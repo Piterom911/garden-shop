@@ -93,18 +93,19 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getAllByStatus(OrderStatus status) {
         return orderRepository.findAllByStatus(status);
     }
-//        List<Order> orders = orderRepository.findAllByStatus(status);
-//        if (orders.isEmpty()) {
-//            throw new OrderNotFoundException("List of orders is empty");
-//        }
-//        return orders;
-// }
+
+    @Override
+    public List<Order> getAllByStatusWithException(OrderStatus status) {
+        List<Order> orders = getAllByStatus(status);
+        if (orders.isEmpty()) {
+            throw new OrderNotFoundException("List of orders is empty");
+        }
+        return orders;
+    }
 
     @Override
     public List<Order> getHistory() {
         ShopUser currentUser = shopUserService.getCurrentUser();
         return orderRepository.findAllByUser_Id(currentUser.getId());
     }
-
-
 }

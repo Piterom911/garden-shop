@@ -84,7 +84,6 @@ public class CategoryController {
             schema = @Schema(type = "string", example = "Pots and planters"))
     @ApiResponse(responseCode = "200", description = "Successfully updated the category",
             content = @Content(schema = @Schema(implementation = CategoryResponseDto.class)))
-   // @ApiResponse(responseCode = "400", description = "Invalid name provided")
     @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN privileges")
     @ApiResponse(responseCode = "404", description = "Category not found")
     public ResponseEntity<CategoryResponseDto> update(@PathVariable(name = "id") Long id, @RequestParam String name) {

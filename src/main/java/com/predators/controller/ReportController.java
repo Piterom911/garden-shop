@@ -8,7 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -36,5 +41,12 @@ public class ReportController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-
+    @GetMapping("/profit")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<BigDecimal> getProfit(@RequestParam(name = "day", required = false) Long day,
+                                                @RequestParam(name = "month", required = false) Long month,
+                                                @RequestParam(name = "year", required = false) Long year) {
+        BigDecimal profit = reportService.getProfit(day, month, year);
+        return new ResponseEntity<>(profit, HttpStatus.OK);
+    }
 }

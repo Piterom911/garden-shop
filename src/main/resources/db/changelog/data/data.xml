@@ -45,11 +45,13 @@
 
     <changeSet id="4" author="kostya">
         <sql>
-            INSERT INTO orders (user_id, status) values (1, 'CANCELLED');
-            INSERT INTO orders (user_id, status) values (2, 'CREATED');
+            INSERT INTO orders (user_id, status, updated_at) values (1, 'COMPLETED', '2025-05-01 10:22:03.862983');
+            INSERT INTO orders (user_id, status, updated_at) values (2, 'COMPLETED', '2025-04-07 10:22:03.862983');
 
-            INSERT INTO order_items (order_id, product_id) values (1,1);
-            INSERT INTO order_items (order_id, product_id) values (2,2);
+            INSERT INTO order_items (order_id, product_id, price_at_purchase) values (1,1,10);
+            INSERT INTO order_items (order_id, product_id, price_at_purchase) values (2,2,20);
         </sql>
     </changeSet>
+
+
 </databaseChangeLog>

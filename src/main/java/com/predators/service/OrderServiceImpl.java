@@ -14,7 +14,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -107,5 +106,10 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getHistory() {
         ShopUser currentUser = shopUserService.getCurrentUser();
         return orderRepository.findAllByUser_Id(currentUser.getId());
+    }
+
+    @Override
+    public List<Order> getAllByStatusAndAfterDate(OrderStatus status, Timestamp afterDate) {
+        return orderRepository.findAllByStatusAndAfterDate(status, afterDate);
     }
 }

@@ -14,9 +14,20 @@ services:
       - garden-net
     restart: always
 
+  frontend:
+    build: ../garden-shop-frontend/
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://garden-shop:8080/v1 # Пример переменной окружения для доступа к бэкенду
+    depends_on:
+      - garden-shop
+    networks:
+      - garden-net
+
 
   garden-shop:
-    image: garden-shop
+    # image: garden-shop # Закомментируйте или удалите эту строку
     build:
       context: .
       dockerfile: Dockerfile

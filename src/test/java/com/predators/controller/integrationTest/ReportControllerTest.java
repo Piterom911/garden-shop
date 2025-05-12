@@ -56,6 +56,50 @@ class ReportControllerTest {
                 .statusCode(200);
     }
 
+    @Test
+    void testGetProfitDays() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/v1/report/profit?day=10")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void testGetProfitMonth() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/v1/report/profit?month=2")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void testGetProfitYear() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/v1/report/profit?year=1")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void testGetProfitDaysMonth() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/v1/report/profit?day=10&month=2")
+                .then()
+                .statusCode(200);
+    }
+
 
 
 }

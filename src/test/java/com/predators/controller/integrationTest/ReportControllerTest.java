@@ -57,6 +57,17 @@ class ReportControllerTest {
     }
 
     @Test
+    void testWaitingPaymentMoreNDaysDaysReturnEmptyList() {
+        given()
+                .port(port)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/v1/report/waiting-payment?days=1")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     void testGetProfitDays() {
         given()
                 .port(port)

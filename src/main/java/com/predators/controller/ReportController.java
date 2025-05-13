@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/report")
 @RequiredArgsConstructor
-public class ReportController {
+public class ReportController implements ReportApi {
 
     private final ReportService reportService;
 
@@ -27,6 +27,7 @@ public class ReportController {
 
     @GetMapping("/top-product")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
     public ResponseEntity<List<ProductResponseDto>> getTopProduct(@RequestParam String status) {
         List<ProductResponseDto> list = reportService.topItems(OrderStatus.valueOf(status.toUpperCase())).stream()
                 .map(converter::toDto).toList();
@@ -35,6 +36,7 @@ public class ReportController {
 
     @GetMapping("/waiting-payment")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
     public ResponseEntity<List<ProductResponseDto>> waitingPaymentMoreNDays(@RequestParam Long days) {
         List<ProductResponseDto> products = reportService.waitingPaymentMoreNDays(days).stream()
                 .map(converter::toDto).toList();
@@ -43,6 +45,7 @@ public class ReportController {
 
     @GetMapping("/profit")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
     public ResponseEntity<BigDecimal> getProfit(@RequestParam(name = "day", required = false) Long day,
                                                 @RequestParam(name = "month", required = false) Long month,
                                                 @RequestParam(name = "year", required = false) Long year) {

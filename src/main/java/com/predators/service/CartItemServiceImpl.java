@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+//@Profile("test")
 @RequiredArgsConstructor
 public class CartItemServiceImpl implements CartItemService {
 

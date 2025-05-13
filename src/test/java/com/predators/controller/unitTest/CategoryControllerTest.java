@@ -46,7 +46,7 @@ public class CategoryControllerTest {
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(1, response.getBody().size());
-        //verify(categoryService, times(1)).getAll();
+
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CategoryControllerTest {
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(dto, response.getBody());
-       // verify(categoryService).getById(id);
+
     }
 
     @Test
@@ -80,7 +80,7 @@ public class CategoryControllerTest {
 
         assertEquals(201, response.getStatusCodeValue());
         assertEquals(responseDto, response.getBody());
-        //verify(categoryService).create(category);
+
     }
 
     @Test
@@ -90,6 +90,6 @@ public class CategoryControllerTest {
         ResponseEntity<Void> response = categoryController.delete(id);
 
         assertEquals(200, response.getStatusCodeValue());
-        //verify(categoryService).delete(id);
+
     }
 }

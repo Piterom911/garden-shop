@@ -9,24 +9,27 @@ import com.predators.security.model.SignInRequest;
 import com.predators.security.model.SignInResponse;
 import com.predators.service.ShopUserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/users")
-@Tag(name = "User", description = "Operations related to users")
-public class ShopUserController {
+public class ShopUserController implements ShopUserApi{
 
     private final ShopUserService shopUserService;
 
@@ -36,7 +39,6 @@ public class ShopUserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = "Get all users", description = "Returns all users.")
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<ShopUser> users = shopUserService.getAll();
         List<UserResponseDto> usersDto = users.stream().map(shopUserConverter::toDto).toList();
@@ -45,9 +47,6 @@ public class ShopUserController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create user", description = "Returns new user.")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User to be created",
-            required = true, content = @Content(schema = @Schema(implementation = UserRequestDto.class)))
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto userDto) {
         ShopUser user = shopUserConverter.toEntity(userDto);
         UserResponseDto dto = shopUserConverter.toDto(shopUserService.create(user));
@@ -56,17 +55,12 @@ public class ShopUserController {
 
     @PostMapping("/login")
     @Operation(summary = "Authentication user", description = "Authentication user and get Jwt Token")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Get Jwt Token",
-            required = true, content = @Content(schema = @Schema(implementation = SignInRequest.class)))
     public SignInResponse login(@Valid @RequestBody SignInRequest request) {
         return authenticationService.authenticate(request);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Operation(summary = "Get user by Id", description = "Get user by Id")
-    @Parameter(name = "id", description = "Unique identifier of the user",
-            required = true, schema = @Schema(type = "integer", format = "int64", example = "1"))
     public ResponseEntity<UserResponseDto> getById(@PathVariable(name = "id") Long id) {
         ShopUser user = shopUserService.getById(id);
         UserResponseDto userDto = shopUserConverter.toDto(user);
@@ -74,18 +68,12 @@ public class ShopUserController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete user by Id", description = "Delete user by Id")
-    @Parameter(name = "id", description = "Unique identifier of the user",
-            required = true, schema = @Schema(type = "integer", format = "int64", example = "123"))
     public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
         shopUserService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping
-    @Operation(summary = "Update current user", description = "Update current user and returns user")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Any from three fields",
-            required = true, content = @Content(schema = @Schema(implementation = UserRequestDto.class)))
     public ResponseEntity<UserResponseDto> update(@RequestBody UserRequestDto userDto) {
         ShopUser update = shopUserService.update(userDto);
         return new ResponseEntity<>(shopUserConverter.toDto(update), HttpStatus.ACCEPTED);

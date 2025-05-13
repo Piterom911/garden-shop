@@ -22,7 +22,7 @@ class ReportControllerTest {
 
     @BeforeEach
     public void init() {
-        RestAssured.baseURI = "http://localhost";
+        RestAssured.baseURI = "http://localhost:" + port;
         token = given()
                 .contentType("application/json")
                 .body("{\"email\":\"test\", \"password\":\"12345\"}")
@@ -37,7 +37,6 @@ class ReportControllerTest {
     @Test
     void testGetTopProductStatusCompleted() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/report/top-product?status=COMPLETED")
@@ -48,7 +47,6 @@ class ReportControllerTest {
     @Test
     void testGetTopProductStatusCancelled() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/report/top-product?status=CANCELLED")
@@ -59,7 +57,6 @@ class ReportControllerTest {
     @Test
     void testWaitingPaymentMoreNDaysDaysReturnEmptyList() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/report/waiting-payment?days=1")
@@ -70,7 +67,6 @@ class ReportControllerTest {
     @Test
     void testGetProfitDays() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/report/profit?day=10")
@@ -81,7 +77,6 @@ class ReportControllerTest {
     @Test
     void testGetProfitMonth() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/report/profit?month=2")
@@ -92,7 +87,6 @@ class ReportControllerTest {
     @Test
     void testGetProfitYear() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/report/profit?year=1")
@@ -103,7 +97,6 @@ class ReportControllerTest {
     @Test
     void testGetProfitDaysMonth() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/report/profit?day=10&month=2")

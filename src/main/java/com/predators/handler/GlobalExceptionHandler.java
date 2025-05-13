@@ -54,4 +54,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handlerPermissionDeniedException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<Object> handlerCommonException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

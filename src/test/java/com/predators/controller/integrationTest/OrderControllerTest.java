@@ -22,7 +22,7 @@ class OrderControllerTest {
 
     @BeforeEach
     public void init() {
-        RestAssured.baseURI = "http://localhost";
+        RestAssured.baseURI = "http://localhost:" + port;
         token = given()
                 .contentType("application/json")
                 .body("{\"email\":\"test\", \"password\":\"12345\"}")
@@ -37,7 +37,6 @@ class OrderControllerTest {
     @Test
     void getAll() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/orders")
@@ -48,7 +47,6 @@ class OrderControllerTest {
     @Test
     void getStatus() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/orders/get-status/CREATED")
@@ -59,7 +57,6 @@ class OrderControllerTest {
     @Test
     void create() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\n" +
                         "  \"items\": [\n" +
@@ -85,7 +82,6 @@ class OrderControllerTest {
     @Test
     void getById() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/v1/orders/1")
@@ -96,7 +92,6 @@ class OrderControllerTest {
     @Test
     void updateStatus() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .put("/v1/orders/1/status?status=CREATED")
@@ -107,7 +102,6 @@ class OrderControllerTest {
     @Test
     void delete() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("/v1/orders/2")

@@ -22,7 +22,7 @@ public class FavoriteControllerIntegrationTest {
 
     @BeforeEach
     public void init() {
-        RestAssured.baseURI = "http://localhost";
+        RestAssured.baseURI = "http://localhost:" + port;
         token = given()
                 .contentType("application/json")
                 .body("{\"email\":\"test\", \"password\":\"12345\"}")
@@ -37,7 +37,6 @@ public class FavoriteControllerIntegrationTest {
     @Test
     void testCreateFavorite() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .post("v1/favorites/2")
@@ -48,7 +47,6 @@ public class FavoriteControllerIntegrationTest {
     @Test
     void testGetAllFavorites() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("v1/favorites")
@@ -59,7 +57,6 @@ public class FavoriteControllerIntegrationTest {
     @Test
     void testGetFavoriteById() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("v1/favorites/1")
@@ -70,7 +67,6 @@ public class FavoriteControllerIntegrationTest {
     @Test
     void testDeleteFavorite() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("v1/favorites/1")

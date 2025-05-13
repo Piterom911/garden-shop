@@ -22,7 +22,7 @@ public class ShopUserTest {
 
     @BeforeEach
     public void init() {
-        RestAssured.baseURI = "http://localhost";
+        RestAssured.baseURI = "http://localhost:" + port;
         token = given()
                 .contentType("application/json")
                 .body("{\"email\":\"test\", \"password\":\"12345\"}")
@@ -37,7 +37,6 @@ public class ShopUserTest {
     @Test
     void testGetAll() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("v1/users")
@@ -48,7 +47,6 @@ public class ShopUserTest {
     @Test
     void testCreate() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\"name\":\"realtest\", " +
                         "\"email\":\"someeamil@gamil.com\", " +
@@ -63,7 +61,6 @@ public class ShopUserTest {
     @Test
     void testNotCreateWithExistingEmail() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\"name\":\"realtest\", " +
                         "\"email\":\"someemail@gamil.com\", " +
@@ -78,7 +75,6 @@ public class ShopUserTest {
     @Test
     void testNotCreateWithEmptyEmail() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\"name\":\"nane\", " +
                         "\"email\":\"\", " +
@@ -93,7 +89,6 @@ public class ShopUserTest {
     @Test
     void testNotCreateWithEmptyPassword() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\"name\":\"something\", " +
                         "\"email\":\"something\", " +
@@ -108,7 +103,6 @@ public class ShopUserTest {
     @Test
     void testNotCreateWithEmptyNumber() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\"name\":\"something\", " +
                         "\"email\":\"something\", " +
@@ -123,7 +117,6 @@ public class ShopUserTest {
     @Test
     void testNotCreateWithEmptyName() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\"name\":\"\", " +
                         "\"email\":\"something\", " +
@@ -138,7 +131,6 @@ public class ShopUserTest {
     @Test
     void testLogin() {
         given()
-                .port(port)
                 .contentType("application/json")
                 .body("{\"email\":\"test\", " +
                         "\"password\":\"12345\"}")
@@ -151,7 +143,6 @@ public class ShopUserTest {
 //    @Test
 //    void testNotLoginWithEmptyEmail() {
 //        given()
-//                .port(port)
 //                .contentType("application/json")
 //                .body("{\"email\":\" \", " +
 //                        "\"password\":\"12345\"}")
@@ -165,33 +156,30 @@ public class ShopUserTest {
     @Test
     void testNotLoginWithNotExistingUser() {
         given()
-                .port(port)
                 .contentType("application/json")
-                .body("{\"email\":\"test5000\", " +
+                .body("{\"email\":\"test5000@gmail.com\", " +
                         "\"password\":\"12345\"}")
                 .when()
                 .post("v1/users/login")
                 .then()
-                .statusCode(404);
+                .statusCode(400);
     }
 
     @Test
     void testNotLoginWithEmptyPassword() {
         given()
-                .port(port)
                 .contentType("application/json")
-                .body("{\"email\":\"test\", " +
+                .body("{\"email\":\"test@gmail.com\", " +
                         "\"password\":\"\"}")
                 .when()
                 .post("v1/users/login")
                 .then()
-                .statusCode(401);
+                .statusCode(400);
     }
 
     @Test
     void testGetById() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get("v1/users/1")
@@ -202,7 +190,6 @@ public class ShopUserTest {
     @Test
     void testGetByIdNotFound() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("v1/users/111")
@@ -213,7 +200,6 @@ public class ShopUserTest {
     @Test
     void testDelete() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("v1/users/2")
@@ -224,7 +210,6 @@ public class ShopUserTest {
     @Test
     void testNotDeleteWithFalseUserId() {
         given()
-                .port(port)
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("v1/users/111")

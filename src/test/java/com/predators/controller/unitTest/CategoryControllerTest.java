@@ -1,9 +1,9 @@
 package com.predators.controller.unitTest;
 
 import com.predators.controller.CategoryController;
+import com.predators.dto.category.CategoryMapper;
 import com.predators.dto.category.CategoryRequestDto;
 import com.predators.dto.category.CategoryResponseDto;
-import com.predators.dto.converter.CategoryConverter;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class CategoryControllerTest {
 
@@ -24,7 +24,7 @@ public class CategoryControllerTest {
     private CategoryService categoryService;
 
     @Mock
-    private CategoryConverter categoryConverter;
+    private CategoryMapper mapper;
 
     @InjectMocks
     private CategoryController categoryController;
@@ -40,7 +40,7 @@ public class CategoryControllerTest {
         CategoryResponseDto dto = new CategoryResponseDto(1L,"one");
 
         when(categoryService.getAll()).thenReturn(List.of(category));
-        when(categoryConverter.toDto(category)).thenReturn(dto);
+        when(mapper.toDto(category)).thenReturn(dto);
 
         ResponseEntity<List<CategoryResponseDto>> response = categoryController.getAll();
 
@@ -56,7 +56,7 @@ public class CategoryControllerTest {
         CategoryResponseDto dto = new CategoryResponseDto(1L,"one");
 
         when(categoryService.getById(id)).thenReturn(category);
-        when(categoryConverter.toDto(category)).thenReturn(dto);
+        when(mapper.toDto(category)).thenReturn(dto);
 
         ResponseEntity<CategoryResponseDto> response = categoryController.getById(id);
 
@@ -72,9 +72,9 @@ public class CategoryControllerTest {
         Category createdCategory = new Category();
         CategoryResponseDto responseDto = new CategoryResponseDto(1L,"one");
 
-        when(categoryConverter.toEntity(requestDto)).thenReturn(category);
+        when(mapper.toEntity(requestDto)).thenReturn(category);
         when(categoryService.create(category)).thenReturn(createdCategory);
-        when(categoryConverter.toDto(createdCategory)).thenReturn(responseDto);
+        when(mapper.toDto(createdCategory)).thenReturn(responseDto);
 
         ResponseEntity<CategoryResponseDto> response = categoryController.create(requestDto);
 

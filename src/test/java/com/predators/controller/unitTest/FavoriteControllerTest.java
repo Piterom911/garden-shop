@@ -2,7 +2,7 @@ package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.predators.controller.FavoriteController;
-import com.predators.dto.converter.FavoriteConverter;
+import com.predators.dto.favorite.FavoriteMapper;
 import com.predators.dto.favorite.FavoriteResponseDto;
 import com.predators.entity.Favorite;
 import com.predators.security.JwtAuthFilter;
@@ -19,13 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,7 +35,7 @@ class FavoriteControllerTest {
     private FavoriteService favoriteService;
 
     @MockBean
-    private FavoriteConverter favoriteConverter;
+    private FavoriteMapper mapper;
 
     @MockBean
     private JwtService jwtService;
@@ -58,7 +53,7 @@ class FavoriteControllerTest {
         FavoriteResponseDto favoriteDto = new FavoriteResponseDto(1L, 2L, 3L);
 
         when(favoriteService.getAll()).thenReturn(List.of(favorite));
-        when(favoriteConverter.toDto(any(Favorite.class))).thenReturn(favoriteDto);
+        when(mapper.toDto(any(Favorite.class))).thenReturn(favoriteDto);
 
         mockMvc.perform(get("/v1/favorites"))
                 .andExpect(status().isOk())
@@ -71,7 +66,7 @@ class FavoriteControllerTest {
         FavoriteResponseDto favoriteDto = new FavoriteResponseDto(1L, 2L, 3L);
 
         when(favoriteService.create(1L)).thenReturn(favorite);
-        when(favoriteConverter.toDto(any(Favorite.class))).thenReturn(favoriteDto);
+        when(mapper.toDto(any(Favorite.class))).thenReturn(favoriteDto);
 
         mockMvc.perform(post("/v1/favorites/1"))
                 .andExpect(status().isCreated())
@@ -86,7 +81,7 @@ class FavoriteControllerTest {
         FavoriteResponseDto favoriteDto = new FavoriteResponseDto(1L, 2L, 3L);
 
         when(favoriteService.getById(1L)).thenReturn(favorite);
-        when(favoriteConverter.toDto(any(Favorite.class))).thenReturn(favoriteDto);
+        when(mapper.toDto(any(Favorite.class))).thenReturn(favoriteDto);
 
         mockMvc.perform(get("/v1/favorites/1"))
                 .andExpect(status().isOk())

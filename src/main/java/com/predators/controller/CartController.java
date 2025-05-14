@@ -1,7 +1,7 @@
 package com.predators.controller;
 
 import com.predators.dto.cart.ProductToItemDto;
-import com.predators.dto.converter.ProductConverter;
+import com.predators.dto.product.ProductMapper;
 import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
@@ -21,7 +21,7 @@ public class CartController implements CartApi {
 
     private final CartService service;
 
-    private final ProductConverter productConverter;
+    private final ProductMapper mapper;
 
     @GetMapping("/all")
     @Override
@@ -35,7 +35,7 @@ public class CartController implements CartApi {
     @Override
     public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
         List<ProductResponseDto> productsResponse =
-                service.getAllProducts().stream().map(productConverter::toDto).toList();
+                service.getAllProducts().stream().map(mapper::toDto).toList();
         return ResponseEntity.ok(productsResponse);
     }
 

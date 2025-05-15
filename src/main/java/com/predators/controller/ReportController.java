@@ -1,6 +1,6 @@
 package com.predators.controller;
 
-import com.predators.dto.converter.ProductConverter;
+import com.predators.dto.product.ProductMapper;
 import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.ReportService;
@@ -23,14 +23,14 @@ public class ReportController implements ReportApi {
 
     private final ReportService reportService;
 
-    private final ProductConverter converter;
+    private final ProductMapper mapper;
 
     @GetMapping("/top-product")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public ResponseEntity<List<ProductResponseDto>> getTopProduct(@RequestParam String status) {
         List<ProductResponseDto> list = reportService.topItems(OrderStatus.valueOf(status.toUpperCase())).stream()
-                .map(converter::toDto).toList();
+                .map(mapper::toDto).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class ReportController implements ReportApi {
     @Override
     public ResponseEntity<List<ProductResponseDto>> waitingPaymentMoreNDays(@RequestParam Long days) {
         List<ProductResponseDto> products = reportService.waitingPaymentMoreNDays(days).stream()
-                .map(converter::toDto).toList();
+                .map(mapper::toDto).toList();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

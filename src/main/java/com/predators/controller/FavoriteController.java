@@ -1,18 +1,13 @@
 package com.predators.controller;
 
-import com.predators.dto.converter.FavoriteConverter;
+import com.predators.dto.favorite.FavoriteMapper;
 import com.predators.dto.favorite.FavoriteResponseDto;
 import com.predators.entity.Favorite;
 import com.predators.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,26 +20,26 @@ public class FavoriteController implements FavoriteApi {
 
     private final FavoriteService favoriteService;
 
-    private final FavoriteConverter favoriteConverter;
+    private final FavoriteMapper mapper;
 
     @GetMapping
     @Override
     public ResponseEntity<List<FavoriteResponseDto>> getAll() {
         return new ResponseEntity<>(favoriteService.getAll().stream()
-                .map(favoriteConverter::toDto).collect(Collectors.toList()), HttpStatus.OK);
+                .map(mapper::toDto).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @PostMapping("/{id}")
     @Override
     public ResponseEntity<FavoriteResponseDto> create(@PathVariable(name = "id") Long productId) {
         Favorite favorite = favoriteService.create(productId);
-        return new ResponseEntity<>(favoriteConverter.toDto(favorite), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.toDto(favorite), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     @Override
     public ResponseEntity<FavoriteResponseDto> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(favoriteConverter.toDto(favoriteService.getById(id)), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.toDto(favoriteService.getById(id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

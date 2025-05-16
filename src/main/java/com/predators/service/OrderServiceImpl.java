@@ -3,6 +3,8 @@ package com.predators.service;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.dto.order.OrderRequestDto;
+import com.predators.entity.Cart;
+import com.predators.entity.CartItem;
 import com.predators.entity.Order;
 import com.predators.entity.OrderItem;
 import com.predators.entity.Product;
@@ -14,11 +16,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +37,10 @@ public class OrderServiceImpl implements OrderService {
     private final ProductService productService;
 
     private final ShopUserService shopUserService;
+
+    private final CartServiceImpl cartService;
+
+    private final CartItemServiceImpl cartItemService;
 
     @Override
     public List<Order> getAll() {
@@ -47,20 +56,39 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order create(OrderRequestDto dto) {
+        ShopUser currentUser = shopUserService.getCurrentUser();
         Order order = orderConverter.toEntity(dto);
+        Cart cart = currentUser.getCart();
 
         List<OrderItem> items = new ArrayList<>();
+        Set<CartItem> cartItems = currentUser.getCart().getCartItems();
+
         for (ProductToItemDto productDto : dto.items()) {
             Product product = productService.getById(productDto.productId());
-            BigDecimal discount = product.getDiscountPrice() == null ? BigDecimal.ZERO : product.getDiscountPrice();
-            OrderItem orderItem = OrderItem.builder()
-                    .product(product)
-                    .quantity(productDto.quantity())
-                    .priceAtPurchase(product.getPrice()
-                            .subtract(discount)
-                            .multiply(BigDecimal.valueOf(productDto.quantity())))
-                    .build();
-            items.add(orderItem);
+
+            CartItem cartItem = cartItemService.getByProductIdAndCartId(productDto.productId(), cart.getId());
+
+            if (cartItems.contains(cartItem)) {
+                BigDecimal discount = product.getDiscountPrice() == null ? BigDecimal.ZERO : product.getDiscountPrice();
+                OrderItem orderItem = OrderItem.builder()
+                        .product(product)
+                        .quantity(productDto.quantity())
+                        .priceAtPurchase(product.getPrice()
+                                .subtract(discount)
+                                .multiply(BigDecimal.valueOf(productDto.quantity())))
+                        .build();
+
+                items.add(orderItem);
+
+                if (Objects.equals(cartItem.getQuantity(), productDto.quantity())
+                || cartItem.getQuantity() < productDto.quantity()) {
+                    cartService.deleteProduct(productDto.productId());
+                } else {
+                    int diff = cartItem.getQuantity() - productDto.quantity();
+                    cartItem.setQuantity(diff);
+                    cartItemService.create(cartItem);
+                }
+            }
         }
 
         order.setOrderItems(items);

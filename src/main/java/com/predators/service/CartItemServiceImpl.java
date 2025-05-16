@@ -1,12 +1,15 @@
 package com.predators.service;
 
+import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
+import com.predators.entity.Product;
 import com.predators.repository.CartItemJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 //@Profile("test")
@@ -18,6 +21,11 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public List<CartItem> getAll() {
         return cartItemJpaRepository.findAll();
+    }
+
+    @Override
+    public Set<CartItem> getAllByCart(Cart cart) {
+        return cartItemJpaRepository.findAllByCart(cart).orElse(null);
     }
 
     @Override
@@ -42,5 +50,16 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public Optional<CartItem> findByProduct_Id(Long productId) {
         return cartItemJpaRepository.findByProduct_Id(productId);
+    }
+
+    @Override
+    public CartItem findCartItemByProductAndCart(Product product, Cart cart) {
+        return cartItemJpaRepository.findCartItemByProductAndCart(product, cart)
+                .orElse(null);
+    }
+
+    @Override
+    public CartItem getByProductIdAndCartId(Long productId, Long cartId) {
+        return cartItemJpaRepository.findCartItemByProduct_IdAndCart_Id(productId, cartId);
     }
 }

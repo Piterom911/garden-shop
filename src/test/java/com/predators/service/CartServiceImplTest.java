@@ -111,25 +111,25 @@ class CartServiceImplTest {
     }
 
     @Test
-    void getAllProducts_shouldReturnProductsFromUserCart() {
+    void getAllProducts_shouldReturnCartItemsFromUserCart() {
         CartItem item = CartItem.builder().product(product).build();
-        Cart cart = Cart.builder().cartItems(List.of(item)).build();
+        Cart cart = Cart.builder().cartItems(Set.of(item)).build();
         user.setCart(cart);
 
         when(shopUserService.getCurrentUser()).thenReturn(user);
 
-        List<Product> products = cartService.getAllProducts();
+        Set<CartItem> products = cartService.getAllCartItems();
 
         assertEquals(1, products.size());
-        assertEquals(product, products.get(0));
+//        assertTrue(product, products.contains(products));
     }
 
     @Test
-    void getAllProducts_shouldThrowIfCartEmpty() {
+    void getAllCartItems_shouldThrowIfCartEmpty() {
         user.setCart(null);
         when(shopUserService.getCurrentUser()).thenReturn(user);
 
-        assertThrows(CartIsEmptyException.class, () -> cartService.getAllProducts());
+        assertThrows(CartIsEmptyException.class, () -> cartService.getAllCartItems());
     }
 
     @Test

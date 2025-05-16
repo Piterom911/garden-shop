@@ -1,8 +1,9 @@
 package com.predators.controller;
 
 import com.predators.dto.cart.ProductToItemDto;
+import com.predators.dto.cartItem.CartItemMapper;
+import com.predators.dto.cartItem.CartItemResponseDto;
 import com.predators.dto.product.ProductMapper;
-import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.service.CartService;
@@ -10,9 +11,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/cart")
@@ -22,6 +31,8 @@ public class CartController implements CartApi {
     private final CartService service;
 
     private final ProductMapper mapper;
+
+    private final CartItemMapper cartItemMapper;
 
     @GetMapping("/all")
     @Override
@@ -33,10 +44,12 @@ public class CartController implements CartApi {
 
     @GetMapping
     @Override
-    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-        List<ProductResponseDto> productsResponse =
-                service.getAllProducts().stream().map(mapper::toDto).toList();
-        return ResponseEntity.ok(productsResponse);
+    public ResponseEntity<Set<CartItemResponseDto>> getAllCartItems() {
+
+        Set<CartItemResponseDto> collect = service.getAllCartItems()
+                .stream().map(cartItemMapper::toDto).collect(Collectors.toSet());
+
+        return ResponseEntity.ok(collect);
     }
 
     @PostMapping

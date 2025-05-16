@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "cart_items")
 @Getter
@@ -27,4 +29,17 @@ public class CartItem {
     private Product product;
 
     private Integer quantity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        return id != null && Objects.equals(id, cartItem.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? Objects.hashCode(id) : super.hashCode();
+    }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
+
     @Query("SELECT o FROM Order o JOIN FETCH o.user WHERE o.status = :status")
     List<Order> findAllByStatus(OrderStatus status);
 

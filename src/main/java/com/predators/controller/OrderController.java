@@ -3,9 +3,11 @@ package com.predators.controller;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
+import com.predators.dto.orderitem.OrderItemMapper;
 import com.predators.entity.Order;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,15 +26,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/orders")
+@RequiredArgsConstructor
 public class OrderController implements OrderApi{
 
     private final OrderService orderService;
+
     private final OrderConverter converter;
 
-    public OrderController(OrderService orderService, OrderConverter orderConverter) {
-        this.orderService = orderService;
-        this.converter = orderConverter;
-    }
+    private final OrderItemMapper orderItemMapper;
 
     @GetMapping
     @Override

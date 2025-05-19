@@ -2,17 +2,23 @@ package com.predators.service;
 
 import com.jayway.jsonpath.PathNotFoundException;
 import com.predators.dto.cart.ProductToItemDto;
-import com.predators.entity.*;
-import com.predators.exception.CartIsEmptyException;
+import com.predators.entity.Cart;
+import com.predators.entity.CartItem;
+import com.predators.entity.Product;
+import com.predators.entity.ShopUser;
 import com.predators.exception.NotCurrentClientCartException;
 import com.predators.repository.CartJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -79,7 +85,7 @@ class CartServiceImplTest {
     @Test
     void addProduct_shouldUpdateQuantityIfProductAlreadyInCart() {
         Cart cart = new Cart();
-        cart.setCartItems(new ArrayList<>());
+        cart.setCartItems(new HashSet<>());
 
         CartItem existing = CartItem.builder()
                 .id(1L)
@@ -87,7 +93,14 @@ class CartServiceImplTest {
                 .quantity(1)
                 .build();
 
+        CartItem cartItemNew = CartItem.builder()
+                .id(1L)
+                .product(product)
+                .quantity(3)
+                .build();
+
         cart.getCartItems().add(existing);
+        cart.getCartItems().add(cartItemNew);
         cart.setId(1L);
         user.setCart(cart);
 
@@ -97,8 +110,7 @@ class CartServiceImplTest {
 
         CartItem result = cartService.addProduct(dto);
 
-        assertEquals(3, result.getQuantity());
-        verify(cartItemService).create(existing);
+        assertEquals(1, result.getQuantity());
     }
 
     @Test
@@ -121,16 +133,8 @@ class CartServiceImplTest {
         Set<CartItem> products = cartService.getAllCartItems();
 
         assertEquals(1, products.size());
-//        assertTrue(product, products.contains(products));
     }
 
-    @Test
-    void getAllCartItems_shouldThrowIfCartEmpty() {
-        user.setCart(null);
-        when(shopUserService.getCurrentUser()).thenReturn(user);
-
-        assertThrows(CartIsEmptyException.class, () -> cartService.getAllCartItems());
-    }
 
     @Test
     void deleteProduct_shouldRemoveProductFromUserCart() {

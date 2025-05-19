@@ -5,6 +5,7 @@ import com.predators.dto.category.CategoryRequestDto;
 import com.predators.dto.category.CategoryResponseDto;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,17 +16,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("v1/categories")
+@RequiredArgsConstructor
 public class CategoryController implements CategoryApi{
 
     private final CategoryService service;
 
     private final CategoryMapper mapper;
-
-
-    public CategoryController(CategoryService service, CategoryMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

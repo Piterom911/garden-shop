@@ -28,6 +28,7 @@ import java.util.Random;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductJpaRepository repository;
+
     private final CategoryService categoryService;
 
     @Override

@@ -14,6 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 public class CartItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

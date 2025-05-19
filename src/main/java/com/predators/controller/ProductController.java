@@ -7,6 +7,7 @@ import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Product;
 import com.predators.service.ProductService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,16 +19,12 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/v1/products")
+@RequiredArgsConstructor
 public class ProductController implements ProductApi{
 
     private final ProductService service;
 
     private final ProductMapper mapper;
-
-    public ProductController(ProductService service, ProductMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
 
     @GetMapping()
     public ResponseEntity<Page<ProductResponseDto>> getAll(

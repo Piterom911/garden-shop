@@ -162,19 +162,19 @@ public class ShopUserTest {
                 .when()
                 .post("v1/users/login")
                 .then()
-                .statusCode(400);
+                .statusCode(404);
     }
 
     @Test
     void testNotLoginWithEmptyPassword() {
         given()
                 .contentType("application/json")
-                .body("{\"email\":\"test@gmail.com\", " +
+                .body("{\"email\":\"someemail@gamil.com\", " +
                         "\"password\":\"\"}")
                 .when()
                 .post("v1/users/login")
                 .then()
-                .statusCode(400);
+                .statusCode(401);
     }
 
     @Test

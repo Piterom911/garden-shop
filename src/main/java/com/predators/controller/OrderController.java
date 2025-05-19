@@ -4,6 +4,7 @@ import com.predators.dto.converter.OrderConverter;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.dto.orderitem.OrderItemMapper;
+import com.predators.dto.orderitem.OrderItemResponseDto;
 import com.predators.entity.Order;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.OrderService;
@@ -47,10 +48,12 @@ public class OrderController implements OrderApi{
 
     @GetMapping("/history")
     @Override
-    public ResponseEntity<List<OrderResponseDto>> getOrderHistory() {
-        List<OrderResponseDto> list = orderService.getHistory()
+    public ResponseEntity<List<OrderItemResponseDto>> getOrderHistory() {
+        List<OrderItemResponseDto> list = orderService.getHistory()
                 .stream()
-                .map(converter::toDto)
+                .map(Order::getOrderItems)
+                .flatMap(List::stream)
+                .map(orderItemMapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
@@ -90,6 +93,12 @@ public class OrderController implements OrderApi{
     @Override
     public ResponseEntity<String> getStatus(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getStatus(id));
+    }
+
+    @PostMapping("/{id}/cancel")
+    @Override
+    public ResponseEntity<OrderResponseDto> cancel(@PathVariable Long id) {
+        return ResponseEntity.ok(converter.toDto(orderService.cancel(id)));
     }
 
     @DeleteMapping("/{id}")

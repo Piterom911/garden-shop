@@ -27,4 +27,5 @@ public interface OrderService {
     List<Order> getHistory();
 
     List<Order> getAllByStatusAndAfterDate(OrderStatus status, Timestamp afterDate);
+    Order cancel(Long id);
 }

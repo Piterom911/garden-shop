@@ -10,6 +10,7 @@ import com.predators.entity.OrderItem;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;
 import com.predators.entity.enums.OrderStatus;
+import com.predators.exception.ImpossibleChangeCurrentOrderStatusException;
 import com.predators.exception.OrderNotFoundException;
 import com.predators.repository.OrderRepository;
 import jakarta.transaction.Transactional;
@@ -20,7 +21,11 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -137,5 +142,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getAllByStatusAndAfterDate(OrderStatus status, Timestamp afterDate) {
         return orderRepository.findAllByStatusAndAfterDate(status, afterDate);
+    }
+
+    @Override
+    public Order cancel(Long id) {
+        Order order = getById(id);
+        if (order.getStatus().equals(OrderStatus.CREATED) || order.getStatus().equals(OrderStatus.PENDING)) {
+            updateStatus(id, OrderStatus.CANCELLED);
+        } else {
+            throw new ImpossibleChangeCurrentOrderStatusException("You can't change status: " + order.getStatus());
+        }
+        return order;
     }
 }

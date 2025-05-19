@@ -1,4 +1,9 @@
 package com.predators.dto.orderitem;
 
-public class OrderItemResponseDto {
+import java.math.BigDecimal;
+
+public record OrderItemResponseDto(Long id,
+                                   Long productId,
+                                   int quantity,
+                                   BigDecimal priceAtPurchase) {
 }

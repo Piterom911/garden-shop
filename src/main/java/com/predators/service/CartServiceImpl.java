@@ -98,4 +98,11 @@ public class CartServiceImpl implements CartService {
             repository.delete(cartIf.get());
         }
     }
+
+    @Override
+    public Cart save(Cart cart) {
+        return repository.save(cart);
+    }
+
+
 }

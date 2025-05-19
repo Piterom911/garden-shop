@@ -37,7 +37,7 @@ public class Cart {
     @JsonBackReference
     private ShopUser user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private Set<CartItem> cartItems = new HashSet<>();
 }

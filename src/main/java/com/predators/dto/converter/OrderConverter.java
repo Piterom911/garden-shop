@@ -2,23 +2,24 @@ package com.predators.dto.converter;
 
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
+import com.predators.dto.orderitem.OrderItemMapper;
 import com.predators.entity.Order;
 import com.predators.entity.ShopUser;
 import com.predators.entity.enums.DeliveryMethod;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.ShopUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.time.Instant;
 
+@RequiredArgsConstructor
 @Component
 public class OrderConverter implements Converter<OrderRequestDto, OrderResponseDto, Order> {
 
     private final ShopUserService shopUserService;
 
-    public OrderConverter(ShopUserService shopUserService) {
-        this.shopUserService = shopUserService;
-    }
+    private final OrderItemMapper orderItemMapper;
 
     public Order toEntity(OrderRequestDto dto) {
         ShopUser user = shopUserService.getCurrentUser();
@@ -40,9 +41,10 @@ public class OrderConverter implements Converter<OrderRequestDto, OrderResponseD
                 .deliveryAddress(order.getDeliveryAddress())
                 .deliveryMethod(order.getDeliveryMethod())
                 .contactPhone(order.getContactPhone())
-                .items(order.getOrderItems())
+                .items(order.getOrderItems().stream().map(orderItemMapper::toDto).toList())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
                 .build();
     }
 }
+

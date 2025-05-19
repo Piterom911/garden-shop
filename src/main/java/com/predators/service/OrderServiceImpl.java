@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final ShopUserService shopUserService;
 
-    private final CartServiceImpl cartService;
-
-    private final CartItemServiceImpl cartItemService;
-
+    private final CartService cartService;
     @Override
     public List<Order> getAll() {
         return orderRepository.findAll();
@@ -61,41 +55,45 @@ public class OrderServiceImpl implements OrderService {
         Cart cart = currentUser.getCart();
 
         List<OrderItem> items = new ArrayList<>();
-        Set<CartItem> cartItems = currentUser.getCart().getCartItems();
+        Set<CartItem> cartItems = cart.getCartItems();
+
+        Map<Long, CartItem> map = new HashMap<>();
+        for(CartItem cartItem : cartItems) {
+            map.put(cartItem.getProduct().getId(), cartItem);
+        }
 
         for (ProductToItemDto productDto : dto.items()) {
             Product product = productService.getById(productDto.productId());
-
-            CartItem cartItem = cartItemService.getByProductIdAndCartId(productDto.productId(), cart.getId());
-
-            if (cartItems.contains(cartItem)) {
-                BigDecimal discount = product.getDiscountPrice() == null ? BigDecimal.ZERO : product.getDiscountPrice();
-                OrderItem orderItem = OrderItem.builder()
-                        .product(product)
-                        .quantity(productDto.quantity())
-                        .priceAtPurchase(product.getPrice()
-                                .subtract(discount)
-                                .multiply(BigDecimal.valueOf(productDto.quantity())))
-                        .build();
-
-                items.add(orderItem);
-
-                if (Objects.equals(cartItem.getQuantity(), productDto.quantity())
-                || cartItem.getQuantity() < productDto.quantity()) {
-                    cartService.deleteProduct(productDto.productId());
-                } else {
-                    int diff = cartItem.getQuantity() - productDto.quantity();
-                    cartItem.setQuantity(diff);
-                    cartItemService.create(cartItem);
-                }
+            CartItem cartItem = map.get(productDto.productId());
+            if (cartItem == null) {
+                continue;
+            }
+            int quantityOrderItem = Math.min(cartItem.getQuantity(), productDto.quantity());
+            OrderItem orderItem = getOrderItem(productDto, product);
+            items.add(orderItem);
+            if (cartItem.getQuantity() <= quantityOrderItem) {
+                cart.getCartItems().remove(cartItem);
+            } else {
+                cartItem.setQuantity(cartItem.getQuantity() - quantityOrderItem);
             }
         }
 
         order.setOrderItems(items);
         Order entity = orderRepository.save(order);
         log.debug("Created order: " + entity);
-
+        cartService.save(cart);
         return entity;
+    }
+
+    private  OrderItem getOrderItem(ProductToItemDto productDto, Product product) {
+        return OrderItem.builder()
+                .product(product)
+                .quantity(productDto.quantity())
+                .priceAtPurchase(product.getPrice()
+                        .subtract(product.getDiscountPrice() == null ?
+                                BigDecimal.ZERO : product.getDiscountPrice())
+                        .multiply(BigDecimal.valueOf(productDto.quantity())))
+                .build();
     }
 
     @Override

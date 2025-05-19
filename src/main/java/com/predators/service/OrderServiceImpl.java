@@ -41,6 +41,7 @@ public class OrderServiceImpl implements OrderService {
     private final ShopUserService shopUserService;
 
     private final CartService cartService;
+
     @Override
     public List<Order> getAll() {
         return orderRepository.findAll();

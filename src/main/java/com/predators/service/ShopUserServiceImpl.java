@@ -8,6 +8,7 @@ import com.predators.exception.UserAlreadyExistsException;
 import com.predators.exception.UserNotFoundException;
 import com.predators.repository.UserJpaRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ShopUserServiceImpl implements ShopUserService {
 
     private final UserJpaRepository userRepository;
-
-    public ShopUserServiceImpl(UserJpaRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public List<ShopUser> getAll() {
@@ -36,7 +34,6 @@ public class ShopUserServiceImpl implements ShopUserService {
         if (existingUser.isPresent()) {
             throw new UserAlreadyExistsException("User with such email exists");
         }
-
         return userRepository.save(shopUser);
     }
 
@@ -93,5 +90,4 @@ public class ShopUserServiceImpl implements ShopUserService {
         }
         return userRepository.save(currentUser);
     }
-
 }

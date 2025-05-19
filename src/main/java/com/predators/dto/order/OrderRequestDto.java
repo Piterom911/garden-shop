@@ -8,6 +8,5 @@ import java.util.List;
 public record OrderRequestDto(
         List<ProductToItemDto> items,
         String deliveryAddress,
-        String deliveryMethod
-) {
+        String deliveryMethod) {
 }

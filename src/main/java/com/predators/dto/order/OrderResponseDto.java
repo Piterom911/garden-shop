@@ -17,4 +17,6 @@ public record OrderResponseDto(
         DeliveryMethod deliveryMethod,
         List<OrderItemResponseDto> items,
         Timestamp createdAt,
-        Timestamp updatedAt) {}
+        Timestamp updatedAt) {
+
+}

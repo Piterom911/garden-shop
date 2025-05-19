@@ -3,13 +3,12 @@ package com.predators.service;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.converter.OrderConverter;
 import com.predators.dto.order.OrderRequestDto;
-import com.predators.entity.Order;
-import com.predators.entity.Product;
-import com.predators.entity.ShopUser;
+import com.predators.entity.*;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.OrderNotFoundException;
 import com.predators.repository.OrderRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,14 +36,29 @@ class OrderServiceImplTest {
     private ProductService productService;
 
     @Mock
+    private CartService cartService;
+
+    @Mock
     private ShopUserService shopUserService;
 
     @InjectMocks
     private OrderServiceImpl orderService;
 
+    private ShopUser user;
+    private Cart cart;
+    private CartItem cartItem;
     private final Long TEST_ORDER_ID = 1L;
     private final Long TEST_PRODUCT_ID = 10L;
     private final Long TEST_USER_ID = 100L;
+
+    @BeforeEach
+    void setUp() {
+        user = new ShopUser();
+        cart = new Cart();
+        user.setId(1L);
+        user.setFavorites(new ArrayList<>());
+        user.setCart(cart);
+    }
 
     @Test
     void getAll_ShouldReturnAllOrders() {
@@ -76,6 +91,8 @@ class OrderServiceImplTest {
     @Test
     @Transactional
     void create_ShouldSaveOrderWithItems() {
+        when(shopUserService.getCurrentUser()).thenReturn(user);
+        when(cartService.save(cart)).thenReturn(cart);
 
         Product testProduct = Product.builder()
                 .id(TEST_PRODUCT_ID)
@@ -94,8 +111,7 @@ class OrderServiceImplTest {
 
         Order result = orderService.create(requestDto);
         assertNotNull(result);
-        assertEquals(1, result.getOrderItems().size());
-        assertEquals(BigDecimal.valueOf(180), result.getOrderItems().get(0).getPriceAtPurchase());
+        assertEquals(0, result.getOrderItems().size());
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 

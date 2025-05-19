@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/v1/users")
+@RequiredArgsConstructor
 public class ShopUserController implements ShopUserApi{
 
     private final ShopUserService shopUserService;

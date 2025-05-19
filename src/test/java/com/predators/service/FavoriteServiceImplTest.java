@@ -81,21 +81,21 @@ class FavoriteServiceImplTest {
     @Test
     void testGetFavoriteById_Found() {
         when(shopUserService.getCurrentUser()).thenReturn(user);
-        when(favoriteRepository.findById(3L)).thenReturn(Optional.of(favorite));
+        when(favoriteRepository.findByIdAndUser(3L, user)).thenReturn(Optional.ofNullable(favorite));
 
         Favorite result = favoriteService.getById(3L);
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(3L);
-        verify(favoriteRepository, times(1)).findById(3L);
     }
 
     @Test
     void testGetFavoriteById_NotFound() {
-        when(favoriteRepository.findById(99L)).thenReturn(Optional.empty());
+        when(shopUserService.getCurrentUser()).thenReturn(user);
+        when(favoriteRepository.findByIdAndUser(99L, user)).thenReturn(Optional.empty());
 
         assertThrows(FavoriteNotFoundException.class, () -> favoriteService.getById(99L));
-        verify(favoriteRepository, times(1)).findById(99L);
+        verify(favoriteRepository, times(1)).findByIdAndUser(99L, user);
     }
 
     @Test

@@ -9,11 +9,14 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductSpecification {
 
     public static Specification<Product> withFilters(ProductFilterDto filter) {
+
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 

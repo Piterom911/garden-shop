@@ -1,6 +1,7 @@
 package com.predators.controller;
 
 import com.predators.dto.cart.ProductToItemDto;
+import com.predators.dto.cartItem.CartItemResponseDto;
 import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Set;
 
 @Tag(name = "Cart Management", description = "Operations related to shopping cart functionality")
 public interface CartApi {
@@ -33,7 +35,7 @@ public interface CartApi {
             description = "Retrieves all products in the authenticated user's shopping cart")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved cart products",
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductResponseDto.class))))
-    ResponseEntity<List<ProductResponseDto>> getAllProducts();
+    ResponseEntity<Set<CartItemResponseDto>> getAllCartItems();
 
     @PostMapping
     @Operation(summary = "Add product to cart",

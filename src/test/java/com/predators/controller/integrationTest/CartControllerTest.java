@@ -35,7 +35,7 @@ class CartControllerTest {
     }
 
     @Test
-    void getAllProducts() {
+    void getAllCartItems() {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()

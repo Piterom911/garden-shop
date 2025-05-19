@@ -55,8 +55,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<Object> handlerCommonException(Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler({ImpossibleChangeCurrentOrderStatusException.class})
+    public ResponseEntity<Object> handlerImpossibleChangeCurrentOrderStatusException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 }

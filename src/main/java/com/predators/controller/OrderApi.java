@@ -2,6 +2,7 @@ package com.predators.controller;
 
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
+import com.predators.dto.orderitem.OrderItemResponseDto;
 import com.predators.entity.Order;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,8 +28,8 @@ public interface OrderApi {
 
     @Operation(summary = "Get order history", description = "Retrieves order history for the authenticated user")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved order history",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = OrderResponseDto.class))))
-    ResponseEntity<List<OrderResponseDto>> getOrderHistory();
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = OrderItemResponseDto.class))))
+    ResponseEntity<List<OrderItemResponseDto>> getOrderHistory();
 
     @Operation(summary = "Get orders by status", description = "Retrieves orders filtered by their status")
     @Parameter(name = "status", description = "Order status to filter by (e.g., CREATED, PENDING, COMPLETED)",
@@ -83,4 +84,14 @@ public interface OrderApi {
     @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN role")
     @ApiResponse(responseCode = "404", description = "Order not found")
     ResponseEntity<Void> delete(@PathVariable Long id);
+
+    @Operation(summary = "Cancel order", description = "Cancel an order by its ID.If its status is CREATED or PENDING")
+    @Parameter(name = "id", description = "ID of the order to cancel", required = true,
+            schema = @Schema(type = "integer", format = "int64", example = "1"))
+    @ApiResponse(responseCode = "200", description = "Successfully updated order status",
+            content = @Content(schema = @Schema(implementation = OrderResponseDto.class)))
+    @ApiResponse(responseCode = "404", description = "Order not found")
+    @ApiResponse(responseCode = "409", description = "You can't change order status")
+    ResponseEntity<OrderResponseDto> cancel(@PathVariable Long id);
+
 }

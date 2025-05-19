@@ -13,6 +13,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.predators.entity.enums.Role.ROLE_CLIENT;
+
+
 @Service
 public class JwtServiceImpl implements JwtService {
 
@@ -26,7 +29,11 @@ public class JwtServiceImpl implements JwtService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("login", user.getEmail());
-        claims.put("role", user.getRole());
+//        claims.put("role", user.getRole());
+        if (user.getRole().equals(ROLE_CLIENT)) {
+            claims.put("role", user.getRole().name());
+        }
+
         return generateToken(claims, user);
     }
 

@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/products")
@@ -78,4 +80,11 @@ public class ProductController implements ProductApi{
         Product dayProduct = service.getDayProduct();
         return new ResponseEntity<>(mapper.toDto(dayProduct), HttpStatus.OK);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<ProductResponseDto>> filterProducts(@ModelAttribute ProductFilterDto filter) {
+        List<ProductResponseDto> result = service.getAllFiltered(filter);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

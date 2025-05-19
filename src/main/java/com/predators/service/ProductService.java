@@ -2,10 +2,13 @@ package com.predators.service;
 
 import com.predators.dto.product.ProductFilterDto;
 import com.predators.dto.product.ProductRequestDto;
+import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -30,4 +33,5 @@ public interface ProductService {
     Product setDiscount(Long id, BigDecimal discount);
 
     Product getDayProduct();
+    List<ProductResponseDto> getAllFiltered(ProductFilterDto filter);
 }

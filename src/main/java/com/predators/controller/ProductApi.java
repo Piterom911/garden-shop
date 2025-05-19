@@ -13,12 +13,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Tag(name = "Product Management", description = "Operations for managing products")
 public interface ProductApi {
@@ -93,4 +95,10 @@ public interface ProductApi {
             content = @Content(schema = @Schema(implementation = ProductResponseDto.class)))
     @ApiResponse(responseCode = "404", description = "Product of the day not set")
     ResponseEntity<ProductResponseDto> getDayProduct();
+
+    @GetMapping("/filter")
+    @Operation(summary = "Filter products", description = "Returns products by filters: price range, category, discount")
+    @ApiResponse(responseCode = "200", description = "Filtered products returned")
+    ResponseEntity<List<ProductResponseDto>> filterProducts(@ModelAttribute ProductFilterDto filter);
+
 }

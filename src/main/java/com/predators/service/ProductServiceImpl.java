@@ -1,7 +1,9 @@
 package com.predators.service;
 
 import com.predators.dto.product.ProductFilterDto;
+import com.predators.dto.product.ProductMapper;
 import com.predators.dto.product.ProductRequestDto;
+import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
 import com.predators.exception.DiscountNotFoundException;
@@ -9,6 +11,7 @@ import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
 import com.predators.specification.ProductSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +33,9 @@ public class ProductServiceImpl implements ProductService {
     private final ProductJpaRepository repository;
 
     private final CategoryService categoryService;
+
+    @Qualifier("productMapper")
+    private final ProductMapper mapper;
 
     @Override
     public List<Product> getAll() {
@@ -146,5 +152,13 @@ public class ProductServiceImpl implements ProductService {
         int index = random.nextInt(0,discountedProducts.size());
         return discountedProducts.get(index);
     }
+
+    @Override
+    public List<ProductResponseDto> getAllFiltered(ProductFilterDto filter) {
+        Specification<Product> spec = ProductSpecification.withFilters(filter);
+        List<Product> products = repository.findAll(spec);
+        return products.stream().map(mapper::toDto).toList();
+    }
+
 }
 

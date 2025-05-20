@@ -9,12 +9,12 @@ import com.predators.service.ProductService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,6 +26,7 @@ public class ProductController implements ProductApi{
 
     private final ProductService service;
 
+    @Qualifier("productMapperImpl")
     private final ProductMapper mapper;
 
     @GetMapping()
@@ -86,5 +87,4 @@ public class ProductController implements ProductApi{
         List<ProductResponseDto> result = service.getAllFiltered(filter);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
 }

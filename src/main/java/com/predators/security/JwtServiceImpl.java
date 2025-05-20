@@ -15,7 +15,6 @@ import java.util.Map;
 
 import static com.predators.entity.enums.Role.ROLE_CLIENT;
 
-
 @Service
 public class JwtServiceImpl implements JwtService {
 

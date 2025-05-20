@@ -6,6 +6,7 @@ import com.predators.service.CategoryService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
 public abstract class ProductMapper {

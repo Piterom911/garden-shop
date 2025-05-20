@@ -1,7 +1,7 @@
 package com.predators.service;
 
 import com.predators.dto.cart.ProductToItemDto;
-import com.predators.dto.converter.OrderConverter;
+import com.predators.dto.converter.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.entity.*;
 import com.predators.entity.enums.OrderStatus;
@@ -30,7 +30,7 @@ class OrderServiceImplTest {
     private OrderRepository orderRepository;
 
     @Mock
-    private OrderConverter orderConverter;
+    private OrderMapper orderConverter;
 
     @Mock
     private ProductService productService;

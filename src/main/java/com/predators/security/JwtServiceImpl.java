@@ -32,7 +32,6 @@ public class JwtServiceImpl implements JwtService {
         if (user.getRole().equals(ROLE_CLIENT)) {
             claims.put("role", user.getRole().name());
         }
-
         return generateToken(claims, user);
     }
 

@@ -96,9 +96,4 @@ public interface ProductApi {
     @ApiResponse(responseCode = "404", description = "Product of the day not set")
     ResponseEntity<ProductResponseDto> getDayProduct();
 
-    @GetMapping("/filter")
-    @Operation(summary = "Filter products", description = "Returns products by filters: price range, category, discount")
-    @ApiResponse(responseCode = "200", description = "Filtered products returned")
-    ResponseEntity<List<ProductResponseDto>> filterProducts(@ModelAttribute ProductFilterDto filter);
-
 }

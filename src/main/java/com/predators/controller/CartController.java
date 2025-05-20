@@ -8,6 +8,7 @@ import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.service.CartService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ public class CartController implements CartApi {
 
     private final CartService service;
 
+    @Qualifier("productMapper")
     private final ProductMapper mapper;
 
     private final CartItemMapper cartItemMapper;

@@ -82,9 +82,4 @@ public class ProductController implements ProductApi{
         return new ResponseEntity<>(mapper.toDto(dayProduct), HttpStatus.OK);
     }
 
-    @GetMapping("/filter")
-    public ResponseEntity<List<ProductResponseDto>> filterProducts(@ModelAttribute ProductFilterDto filter) {
-        List<ProductResponseDto> result = service.getAllFiltered(filter);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 }

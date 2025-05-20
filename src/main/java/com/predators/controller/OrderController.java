@@ -1,6 +1,6 @@
 package com.predators.controller;
 
-import com.predators.dto.converter.OrderConverter;
+import com.predators.dto.converter.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.dto.orderitem.OrderItemMapper;
@@ -32,7 +32,7 @@ public class OrderController implements OrderApi{
 
     private final OrderService orderService;
 
-    private final OrderConverter converter;
+    private final OrderMapper mapper;
 
     private final OrderItemMapper orderItemMapper;
 
@@ -41,7 +41,7 @@ public class OrderController implements OrderApi{
     public ResponseEntity<List<OrderResponseDto>> getAll() {
         List<OrderResponseDto> list = orderService.getAll()
                 .stream()
-                .map(converter::toDto)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
@@ -70,14 +70,14 @@ public class OrderController implements OrderApi{
     public ResponseEntity<OrderResponseDto> create(@RequestBody OrderRequestDto dto) {
         Order created = orderService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(converter.toDto(created));
+                .body(mapper.toDto(created));
     }
 
     @GetMapping("/{id}")
     @Override
     public ResponseEntity<OrderResponseDto> getById(@PathVariable Long id) {
         Order order = orderService.getById(id);
-        return ResponseEntity.ok(converter.toDto(order));
+        return ResponseEntity.ok(mapper.toDto(order));
     }
 
     @PutMapping("/{id}/status")
@@ -86,7 +86,7 @@ public class OrderController implements OrderApi{
     public ResponseEntity<OrderResponseDto> updateStatus(@PathVariable Long id,
                                                          @RequestParam String status) {
         Order updated = orderService.updateStatus(id, OrderStatus.valueOf(status.toUpperCase()));
-        return ResponseEntity.ok(converter.toDto(updated));
+        return ResponseEntity.ok(mapper.toDto(updated));
     }
 
     @GetMapping("/{id}/status")
@@ -98,7 +98,7 @@ public class OrderController implements OrderApi{
     @PostMapping("/{id}/cancel")
     @Override
     public ResponseEntity<OrderResponseDto> cancel(@PathVariable Long id) {
-        return ResponseEntity.ok(converter.toDto(orderService.cancel(id)));
+        return ResponseEntity.ok(mapper.toDto(orderService.cancel(id)));
     }
 
     @DeleteMapping("/{id}")

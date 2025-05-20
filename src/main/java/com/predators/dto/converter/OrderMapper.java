@@ -15,7 +15,7 @@ import java.time.Instant;
 
 @RequiredArgsConstructor
 @Component
-public class OrderConverter implements Converter<OrderRequestDto, OrderResponseDto, Order> {
+public class OrderMapper implements Converter<OrderRequestDto, OrderResponseDto, Order> {
 
     private final ShopUserService shopUserService;
 

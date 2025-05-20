@@ -6,6 +6,7 @@ import com.predators.dto.category.CategoryResponseDto;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ public class CategoryController implements CategoryApi{
 
     private final CategoryService service;
 
+    @Qualifier("categoryMapper")
     private final CategoryMapper mapper;
 
     @GetMapping

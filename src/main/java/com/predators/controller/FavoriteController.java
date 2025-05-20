@@ -5,6 +5,7 @@ import com.predators.dto.favorite.FavoriteResponseDto;
 import com.predators.entity.Favorite;
 import com.predators.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class FavoriteController implements FavoriteApi {
 
     private final FavoriteService favoriteService;
 
+    @Qualifier("favoriteMapper")
     private final FavoriteMapper mapper;
 
     @GetMapping

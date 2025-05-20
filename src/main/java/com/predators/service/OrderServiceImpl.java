@@ -1,7 +1,7 @@
 package com.predators.service;
 
 import com.predators.dto.cart.ProductToItemDto;
-import com.predators.dto.converter.OrderConverter;
+import com.predators.dto.converter.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final OrderConverter orderConverter;
+    private final OrderMapper orderConverter;
 
     private final ProductService productService;
 

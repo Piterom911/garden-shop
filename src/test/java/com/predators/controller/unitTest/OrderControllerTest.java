@@ -2,7 +2,7 @@ package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.predators.controller.OrderController;
-import com.predators.dto.converter.OrderConverter;
+import com.predators.dto.converter.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.dto.orderitem.OrderItemMapper;
@@ -35,7 +35,7 @@ class OrderControllerTest {
     private OrderService orderService;
 
     @Mock
-    private OrderConverter converter;
+    private OrderMapper converter;
 
     @Mock
     private OrderItemMapper orderItemMapper;

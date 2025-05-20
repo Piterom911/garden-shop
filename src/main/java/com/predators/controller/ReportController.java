@@ -5,6 +5,7 @@ import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.ReportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ public class ReportController implements ReportApi {
 
     private final ReportService reportService;
 
+    @Qualifier("productMapper")
     private final ProductMapper mapper;
 
     @GetMapping("/top-product")

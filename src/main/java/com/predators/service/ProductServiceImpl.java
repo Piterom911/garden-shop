@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -136,12 +137,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getDayProduct() {
-        PriorityQueue<Product> productWithDiscount = repository.findAllByDiscountPriceIsNotNull();
+        List<Product> productRepo = repository.findAllByDiscountPriceIsNotNull();
 
-        if (productWithDiscount.isEmpty()) {
+        Comparator<Product> comparator = Comparator.comparing(Product::getDiscountPrice).reversed();
+        PriorityQueue<Product> priorityQueue = new PriorityQueue<>(comparator);
+        priorityQueue.addAll(productRepo);
+
+        if (priorityQueue.isEmpty()) {
             throw new DiscountNotFoundException("Product with discount is not found");
         }
-        return productWithDiscount.peek();
+        return priorityQueue.peek();
     }
 
     private Specification<Product> withFilters(ProductFilterDto filter) {

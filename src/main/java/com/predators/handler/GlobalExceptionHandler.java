@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({UserAlreadyExistsException.class})
+    @ExceptionHandler({AlreadyExistsException.class})
     public ResponseEntity<Object> handlerAlreadyExistsException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }

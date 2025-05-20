@@ -4,6 +4,7 @@ import com.predators.dto.product.ProductFilterDto;
 import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
+import com.predators.exception.DiscountGraterThanPriceException;
 import com.predators.exception.DiscountNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
@@ -23,8 +24,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.PriorityQueue;
 
 @Service
 @RequiredArgsConstructor
@@ -124,31 +124,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product setDiscount(Long id, BigDecimal discount) {
         Product product = getById(id);
-        product.setDiscountPrice(discount);
-        return create(product);
+
+        if (product.getPrice().compareTo(discount) > 0) {
+            product.setDiscountPrice(discount);
+            product.setUpdatedAt(Timestamp.from(Instant.now()));
+            return create(product);
+        }
+
+        throw new DiscountGraterThanPriceException("Discount can't be grater than Price!");
     }
 
     @Override
     public Product getDayProduct() {
-        List<Product> productWithDiscount = repository.findProductWithDiscount();
+        PriorityQueue<Product> productWithDiscount = repository.findAllByDiscountPriceIsNotNull();
+
         if (productWithDiscount.isEmpty()) {
-           throw  new DiscountNotFoundException("Product with discount is not found");
+            throw new DiscountNotFoundException("Product with discount is not found");
         }
-        BigDecimal greatestDiscount = new BigDecimal(0);
-        for (Product product : productWithDiscount) {
-            if (product.getDiscountPrice().compareTo(greatestDiscount) > 0) {
-                greatestDiscount = product.getDiscountPrice();
-            }
-        }
-        List<Product> discountedProducts = new ArrayList<>();
-        for (Product product : productWithDiscount) {
-            if (Objects.equals(product.getDiscountPrice(), greatestDiscount)) {
-                discountedProducts.add(product);
-            }
-        }
-        Random random = new Random();
-        int index = random.nextInt(0,discountedProducts.size());
-        return discountedProducts.get(index);
+        return productWithDiscount.peek();
     }
 
     private Specification<Product> withFilters(ProductFilterDto filter) {

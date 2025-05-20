@@ -3,6 +3,7 @@ package com.predators.service;
 import com.predators.entity.Favorite;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;
+import com.predators.exception.FavoriteAlreadyExistsException;
 import com.predators.exception.FavoriteNotFoundException;
 import com.predators.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,21 +30,22 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public Favorite create(Long productId) {
         ShopUser currentUser = shopUserService.getCurrentUser();
-        Product byId = productService.getById(productId);
+        Product product = productService.getById(productId);
         Set<Favorite> favorites = currentUser.getFavorites();
+        Favorite existedFavorite = favoriteRepository.findByUserAndProduct(currentUser, product).orElse(null);
 
-        for (Favorite favorite : favorites) {
-            Long favoriteProductId = favorite.getProduct().getId();
-            if (favoriteProductId.equals(productId)) {
-                return favoriteRepository.save(favorite);
-            }
+        if (favorites.contains(existedFavorite)) {
+           throw new FavoriteAlreadyExistsException("Favorite with such data already exists");
         }
 
-        Favorite favorite = Favorite.builder()
+        existedFavorite = Favorite.builder()
                 .user(currentUser)
-                .product(byId)
+                .product(product)
                 .build();
-        return favoriteRepository.save(favorite);
+
+        favorites.add(existedFavorite);
+
+        return favoriteRepository.save(existedFavorite);
     }
 
     @Override

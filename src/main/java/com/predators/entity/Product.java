@@ -21,7 +21,7 @@ import java.util.Set;
 @Setter
 @Builder
 @Table(name = "products")
-public class Product {
+public class Product implements Comparable<Product> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,4 +56,9 @@ public class Product {
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "product")
     @JsonBackReference
     private Set<Favorite> favorites = new HashSet<>();
+
+    @Override
+    public int compareTo(Product other) {
+        return other.discountPrice.intValue() - this.discountPrice.intValue();
+    }
 }

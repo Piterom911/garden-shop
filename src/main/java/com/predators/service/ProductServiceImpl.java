@@ -7,7 +7,9 @@ import com.predators.entity.Product;
 import com.predators.exception.DiscountNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
-import com.predators.specification.ProductSpecification;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(orders));
-        Specification<Product> spec = ProductSpecification.withFilters(filter);
+        Specification<Product> spec = withFilters(filter);
         return repository.findAll(spec, pageable);
     }
 
@@ -145,6 +147,43 @@ public class ProductServiceImpl implements ProductService {
         Random random = new Random();
         int index = random.nextInt(0,discountedProducts.size());
         return discountedProducts.get(index);
+    }
+
+    private Specification<Product> withFilters(ProductFilterDto filter) {
+
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (filter != null) {
+
+                if (filter.minPrice() != null) {
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("price"), filter.minPrice()));
+                }
+
+                if (filter.maxPrice() != null) {
+                    predicates.add(cb.lessThanOrEqualTo(root.get("price"), filter.maxPrice()));
+                }
+
+                if (filter.categoryId() != null) {
+                    Join<Product, Category> categoryJoin = root.join("category", JoinType.INNER);
+                    predicates.add(cb.equal(categoryJoin.get("id"), filter.categoryId()));
+                }
+
+                if (Boolean.TRUE.equals(filter.discountPrice())) {
+                    predicates.add(cb.isNotNull(root.get("discountPrice")));
+                    predicates.add(cb.lessThan(root.get("discountPrice"), root.get("price")));
+                } else if (Boolean.FALSE.equals(filter.discountPrice())) {
+                    predicates.add(
+                            cb.or(
+                                    cb.isNull(root.get("discountPrice")),
+                                    cb.greaterThanOrEqualTo(root.get("discountPrice"), root.get("price"))
+                            )
+                    );
+                }
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
     }
 }
 

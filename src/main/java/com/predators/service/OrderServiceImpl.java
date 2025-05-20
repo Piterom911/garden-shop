@@ -1,14 +1,9 @@
 package com.predators.service;
 
 import com.predators.dto.cart.ProductToItemDto;
-import com.predators.dto.converter.OrderConverter;
+import com.predators.dto.order.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
-import com.predators.entity.Cart;
-import com.predators.entity.CartItem;
-import com.predators.entity.Order;
-import com.predators.entity.OrderItem;
-import com.predators.entity.Product;
-import com.predators.entity.ShopUser;
+import com.predators.entity.*;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.ImpossibleChangeCurrentOrderStatusException;
 import com.predators.exception.OrderNotFoundException;
@@ -21,11 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
 
-    private final OrderConverter orderConverter;
+    private final OrderMapper orderMapper;
 
     private final ProductService productService;
 
@@ -57,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order create(OrderRequestDto dto) {
         ShopUser currentUser = shopUserService.getCurrentUser();
-        Order order = orderConverter.toEntity(dto);
+        Order order = orderMapper.toEntity(dto);
         Cart cart = currentUser.getCart();
 
         List<OrderItem> items = new ArrayList<>();

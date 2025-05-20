@@ -1,7 +1,7 @@
 package com.predators.service;
 
 import com.predators.dto.cart.ProductToItemDto;
-import com.predators.dto.converter.OrderConverter;
+import com.predators.dto.order.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.entity.*;
 import com.predators.entity.enums.OrderStatus;
@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +30,7 @@ class OrderServiceImplTest {
     private OrderRepository orderRepository;
 
     @Mock
-    private OrderConverter orderConverter;
+    private OrderMapper orderMapper;
 
     @Mock
     private ProductService productService;
@@ -56,7 +56,7 @@ class OrderServiceImplTest {
         user = new ShopUser();
         cart = new Cart();
         user.setId(1L);
-        user.setFavorites(new ArrayList<>());
+        user.setFavorites(new HashSet<>());
         user.setCart(cart);
     }
 
@@ -106,7 +106,7 @@ class OrderServiceImplTest {
 
         Order expectedOrder = Order.builder().id(TEST_ORDER_ID).build();
         when(productService.getById(TEST_PRODUCT_ID)).thenReturn(testProduct);
-        when(orderConverter.toEntity(requestDto)).thenReturn(expectedOrder);
+        when(orderMapper.toEntity(requestDto)).thenReturn(expectedOrder);
         when(orderRepository.save(any(Order.class))).thenReturn(expectedOrder);
 
         Order result = orderService.create(requestDto);

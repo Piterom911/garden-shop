@@ -8,7 +8,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -49,5 +51,5 @@ public class Product {
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "product")
     @JsonBackReference
-    private List<Favorite> favorites;
+    private Set<Favorite> favorites = new HashSet<>();
 }

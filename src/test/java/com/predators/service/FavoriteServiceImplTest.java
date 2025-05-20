@@ -12,9 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -43,8 +42,6 @@ class FavoriteServiceImplTest {
     void setUp() {
         user = new ShopUser();
         user.setId(1L);
-        user.setFavorites(new ArrayList<>());
-
         product = new Product();
         product.setId(2L);
 
@@ -58,9 +55,9 @@ class FavoriteServiceImplTest {
     @Test
     void testGetAllFavorites() {
         when(shopUserService.getCurrentUser()).thenReturn(user);
-        when(favoriteRepository.findAllByUser(user)).thenReturn(List.of(favorite));
+        when(favoriteRepository.findAllByUser(user)).thenReturn(Set.of(favorite));
 
-        List<Favorite> result = favoriteService.getAll();
+        Set<Favorite> result = favoriteService.getAll();
 
         assertThat(result).hasSize(1);
         verify(favoriteRepository, times(1)).findAllByUser(user);

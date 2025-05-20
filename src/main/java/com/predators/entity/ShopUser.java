@@ -5,7 +5,8 @@ import com.predators.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -33,7 +34,7 @@ public class ShopUser {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
-    private List<Favorite> favorites;
+    private Set<Favorite> favorites = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference

@@ -8,7 +8,7 @@ import com.predators.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +21,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final ShopUserService shopUserService;
 
     @Override
-    public List<Favorite> getAll() {
+    public Set<Favorite> getAll() {
         ShopUser currentUser = shopUserService.getCurrentUser();
         return favoriteRepository.findAllByUser(currentUser);
     }
@@ -30,7 +30,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     public Favorite create(Long productId) {
         ShopUser currentUser = shopUserService.getCurrentUser();
         Product byId = productService.getById(productId);
-        List<Favorite> favorites = currentUser.getFavorites();
+        Set<Favorite> favorites = currentUser.getFavorites();
 
         for (Favorite favorite : favorites) {
             Long favoriteProductId = favorite.getProduct().getId();

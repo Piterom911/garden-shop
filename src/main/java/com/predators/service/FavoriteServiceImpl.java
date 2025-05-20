@@ -23,7 +23,6 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public List<Favorite> getAll() {
         ShopUser currentUser = shopUserService.getCurrentUser();
-
         return favoriteRepository.findAllByUser(currentUser);
     }
 
@@ -56,6 +55,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public void delete(Long id) {
-        favoriteRepository.deleteById(id);
+        Favorite favorite = getById(id);
+        favoriteRepository.deleteById(favorite.getId());
     }
 }

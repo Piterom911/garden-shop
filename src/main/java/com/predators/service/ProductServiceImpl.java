@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -81,7 +82,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long id) {
-        repository.deleteById(id);
+        Product product = getById(id);
+        repository.deleteById(product.getId());
     }
 
     @Override
@@ -140,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
         }
         List<Product> discountedProducts = new ArrayList<>();
         for (Product product : productWithDiscount) {
-            if (product.getDiscountPrice() == greatestDiscount) {
+            if (Objects.equals(product.getDiscountPrice(), greatestDiscount)) {
                 discountedProducts.add(product);
             }
         }
@@ -181,7 +183,6 @@ public class ProductServiceImpl implements ProductService {
                     );
                 }
             }
-
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

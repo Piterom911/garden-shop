@@ -87,7 +87,7 @@ public class ReportServiceImplTest {
         Order order1 = createOrder(101L, status, now.minusDays(3), item1);
         Order order2 = createOrder(102L, status, now.minusDays(1), item2);
 
-        when(orderService.getAllByStatusWithException(status)).thenReturn(List.of(order1, order2));
+        when(orderService.getAllByStatus(status)).thenReturn(List.of(order1, order2));
 
         Set<Product> waitingProducts = reportService.waitingPaymentMoreNDays(days);
 
@@ -102,7 +102,7 @@ public class ReportServiceImplTest {
 
         Order order = createOrder(101L, status, now.minusDays(3), item1);
 
-        when(orderService.getAllByStatusWithException(status)).thenReturn(List.of(order));
+        when(orderService.getAllByStatus(status)).thenReturn(List.of(order));
 
         Set<Product> waitingProducts = reportService.waitingPaymentMoreNDays(days);
 

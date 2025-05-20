@@ -1,4 +1,4 @@
-package com.predators.util;
+package com.predators.scheduler;
 
 import com.predators.entity.Order;
 import com.predators.entity.enums.OrderStatus;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executor;
 
 @Slf4j
 @Component
@@ -19,7 +18,6 @@ import java.util.concurrent.Executor;
 public class OrderScheduler {
 
     private final OrderService orderService;
-    private final Executor pool;
 
     @Async("pool")
     @Scheduled(fixedRate = 30000)

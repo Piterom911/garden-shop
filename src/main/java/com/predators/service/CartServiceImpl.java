@@ -1,12 +1,12 @@
 package com.predators.service;
 
-import com.jayway.jsonpath.PathNotFoundException;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;
 import com.predators.exception.NotCurrentClientCartException;
+import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.CartJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,6 @@ public class CartServiceImpl implements CartService {
         if (currentUser.getCart() == null) {
             return null;
         }
-
         return currentUser.getCart().getCartItems();
     }
 
@@ -78,7 +77,7 @@ public class CartServiceImpl implements CartService {
     public void deleteProduct(Long productId) {
         Optional<CartItem> cartItemByProduct = cartItemService.findByProduct_Id(productId);
         if (cartItemByProduct.isEmpty()) {
-            throw new PathNotFoundException("Product with id " + productId + " not found");
+            throw new ProductNotFoundException("Product with id " + productId + " not found");
         }
 
         ShopUser user = shopUserService.getCurrentUser();
@@ -86,17 +85,13 @@ public class CartServiceImpl implements CartService {
         if (!Objects.equals(user.getCart().getId(), cart.getId())) {
             throw new NotCurrentClientCartException("This is not your Cart. Finger weg!");
         }
-
         cartItemService.delete(cartItemByProduct.get().getId());
     }
 
     @Override
-    @Transactional
     public void deleteById(Long id) {
         Optional<Cart> cartIf = repository.findById(id);
-        if (cartIf.isPresent()) {
-            repository.delete(cartIf.get());
-        }
+        cartIf.ifPresent(repository::delete);
     }
 
     @Override

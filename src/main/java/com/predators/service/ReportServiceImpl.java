@@ -46,7 +46,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public Set<Product> waitingPaymentMoreNDays(Long days) {
-        List<Order> orders = orderService.getAllByStatusWithException(OrderStatus.PENDING);
+        List<Order> orders = orderService.getAllByStatus(OrderStatus.PENDING);
 
         Set<Product> products = new HashSet<>();
         for (Order order : orders) {

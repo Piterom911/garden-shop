@@ -104,7 +104,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void delete(Long id) {
-        orderRepository.deleteById(id);
+        Order order = getById(id);
+        orderRepository.deleteById(order.getId());
     }
 
     @Override
@@ -117,21 +118,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String getStatus(Long id) {
-        return "";
+        return getById(id).getStatus().toString();
     }
 
     @Override
     public List<Order> getAllByStatus(OrderStatus status) {
         return orderRepository.findAllByStatus(status);
-    }
-
-    @Override
-    public List<Order> getAllByStatusWithException(OrderStatus status) {
-        List<Order> orders = getAllByStatus(status);
-        if (orders.isEmpty()) {
-            throw new OrderNotFoundException("List of orders is empty");
-        }
-        return orders;
     }
 
     @Override

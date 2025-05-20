@@ -3,7 +3,7 @@ package com.predators.service;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
-import com.predators.exception.ProductNotFoundException;
+import com.predators.exception.CartItemNotFoundException;
 import com.predators.repository.CartItemJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem getById(Long id) {
         return cartItemJpaRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("CartItem Not Found"));
+                orElseThrow(() -> new CartItemNotFoundException("CartItem Not Found"));
     }
 
     @Override
@@ -41,10 +41,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public void delete(Long id) {
-        if (!cartItemJpaRepository.existsById(id)) {
-            throw new RuntimeException("CartItem Not Found");
-        }
-        cartItemJpaRepository.deleteById(id);
+        CartItem cartItem = getById(id);
+        cartItemJpaRepository.deleteById(cartItem.getId());
     }
 
     @Override
@@ -61,6 +59,6 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem getByProductIdAndCartId(Long productId, Long cartId) {
         return cartItemJpaRepository.findCartItemByProduct_IdAndCart_Id(productId, cartId)
-                .orElseThrow(() -> new ProductNotFoundException("No cartItem with such ids"));
+                .orElseThrow(() -> new CartItemNotFoundException("No cartItem with such ids"));
     }
 }

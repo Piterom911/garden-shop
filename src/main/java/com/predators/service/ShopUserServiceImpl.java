@@ -44,6 +44,7 @@ public class ShopUserServiceImpl implements ShopUserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         ShopUser currentUser = getCurrentUser();
         if (currentUser.getId().equals(id) || currentUser.getRole().equals(Role.ROLE_ADMIN)) {

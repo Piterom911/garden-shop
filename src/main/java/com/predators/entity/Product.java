@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -41,8 +43,10 @@ public class Product {
 
     private BigDecimal discountPrice;
 
+    @CreatedDate
     private Timestamp createdAt;
 
+    @LastModifiedDate
     private Timestamp updatedAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id")

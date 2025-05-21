@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Tag(name = "Category Management", description = "Operations for managing product categories")
-public interface CategoryApi  {
+public interface CategoryApi {
 
     @Operation(summary = "Get all categories", description = "Retrieves a list of all available product categories")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved categories",

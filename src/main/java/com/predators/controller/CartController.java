@@ -3,7 +3,6 @@ package com.predators.controller;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.cartItem.CartItemMapper;
 import com.predators.dto.cartItem.CartItemResponseDto;
-import com.predators.dto.product.ProductMapper;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.service.CartService;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
 public class CartController implements CartApi {
 
     private final CartService service;
-
-    private final ProductMapper mapper;
 
     private final CartItemMapper cartItemMapper;
 

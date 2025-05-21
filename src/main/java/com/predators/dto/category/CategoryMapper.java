@@ -4,9 +4,9 @@ import com.predators.entity.Category;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface CategoryMapper {
+public abstract class CategoryMapper {
 
-    Category toEntity(CategoryRequestDto categoryRequestDto);
+    public abstract Category toEntity(CategoryRequestDto categoryRequestDto);
 
-    CategoryResponseDto toDto(Category category);
+    public abstract CategoryResponseDto toDto(Category category);
 }

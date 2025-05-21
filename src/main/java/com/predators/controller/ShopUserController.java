@@ -14,18 +14,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/v1/users")
 @RequiredArgsConstructor
-public class ShopUserController implements ShopUserApi{
+public class ShopUserController implements ShopUserApi {
 
     private final ShopUserService shopUserService;
 
-    private final ShopUserMapper userMapper;
+    private final ShopUserMapper shopUserMapper;
 
     private final AuthenticationService authenticationService;
 
@@ -33,15 +41,15 @@ public class ShopUserController implements ShopUserApi{
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<ShopUser> users = shopUserService.getAll();
-        List<UserResponseDto> usersDto = users.stream().map(userMapper::toDto).toList();
+        List<UserResponseDto> usersDto = users.stream().map(shopUserMapper::toDto).toList();
         return ResponseEntity.ok(usersDto);
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody UserRequestDto userDto) {
-        ShopUser user = userMapper.toEntity(userDto);
-        UserResponseDto dto = userMapper.toDto(shopUserService.create(user));
+        ShopUser user = shopUserMapper.toEntity(userDto);
+        UserResponseDto dto = shopUserMapper.toDto(shopUserService.create(user));
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
@@ -55,7 +63,7 @@ public class ShopUserController implements ShopUserApi{
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserResponseDto> getById(@PathVariable(name = "id") Long id) {
         ShopUser user = shopUserService.getById(id);
-        UserResponseDto userDto = userMapper.toDto(user);
+        UserResponseDto userDto = shopUserMapper.toDto(user);
         return ResponseEntity.ok(userDto);
     }
 
@@ -68,6 +76,6 @@ public class ShopUserController implements ShopUserApi{
     @PutMapping
     public ResponseEntity<UserResponseDto> update(@RequestBody UserRequestDto userDto) {
         ShopUser update = shopUserService.update(userDto);
-        return new ResponseEntity<>(userMapper.toDto(update), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(shopUserMapper.toDto(update), HttpStatus.ACCEPTED);
     }
 }

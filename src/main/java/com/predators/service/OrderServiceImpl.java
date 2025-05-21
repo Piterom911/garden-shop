@@ -3,7 +3,13 @@ package com.predators.service;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.order.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
-import com.predators.entity.*;
+import com.predators.dto.product.ProductCountDto;
+import com.predators.entity.Cart;
+import com.predators.entity.CartItem;
+import com.predators.entity.Order;
+import com.predators.entity.OrderItem;
+import com.predators.entity.Product;
+import com.predators.entity.ShopUser;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.ImpossibleChangeCurrentOrderStatusException;
 import com.predators.exception.OrderNotFoundException;
@@ -16,7 +22,11 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
         Set<CartItem> cartItems = cart.getCartItems();
 
         Map<Long, CartItem> map = new HashMap<>();
-        for(CartItem cartItem : cartItems) {
+        for (CartItem cartItem : cartItems) {
             map.put(cartItem.getProduct().getId(), cartItem);
         }
 
@@ -82,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         return entity;
     }
 
-    private  OrderItem getOrderItem(ProductToItemDto productDto, Product product) {
+    private OrderItem getOrderItem(ProductToItemDto productDto, Product product) {
         return OrderItem.builder()
                 .product(product)
                 .quantity(productDto.quantity())
@@ -137,5 +147,15 @@ public class OrderServiceImpl implements OrderService {
             throw new ImpossibleChangeCurrentOrderStatusException("You can't change status: " + order.getStatus());
         }
         return order;
+    }
+
+    @Override
+    public List<ProductCountDto> findTopProductsAndCountsByOrderStatus(OrderStatus status, int limit) {
+        return orderRepository.findTopProductsAndCountsByOrderStatus(status, limit);
+    }
+
+    @Override
+    public Set<Product> findByStatusAndUpdatedAtBeforeThreshold(OrderStatus status, Timestamp data) {
+        return orderRepository.findProductsFromOrdersByStatusAndUpdatedAtBefore(status, data);
     }
 }

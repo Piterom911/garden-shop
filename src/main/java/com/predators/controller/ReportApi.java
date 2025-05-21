@@ -1,5 +1,6 @@
 package com.predators.controller;
 
+import com.predators.dto.product.ProductCountDto;
 import com.predators.dto.product.ProductResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Tag(name = "Report Generation", description = "Operations for generating various reports")
 public interface ReportApi {
@@ -25,7 +27,7 @@ public interface ReportApi {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN role",
             content = @Content(schema = @Schema(type = "string", example = "Access Denied")))
-    ResponseEntity<List<ProductResponseDto>> getTopProduct(@RequestParam String status);
+    ResponseEntity<List<ProductCountDto>> getTopProduct(@RequestParam String status);
 
     @Operation(summary = "Get products waiting for payment for more than N days (Admin only)",
             description = "Retrieves a list of products that have been waiting for payment for more than the specified number of days. Requires ADMIN role.")
@@ -36,7 +38,7 @@ public interface ReportApi {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden - requires ADMIN role",
             content = @Content(schema = @Schema(type = "string", example = "Access Denied")))
-    ResponseEntity<List<ProductResponseDto>> waitingPaymentMoreNDays(@RequestParam Long days);
+    ResponseEntity<Set<ProductResponseDto>> waitingPaymentMoreNDays(@RequestParam Long days);
 
     @Operation(summary = "Get profit (Admin only)",
             description = "Retrieves the total profit, optionally filtered by day, month, or year. Requires ADMIN role.")

@@ -1,5 +1,6 @@
 package com.predators.service;
 
+import com.predators.dto.product.ProductCountDto;
 import com.predators.entity.Order;
 import com.predators.entity.OrderItem;
 import com.predators.entity.Product;
@@ -72,7 +73,7 @@ public class ReportServiceImplTest {
 
         when(orderService.getAllByStatus(status)).thenReturn(List.of(order1, order2, order3));
 
-        List<Product> topProducts = reportService.topItems(status);
+        List<ProductCountDto> topProducts = reportService.topItems(status);
 
         assertEquals(2, topProducts.size());
         assertEquals(product3, topProducts.get(0));

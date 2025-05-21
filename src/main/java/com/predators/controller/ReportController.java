@@ -1,5 +1,6 @@
 package com.predators.controller;
 
+import com.predators.dto.product.ProductCountDto;
 import com.predators.dto.product.ProductMapper;
 import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.enums.OrderStatus;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/report")
@@ -28,18 +31,17 @@ public class ReportController implements ReportApi {
     @GetMapping("/top-product")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    public ResponseEntity<List<ProductResponseDto>> getTopProduct(@RequestParam String status) {
-        List<ProductResponseDto> list = reportService.topItems(OrderStatus.valueOf(status.toUpperCase())).stream()
-                .map(mapper::toDto).toList();
+    public ResponseEntity<List<ProductCountDto>> getTopProduct(@RequestParam String status) {
+        List<ProductCountDto> list = reportService.topItems(OrderStatus.valueOf(status.toUpperCase()));
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/waiting-payment")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    public ResponseEntity<List<ProductResponseDto>> waitingPaymentMoreNDays(@RequestParam Long days) {
-        List<ProductResponseDto> products = reportService.waitingPaymentMoreNDays(days).stream()
-                .map(mapper::toDto).toList();
+    public ResponseEntity<Set<ProductResponseDto>> waitingPaymentMoreNDays(@RequestParam Long days) {
+        Set<ProductResponseDto> products = reportService.waitingPaymentMoreNDays(days).stream()
+                .map(mapper::toDto).collect(Collectors.toSet());
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

@@ -40,7 +40,6 @@
 
             INSERT INTO cart_items (cart_id, product_id, quantity) values (1, 1, 12);
             INSERT INTO cart_items (cart_id, product_id, quantity) values (2, 2, 15);
-            INSERT INTO cart_items (cart_id, product_id, quantity) values (2, 2, 1);
         </sql>
     </changeSet>
 
@@ -48,11 +47,9 @@
         <sql>
             INSERT INTO orders (user_id, status, updated_at) values (1, 'COMPLETED', '2025-05-01 10:22:03.862983');
             INSERT INTO orders (user_id, status, updated_at) values (2, 'COMPLETED', '2025-04-07 10:22:03.862983');
-            INSERT INTO orders (user_id, status, updated_at) values (2, 'COMPLETED', '2025-04-07 11:22:03.862983');
 
             INSERT INTO order_items (order_id, product_id, price_at_purchase) values (1,1,10);
             INSERT INTO order_items (order_id, product_id, price_at_purchase) values (2,2,20);
-            INSERT INTO order_items (order_id, product_id, price_at_purchase) values (3,2,1);
         </sql>
     </changeSet>
 

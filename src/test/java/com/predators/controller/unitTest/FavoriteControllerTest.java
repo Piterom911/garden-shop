@@ -17,6 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -52,7 +53,7 @@ class FavoriteControllerTest {
         Favorite favorite = new Favorite();
         FavoriteResponseDto favoriteDto = new FavoriteResponseDto(1L, 2L, 3L);
 
-        when(favoriteService.getAll()).thenReturn(List.of(favorite));
+        when(favoriteService.getAll()).thenReturn((Set<Favorite>) List.of(favorite));
         when(mapper.toDto(any(Favorite.class))).thenReturn(favoriteDto);
 
         mockMvc.perform(get("/v1/favorites"))

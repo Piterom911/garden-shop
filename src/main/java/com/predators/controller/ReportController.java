@@ -26,7 +26,7 @@ public class ReportController implements ReportApi {
 
     private final ReportService reportService;
 
-    private final ProductMapper mapper;
+    private final ProductMapper productMapper;
 
     @GetMapping("/top-product")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -41,7 +41,7 @@ public class ReportController implements ReportApi {
     @Override
     public ResponseEntity<Set<ProductResponseDto>> waitingPaymentMoreNDays(@RequestParam Long days) {
         Set<ProductResponseDto> products = reportService.waitingPaymentMoreNDays(days).stream()
-                .map(mapper::toDto).collect(Collectors.toSet());
+                .map(productMapper::toDto).collect(Collectors.toSet());
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

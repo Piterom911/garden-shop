@@ -16,11 +16,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,7 +57,7 @@ class FavoriteControllerTest {
         Favorite favorite = new Favorite();
         FavoriteResponseDto favoriteDto = new FavoriteResponseDto(1L, 2L, 3L);
 
-        when(favoriteService.getAll()).thenReturn(List.of(favorite));
+        when(favoriteService.getAll()).thenReturn(Set.of(favorite));
         when(mapper.toDto(any(Favorite.class))).thenReturn(favoriteDto);
 
         mockMvc.perform(get("/v1/favorites"))

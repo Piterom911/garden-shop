@@ -3,7 +3,11 @@ package com.predators.service;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.order.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
-import com.predators.entity.*;
+import com.predators.entity.Cart;
+import com.predators.entity.CartItem;
+import com.predators.entity.Order;
+import com.predators.entity.Product;
+import com.predators.entity.ShopUser;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.OrderNotFoundException;
 import com.predators.repository.OrderRepository;
@@ -20,8 +24,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
@@ -50,9 +63,12 @@ class OrderServiceImplTest {
     private final Long TEST_ORDER_ID = 1L;
     private final Long TEST_PRODUCT_ID = 10L;
     private final Long TEST_USER_ID = 100L;
+    private Order testOrder;
 
     @BeforeEach
     void setUp() {
+        testOrder = new Order();
+        testOrder.setId(TEST_ORDER_ID);
         user = new ShopUser();
         cart = new Cart();
         user.setId(1L);
@@ -101,7 +117,7 @@ class OrderServiceImplTest {
                 .build();
 
         OrderRequestDto requestDto = new OrderRequestDto(
-                List.of(new ProductToItemDto(TEST_PRODUCT_ID, 2)),"My Address","AIRPLANE"
+                List.of(new ProductToItemDto(TEST_PRODUCT_ID, 2)), "My Address", "AIRPLANE"
         );
 
         Order expectedOrder = Order.builder().id(TEST_ORDER_ID).build();
@@ -117,9 +133,19 @@ class OrderServiceImplTest {
 
     @Test
     void delete_ShouldCallRepository() {
+         when(orderRepository.findById(TEST_ORDER_ID)).thenReturn(Optional.of(testOrder));
         doNothing().when(orderRepository).deleteById(TEST_ORDER_ID);
         orderService.delete(TEST_ORDER_ID);
+
+        verify(orderRepository, times(1)).findById(TEST_ORDER_ID);
         verify(orderRepository, times(1)).deleteById(TEST_ORDER_ID);
+    }
+
+    @Test
+    void delete_ShouldThrowException_WhenOrderNotFound() {
+        when(orderRepository.findById(TEST_ORDER_ID)).thenReturn(Optional.empty());
+        assertThrows(OrderNotFoundException.class, () -> orderService.delete(TEST_ORDER_ID));
+        verify(orderRepository, never()).deleteById(anyLong()); // или delete(any(Order.class));
     }
 
     @Test

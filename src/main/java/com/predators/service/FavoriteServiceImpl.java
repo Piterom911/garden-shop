@@ -35,7 +35,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         Favorite existedFavorite = favoriteRepository.findByUserAndProduct(currentUser, product).orElse(null);
 
         if (favorites.contains(existedFavorite)) {
-           throw new FavoriteAlreadyExistsException("Favorite with such data already exists");
+            throw new FavoriteAlreadyExistsException("Favorite with such data already exists");
         }
 
         existedFavorite = Favorite.builder()

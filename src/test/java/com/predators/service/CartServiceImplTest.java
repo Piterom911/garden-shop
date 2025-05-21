@@ -1,12 +1,12 @@
 package com.predators.service;
 
-import com.jayway.jsonpath.PathNotFoundException;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;
 import com.predators.exception.NotCurrentClientCartException;
+import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.CartJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CartServiceImplTest {
@@ -156,7 +162,7 @@ class CartServiceImplTest {
     void deleteProduct_shouldThrowIfNotFound() {
         when(cartItemService.findByProduct_Id(10L)).thenReturn(Optional.empty());
 
-        assertThrows(PathNotFoundException.class, () -> cartService.deleteProduct(10L));
+        assertThrows(ProductNotFoundException.class, () -> cartService.deleteProduct(10L));
     }
 
     @Test

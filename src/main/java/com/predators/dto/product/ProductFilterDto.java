@@ -5,8 +5,8 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record ProductFilterDto (BigDecimal minPrice,
-                                BigDecimal maxPrice,
-                                Boolean discountPrice,
-                                Long categoryId) {
+public record ProductFilterDto(BigDecimal minPrice,
+                               BigDecimal maxPrice,
+                               Boolean discountPrice,
+                               Long categoryId) {
 }

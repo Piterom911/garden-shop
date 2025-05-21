@@ -1,6 +1,6 @@
 package com.predators.dto.product;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 

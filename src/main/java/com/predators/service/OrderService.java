@@ -30,4 +30,6 @@ public interface OrderService {
     Order cancel(Long id);
 
     List<Product> getTopProducts(OrderStatus status);
+
+    List<Order> findAllByStatusAndUpdatedAtBefore(OrderStatus status, Timestamp date);
 }

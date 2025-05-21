@@ -143,4 +143,9 @@ public class OrderServiceImpl implements OrderService {
     public List<Product> getTopProducts(OrderStatus status) {
         return orderRepository.findTopProductsWithStatus(status);
     }
+
+    @Override
+    public List<Order> findAllByStatusAndUpdatedAtBefore(OrderStatus status, Timestamp date) {
+        return orderRepository.findAllByStatusAndUpdatedAtBefore(status, date);
+    }
 }

@@ -28,4 +28,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "GROUP BY oi.product " +
             "ORDER BY COUNT(oi) DESC ")
     List<Product> findTopProductsWithStatus(@Param("status") OrderStatus status);
+
+    List<Order> findAllByStatusAndUpdatedAtBefore(OrderStatus status, Timestamp date);
 }

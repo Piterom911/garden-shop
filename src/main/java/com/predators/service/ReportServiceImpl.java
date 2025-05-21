@@ -35,22 +35,13 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public Set<Product> waitingPaymentMoreNDays(Long days) {
-        List<Order> orders = orderService.getAllByStatus(OrderStatus.PENDING);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime dateTime = now.minusDays(days);
+        Timestamp data = Timestamp.valueOf(dateTime);
 
-        Set<Product> products = new HashSet<>();
-        for (Order order : orders) {
-            Timestamp updatedAt = order.getUpdatedAt();
-            LocalDateTime dateTime = updatedAt.toLocalDateTime();
-            LocalDateTime daysPlusN = dateTime.plusDays(days);
-            LocalDateTime now = LocalDateTime.now();
-            if (daysPlusN.isBefore(now)) {
-                order.getOrderItems().forEach(item -> {
-                    Product product = item.getProduct();
-                    products.add(product);
-                });
-            }
-        }
-        return products;
+        List<Order> orders = orderService.findAllByStatusAndUpdatedAtBefore(OrderStatus.PENDING, data );
+
+        return orders;
     }
 
     @Override

@@ -50,7 +50,7 @@ public class ShopUser {
     @JsonBackReference
     private Set<Favorite> favorites = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @JsonBackReference
     private Cart cart;
 }

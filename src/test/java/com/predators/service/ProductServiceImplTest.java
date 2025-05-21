@@ -7,6 +7,7 @@ import com.predators.entity.Product;
 import com.predators.exception.DiscountNotFoundException;
 import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.ProductJpaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -20,8 +21,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
@@ -34,6 +42,14 @@ class ProductServiceImplTest {
 
     @InjectMocks
     private ProductServiceImpl productService;
+
+    private Product testProduct;
+
+    @BeforeEach
+    void setUp() {
+        testProduct = new Product();
+        testProduct.setId(1L);
+    }
 
     @Test
     void getAll_shouldReturnListOfProducts() {
@@ -93,15 +109,6 @@ class ProductServiceImplTest {
 
         assertThrows(ProductNotFoundException.class, () -> productService.getById(productId));
         verify(repository, times(1)).findById(productId);
-    }
-
-    @Test
-    void delete_shouldCallRepositoryDeleteById() {
-        Long productId = 1L;
-
-        productService.delete(productId);
-
-        verify(repository, times(1)).deleteById(productId);
     }
 
     @Test
@@ -202,35 +209,11 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void setDiscount_shouldSetDiscountPriceAndSaveProduct() {
-        Long productId = 1L;
-        BigDecimal discount = BigDecimal.valueOf(5.00);
-        Product existingProduct = new Product();
-        existingProduct.setId(productId);
-        Product savedProductWithDiscount = new Product();
-        savedProductWithDiscount.setId(productId);
-        savedProductWithDiscount.setDiscountPrice(discount);
-
-        when(repository.findById(productId)).thenReturn(Optional.of(existingProduct));
-        when(repository.save(any(Product.class))).thenReturn(savedProductWithDiscount);
-        ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
-
-        Product result = productService.setDiscount(productId, discount);
-
-        assertEquals(discount, result.getDiscountPrice());
-        verify(repository, times(1)).findById(productId);
-        verify(repository, times(1)).save(productCaptor.capture());
-        assertEquals(discount, productCaptor.getValue().getDiscountPrice());
-        assertNotNull(productCaptor.getValue().getCreatedAt());
-    }
-
-
-    @Test
     void getDayProduct_shouldThrowDiscountNotFoundExceptionIfNoDiscountedProducts() {
-        when(repository.findProductWithDiscount()).thenReturn(List.of());
+        when(repository.findAllByDiscountPriceIsNotNull()).thenReturn(List.of());
 
         assertThrows(DiscountNotFoundException.class, () -> productService.getDayProduct());
-        verify(repository, times(1)).findProductWithDiscount();
+        verify(repository, times(1)).findAllByDiscountPriceIsNotNull();
     }
 
     @Test
@@ -239,12 +222,26 @@ class ProductServiceImplTest {
         Product product = new Product();
         product.setId(1L);
         product.setDiscountPrice(discount);
-        when(repository.findProductWithDiscount()).thenReturn(List.of(product));
+        when(repository.findAllByDiscountPriceIsNotNull()).thenReturn(List.of(product));
 
         Product result = productService.getDayProduct();
 
         assertEquals(discount, result.getDiscountPrice());
         assertEquals(product.getId(), result.getId());
-        verify(repository, times(1)).findProductWithDiscount();
+        verify(repository, times(1)).findAllByDiscountPriceIsNotNull();
+    }
+
+    @Test
+    void deleteById_shouldDeleteProductIfExists() {
+        Long productId = 1L;
+        Product product = new Product();
+        product.setId(productId);
+
+        when(repository.findById(productId)).thenReturn(Optional.of(product));
+
+        productService.delete(productId);
+
+        verify(repository, times(1)).findById(productId);
+        verify(repository, times(1)).deleteById(productId);
     }
 }

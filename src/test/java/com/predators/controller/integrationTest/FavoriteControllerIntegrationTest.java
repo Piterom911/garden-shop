@@ -39,9 +39,19 @@ public class FavoriteControllerIntegrationTest {
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .post("v1/favorites/2")
+                .post("v1/favorites/7")
                 .then()
                 .statusCode(201);
+    }
+
+    @Test
+    void testNotCreateExistingFavorite() {
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .post("v1/favorites/3")
+                .then()
+                .statusCode(409);
     }
 
     @Test

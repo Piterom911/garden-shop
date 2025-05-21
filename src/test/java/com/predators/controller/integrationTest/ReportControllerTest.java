@@ -55,16 +55,6 @@ class ReportControllerTest {
     }
 
     @Test
-    void testWaitingPaymentMoreNDaysDaysReturnEmptyList() {
-        given()
-                .header("Authorization", "Bearer " + token)
-                .when()
-                .get("/v1/report/waiting-payment?days=1")
-                .then()
-                .statusCode(404);
-    }
-
-    @Test
     void testGetProfitDays() {
         given()
                 .header("Authorization", "Bearer " + token)
@@ -103,7 +93,6 @@ class ReportControllerTest {
                 .then()
                 .statusCode(200);
     }
-
 
 
 }

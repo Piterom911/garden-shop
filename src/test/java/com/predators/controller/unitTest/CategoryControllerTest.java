@@ -37,7 +37,7 @@ public class CategoryControllerTest {
     @Test
     void testGetAllCategories() {
         Category category = new Category();
-        CategoryResponseDto dto = new CategoryResponseDto(1L,"one");
+        CategoryResponseDto dto = new CategoryResponseDto(1L, "one");
 
         when(categoryService.getAll()).thenReturn(List.of(category));
         when(mapper.toDto(category)).thenReturn(dto);
@@ -53,7 +53,7 @@ public class CategoryControllerTest {
     void testGetCategoryById() {
         Long id = 1L;
         Category category = new Category();
-        CategoryResponseDto dto = new CategoryResponseDto(1L,"one");
+        CategoryResponseDto dto = new CategoryResponseDto(1L, "one");
 
         when(categoryService.getById(id)).thenReturn(category);
         when(mapper.toDto(category)).thenReturn(dto);
@@ -70,7 +70,7 @@ public class CategoryControllerTest {
         CategoryRequestDto requestDto = new CategoryRequestDto("one");
         Category category = new Category();
         Category createdCategory = new Category();
-        CategoryResponseDto responseDto = new CategoryResponseDto(1L,"one");
+        CategoryResponseDto responseDto = new CategoryResponseDto(1L, "one");
 
         when(mapper.toEntity(requestDto)).thenReturn(category);
         when(categoryService.create(category)).thenReturn(createdCategory);

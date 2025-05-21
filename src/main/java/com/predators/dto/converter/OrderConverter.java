@@ -9,12 +9,12 @@ import com.predators.entity.enums.DeliveryMethod;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.service.ShopUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+
 import java.sql.Timestamp;
 import java.time.Instant;
 
 @RequiredArgsConstructor
-@Component
+
 public class OrderConverter implements Converter<OrderRequestDto, OrderResponseDto, Order> {
 
     private final ShopUserService shopUserService;

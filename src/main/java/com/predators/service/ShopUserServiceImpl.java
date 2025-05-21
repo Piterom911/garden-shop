@@ -86,8 +86,8 @@ public class ShopUserServiceImpl implements ShopUserService {
             }
             currentUser.setEmail(userDto.email());
         }
-        if (userDto.phone() != null) {
-            currentUser.setPhoneNumber(userDto.phone());
+        if (userDto.phoneNumber() != null) {
+            currentUser.setPhoneNumber(userDto.phoneNumber());
         }
         return userRepository.save(currentUser);
     }

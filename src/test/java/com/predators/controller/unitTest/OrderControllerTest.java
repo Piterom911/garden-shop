@@ -2,7 +2,7 @@ package com.predators.controller.unitTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.predators.controller.OrderController;
-import com.predators.dto.converter.OrderConverter;
+import com.predators.dto.order.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.dto.order.OrderResponseDto;
 import com.predators.dto.orderitem.OrderItemMapper;
@@ -35,7 +35,7 @@ class OrderControllerTest {
     private OrderService orderService;
 
     @Mock
-    private OrderConverter converter;
+    private OrderMapper orderMapper;
 
     @Mock
     private OrderItemMapper orderItemMapper;
@@ -51,7 +51,7 @@ class OrderControllerTest {
         Order order = new Order();
         OrderResponseDto dto = buildOrderResponseDto();
         when(orderService.getAll()).thenReturn(List.of(order));
-        when(converter.toDto(order)).thenReturn(dto);
+        when(orderMapper.toDto(order)).thenReturn(dto);
         mockMvc.perform(get("/v1/orders"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(dto.id()))
@@ -73,7 +73,7 @@ class OrderControllerTest {
         Order order = new Order();
         OrderResponseDto responseDto = buildOrderResponseDto();
         when(orderService.create(any())).thenReturn(order);
-        when(converter.toDto(order)).thenReturn(responseDto);
+        when(orderMapper.toDto(order)).thenReturn(responseDto);
         mockMvc.perform(post("/v1/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
@@ -87,7 +87,7 @@ class OrderControllerTest {
         Order order = new Order();
         OrderResponseDto dto = buildOrderResponseDto();
         when(orderService.getById(anyLong())).thenReturn(order);
-        when(converter.toDto(order)).thenReturn(dto);
+        when(orderMapper.toDto(order)).thenReturn(dto);
 
         mockMvc.perform(get("/v1/orders/1"))
                 .andExpect(status().isOk())
@@ -100,7 +100,7 @@ class OrderControllerTest {
         Order updatedOrder = new Order();
         OrderResponseDto updatedDto = buildOrderResponseDto();
         when(orderService.updateStatus(anyLong(), any())).thenReturn(updatedOrder);
-        when(converter.toDto(updatedOrder)).thenReturn(updatedDto);
+        when(orderMapper.toDto(updatedOrder)).thenReturn(updatedDto);
 
         mockMvc.perform(put("/v1/orders/1/status")
                         .param("status", "COMPLETED"))

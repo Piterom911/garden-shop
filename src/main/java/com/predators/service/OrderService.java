@@ -2,6 +2,7 @@ package com.predators.service;
 
 import com.predators.dto.order.OrderRequestDto;
 import com.predators.entity.Order;
+import com.predators.entity.Product;
 import com.predators.entity.enums.OrderStatus;
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface OrderService {
     List<Order> getAllByStatusAndAfterDate(OrderStatus status, Timestamp afterDate);
 
     Order cancel(Long id);
+
+    List<Product> getTopProducts(OrderStatus status);
 }

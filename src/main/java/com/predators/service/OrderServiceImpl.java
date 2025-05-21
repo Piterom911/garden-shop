@@ -138,4 +138,9 @@ public class OrderServiceImpl implements OrderService {
         }
         return order;
     }
+
+    @Override
+    public List<Product> getTopProducts(OrderStatus status) {
+        return orderRepository.findTopProductsWithStatus(status);
+    }
 }

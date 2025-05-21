@@ -6,9 +6,8 @@ import com.predators.entity.ShopUser;
 import com.predators.entity.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
-@Component
+
 public class ShopUserConverter implements Converter<UserRequestDto, UserResponseDto, ShopUser> {
 
     @Autowired
@@ -19,7 +18,7 @@ public class ShopUserConverter implements Converter<UserRequestDto, UserResponse
         return ShopUser.builder()
                 .name(userDto.name())
                 .email(userDto.email())
-                .phoneNumber(userDto.phone())
+                .phoneNumber(userDto.phoneNumber())
                 .role(Role.ROLE_CLIENT)
                 .passwordHash(passwordEncoder.encode(userDto.password()))
                 .build();

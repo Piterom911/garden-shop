@@ -98,8 +98,8 @@ public class ProductServiceImpl implements ProductService {
         if (product.price() != null) {
             productByDB.setPrice(product.price());
         }
-        if (product.image() != null) {
-            productByDB.setImageUrl(product.image());
+        if (product.imageUrl() != null) {
+            productByDB.setImageUrl(product.imageUrl());
         }
         if (product.categoryId() != null) {
             Category categoryById = categoryService.getById(product.categoryId());

@@ -22,7 +22,7 @@ public class ProductConverter implements Converter<ProductRequestDto, ProductRes
                 .description(productDto.description())
                 .price(productDto.price())
                 .category(category)
-                .imageUrl(productDto.image())
+                .imageUrl(productDto.imageUrl())
                 .build();
     }
 
@@ -33,7 +33,7 @@ public class ProductConverter implements Converter<ProductRequestDto, ProductRes
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .categoryId(product.getCategory() == null ? null : product.getCategory().getId())
-                .image(product.getImageUrl())
+                //.image(product.getImageUrl())
                 .discountPrice(product.getDiscountPrice())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())

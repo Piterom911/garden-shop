@@ -5,9 +5,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface FavoriteMapper {
+public abstract class FavoriteMapper {
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "product.id", target = "productId")
-    FavoriteResponseDto toDto(Favorite favorite);
+    public abstract FavoriteResponseDto toDto(Favorite favorite);
 }

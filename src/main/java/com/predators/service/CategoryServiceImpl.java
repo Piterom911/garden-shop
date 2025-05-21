@@ -1,6 +1,7 @@
 package com.predators.service;
 
 import com.predators.entity.Category;
+import com.predators.exception.CategoryAlreadyExistsException;
 import com.predators.exception.CategoryNotFoundException;
 import com.predators.repository.CategoryJpaRepository;
 import jakarta.transaction.Transactional;
@@ -28,6 +29,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category create(Category category) {
+        if (repository.findByName(category.getName()).isPresent()) {
+            throw new CategoryAlreadyExistsException("Category already exists with name: " + category.getName());
+        }
         return repository.save(category);
     }
 

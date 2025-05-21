@@ -23,22 +23,15 @@ public abstract class OrderMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", expression = "java(shopUserService.getCurrentUser())")
-    @Mapping(target = "deliveryAddress", source = "deliveryAddress")
     @Mapping(target = "deliveryMethod", source = "deliveryMethod", qualifiedByName = "stringToDeliveryMethod")
     @Mapping(target = "createdAt", expression = "java(java.sql.Timestamp.from(java.time.Instant.now()))")
     @Mapping(target = "contactPhone", expression = "java(shopUserService.getCurrentUser().getPhoneNumber())")
     @Mapping(target = "status", expression = "java(com.predators.entity.enums.OrderStatus.CREATED)")
     public abstract Order toEntity(OrderRequestDto dto);
 
-    @Mapping(source = "id", target = "id")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "status", target = "status", qualifiedByName = "orderStatusToString")
-    @Mapping(source = "contactPhone", target = "contactPhone")
-    @Mapping(source = "deliveryAddress", target = "deliveryAddress")
-    @Mapping(source = "deliveryMethod", target = "deliveryMethod")
     @Mapping(source = "orderItems", target = "items", qualifiedByName = "mapOrderItems")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
     public abstract OrderResponseDto toDto(Order order);
 
     @Named("stringToDeliveryMethod")

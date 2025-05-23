@@ -21,12 +21,14 @@ public class ReportServiceImpl implements ReportService {
 
     private final OrderService orderService;
 
+    private final ProductService productService;
+
     @Value("${orders.top.limit:10}")
     private int limit;
 
     @Override
     public List<ProductCountDto> topItems(OrderStatus status) {
-        return orderService.findTopProductsAndCountsByOrderStatus(status, limit);
+        return productService.findTopProductsAndCountsByOrderStatus(status, limit);
     }
 
     public Set<Product> waitingPaymentMoreNDays(Long days) {
@@ -34,7 +36,7 @@ public class ReportServiceImpl implements ReportService {
         LocalDateTime dateTime = now.minusDays(days);
         Timestamp dateBefore = Timestamp.valueOf(dateTime);
 
-        return orderService.findByStatusAndUpdatedAtBeforeThreshold(OrderStatus.PENDING, dateBefore);
+        return productService.findByStatusAndUpdatedAtBeforeThreshold(OrderStatus.PENDING, dateBefore);
     }
 
     @Override

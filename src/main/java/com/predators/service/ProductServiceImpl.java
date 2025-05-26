@@ -1,9 +1,11 @@
 package com.predators.service;
 
+import com.predators.dto.product.ProductCountDto;
 import com.predators.dto.product.ProductFilterDto;
 import com.predators.dto.product.ProductRequestDto;
 import com.predators.entity.Category;
 import com.predators.entity.Product;
+import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.DiscountGraterThanPriceException;
 import com.predators.exception.DiscountNotFoundException;
 import com.predators.exception.ProductNotFoundException;
@@ -22,10 +24,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -183,6 +182,16 @@ public class ProductServiceImpl implements ProductService {
             }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    @Override
+    public List<ProductCountDto> findTopProductsAndCountsByOrderStatus(OrderStatus status, int limit) {
+        return repository.findTopProductsAndCountsByOrderStatus(status, limit);
+    }
+
+    @Override
+    public Set<Product> findByStatusAndUpdatedAtBeforeThreshold(OrderStatus status, Timestamp data) {
+        return repository.findProductsFromOrdersByStatusAndUpdatedAtBefore(status, data);
     }
 }
 

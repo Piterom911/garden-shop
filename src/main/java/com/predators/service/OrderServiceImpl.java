@@ -3,13 +3,7 @@ package com.predators.service;
 import com.predators.dto.cart.ProductToItemDto;
 import com.predators.dto.order.OrderMapper;
 import com.predators.dto.order.OrderRequestDto;
-import com.predators.dto.product.ProductCountDto;
-import com.predators.entity.Cart;
-import com.predators.entity.CartItem;
-import com.predators.entity.Order;
-import com.predators.entity.OrderItem;
-import com.predators.entity.Product;
-import com.predators.entity.ShopUser;
+import com.predators.entity.*;
 import com.predators.entity.enums.OrderStatus;
 import com.predators.exception.ImpossibleChangeCurrentOrderStatusException;
 import com.predators.exception.OrderNotFoundException;
@@ -22,11 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -149,13 +139,5 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    @Override
-    public List<ProductCountDto> findTopProductsAndCountsByOrderStatus(OrderStatus status, int limit) {
-        return orderRepository.findTopProductsAndCountsByOrderStatus(status, limit);
-    }
 
-    @Override
-    public Set<Product> findByStatusAndUpdatedAtBeforeThreshold(OrderStatus status, Timestamp data) {
-        return orderRepository.findProductsFromOrdersByStatusAndUpdatedAtBefore(status, data);
-    }
 }

@@ -61,11 +61,4 @@ public class CartController implements CartApi {
         service.deleteProduct(productId);
         return ResponseEntity.ok().build();
     }
-
-    @DeleteMapping("/current-cart/{id}")
-    @Override
-    public ResponseEntity<Void> deleteCartById(@PathVariable(name = "id") Long id) {
-        service.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 }

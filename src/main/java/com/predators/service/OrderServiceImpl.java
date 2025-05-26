@@ -109,7 +109,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String getStatus(Long id) {
-        return getById(id).getStatus().toString();
+        ShopUser currentUser = shopUserService.getCurrentUser();
+        return orderRepository.findByIdAndUser(id, currentUser)
+                .orElseThrow(()-> new OrderNotFoundException("Order with id " + id + " not found"))
+                .getStatus().toString();
     }
 
     @Override

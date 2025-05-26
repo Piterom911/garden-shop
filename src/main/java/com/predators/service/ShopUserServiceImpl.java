@@ -1,6 +1,6 @@
 package com.predators.service;
 
-import com.predators.dto.user.UserRequestDto;
+import com.predators.dto.user.UserRequestUpdateDto;
 import com.predators.entity.ShopUser;
 import com.predators.entity.enums.Role;
 import com.predators.exception.PermissionDeniedException;
@@ -75,7 +75,7 @@ public class ShopUserServiceImpl implements ShopUserService {
 
     @Override
     @Transactional
-    public ShopUser update(UserRequestDto userDto) {
+    public ShopUser update(UserRequestUpdateDto userDto) {
         ShopUser currentUser = getCurrentUser();
         if (userDto.name() != null) {
             currentUser.setName(userDto.name());

@@ -62,10 +62,10 @@ class ProductControllerTest {
         String product = """
                 {
                   "name": "one",
-                  "description": "one description",
-                  "price": "20.89",
+                  "description": "description",
+                  "price": "20.25",
                   "categoryId": "1",
-                  "image": "http/"
+                  "imageUrl": "http/"
                 }""";
         given()
                 .contentType(ContentType.JSON)
@@ -97,7 +97,6 @@ class ProductControllerTest {
                 .statusCode(201);
     }
 
-
     @Test
     @Transactional
     void testDelete() {
@@ -108,5 +107,4 @@ class ProductControllerTest {
                 .then()
                 .statusCode(200);
     }
-
 }

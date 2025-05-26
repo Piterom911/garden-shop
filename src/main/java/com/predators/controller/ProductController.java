@@ -7,6 +7,7 @@ import com.predators.dto.product.ProductResponseDto;
 import com.predators.entity.Product;
 import com.predators.service.ProductService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
@@ -50,7 +51,7 @@ public class ProductController implements ProductApi {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto productDto) {
+    public ResponseEntity<ProductResponseDto> create(@Valid @RequestBody ProductRequestDto productDto) {
         Product product = productMapper.toEntity(productDto);
         Product createdProd = service.create(product);
         return new ResponseEntity<>(productMapper.toDto(createdProd), HttpStatus.CREATED);

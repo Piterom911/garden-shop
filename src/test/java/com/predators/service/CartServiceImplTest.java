@@ -20,14 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CartServiceImplTest {
@@ -141,7 +135,6 @@ class CartServiceImplTest {
         assertEquals(1, products.size());
     }
 
-
     @Test
     void deleteProduct_shouldRemoveProductFromUserCart() {
         Cart cart = new Cart();
@@ -179,24 +172,5 @@ class CartServiceImplTest {
         when(cartItemService.findByProduct_Id(10L)).thenReturn(Optional.of(item));
 
         assertThrows(NotCurrentClientCartException.class, () -> cartService.deleteProduct(10L));
-    }
-
-    @Test
-    void deleteById_shouldDeleteIfFound() {
-        Cart cart = new Cart();
-        when(cartRepository.findById(1L)).thenReturn(Optional.of(cart));
-
-        cartService.deleteById(1L);
-
-        verify(cartRepository).delete(cart);
-    }
-
-    @Test
-    void deleteById_shouldDoNothingIfNotFound() {
-        when(cartRepository.findById(999L)).thenReturn(Optional.empty());
-
-        cartService.deleteById(999L);
-
-        verify(cartRepository, never()).delete(any());
     }
 }

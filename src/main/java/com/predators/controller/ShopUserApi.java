@@ -1,6 +1,7 @@
 package com.predators.controller;
 
 import com.predators.dto.user.UserRequestDto;
+import com.predators.dto.user.UserRequestUpdateDto;
 import com.predators.dto.user.UserResponseDto;
 import com.predators.security.model.SignInRequest;
 import com.predators.security.model.SignInResponse;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Tag(name = "User", description = "Operations related to users")
 public interface ShopUserApi {
-    @Operation(summary = "Get all users", description = "Returns all users.")
+    @Operation(summary = "Get all users , (Admin only)", description = "Returns all users." )
     ResponseEntity<List<UserResponseDto>> getAll();
 
     @Operation(summary = "Create user", description = "Returns new user.")
@@ -31,7 +32,7 @@ public interface ShopUserApi {
             required = true, content = @Content(schema = @Schema(implementation = SignInRequest.class)))
     SignInResponse login(@Valid @RequestBody SignInRequest request);
 
-    @Operation(summary = "Get user by Id", description = "Get user by Id")
+    @Operation(summary = "Get user by Id, (Admin only)", description = "Get user by Id")
     @Parameter(name = "id", description = "Unique identifier of the user",
             required = true, schema = @Schema(type = "integer", format = "int64", example = "1"))
     ResponseEntity<UserResponseDto> getById(@PathVariable(name = "id") Long id);
@@ -44,6 +45,6 @@ public interface ShopUserApi {
 
     @Operation(summary = "Update current user", description = "Update current user and returns user")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Any from three fields",
-            required = true, content = @Content(schema = @Schema(implementation = UserRequestDto.class)))
-    ResponseEntity<UserResponseDto> update(@RequestBody UserRequestDto userDto);
+            required = true, content = @Content(schema = @Schema(implementation = UserRequestUpdateDto.class)))
+    ResponseEntity<UserResponseDto> update(@RequestBody UserRequestUpdateDto userDto);
 }

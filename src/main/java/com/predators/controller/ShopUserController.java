@@ -2,6 +2,7 @@ package com.predators.controller;
 
 import com.predators.dto.user.ShopUserMapper;
 import com.predators.dto.user.UserRequestDto;
+import com.predators.dto.user.UserRequestUpdateDto;
 import com.predators.dto.user.UserResponseDto;
 import com.predators.entity.ShopUser;
 import com.predators.security.AuthenticationService;
@@ -74,7 +75,7 @@ public class ShopUserController implements ShopUserApi {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponseDto> update(@RequestBody UserRequestDto userDto) {
+    public ResponseEntity<UserResponseDto> update(@Valid @RequestBody UserRequestUpdateDto userDto) {
         ShopUser update = shopUserService.update(userDto);
         return new ResponseEntity<>(shopUserMapper.toDto(update), HttpStatus.ACCEPTED);
     }

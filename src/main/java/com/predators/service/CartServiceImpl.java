@@ -90,12 +90,6 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        Optional<Cart> cartIf = repository.findById(id);
-        cartIf.ifPresent(repository::delete);
-    }
-
-    @Override
     public Cart save(Cart cart) {
         return repository.save(cart);
     }

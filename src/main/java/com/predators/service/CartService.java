@@ -17,7 +17,5 @@ public interface CartService {
 
     void deleteProduct(Long productId);
 
-    void deleteById(Long id);
-
     Cart save(Cart cart);
 }

@@ -53,13 +53,4 @@ public interface CartApi {
     @ApiResponse(responseCode = "200", description = "Successfully removed product from cart")
     @ApiResponse(responseCode = "404", description = "Product not found in cart")
     ResponseEntity<Void> deleteProduct(@PathVariable(name = "id") Long productId);
-
-    @DeleteMapping("/current-cart/{id}")
-    @Operation(summary = "Delete cart by ID",
-            description = "Completely removes a shopping cart with specified ID")
-    @Parameter(name = "id", description = "ID of the cart to remove", required = true,
-            schema = @Schema(type = "integer", format = "int64", example = "456"))
-    @ApiResponse(responseCode = "204", description = "Successfully deleted cart")
-    @ApiResponse(responseCode = "404", description = "Cart not found")
-    ResponseEntity<Void> deleteCartById(@PathVariable(name = "id") Long id);
 }

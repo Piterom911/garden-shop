@@ -50,13 +50,14 @@ public class CartServiceImpl implements CartService {
         Cart cart = currentUser.getCart();
         if (cart == null) {
             cart = createCart(currentUser);
+            currentUser.setCart(cart);
         }
 
         Product product = productService.getById(productToItemDto.productId());
         CartItem cartItem = cartItemService.findCartItemByProductAndCart(product, cart);
         if (cartItem == null) {
             cartItem = CartItem.builder()
-                    .cart(currentUser.getCart())
+                    .cart(cart)
                     .product(product)
                     .quantity(productToItemDto.quantity())
                     .build();

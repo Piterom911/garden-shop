@@ -5,6 +5,7 @@ import com.predators.dto.category.CategoryRequestDto;
 import com.predators.dto.category.CategoryResponseDto;
 import com.predators.entity.Category;
 import com.predators.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class CategoryController implements CategoryApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    public ResponseEntity<CategoryResponseDto> create(@RequestBody CategoryRequestDto categoryDto) {
+    public ResponseEntity<CategoryResponseDto> create(@Valid @RequestBody CategoryRequestDto categoryDto) {
         Category category = categoryMapper.toEntity(categoryDto);
         Category createdCategory = service.create(category);
         return new ResponseEntity<>(categoryMapper.toDto(createdCategory), HttpStatus.CREATED);
@@ -61,7 +62,7 @@ public class CategoryController implements CategoryApi {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    public ResponseEntity<CategoryResponseDto> update(@PathVariable(name = "id") Long id, @RequestParam String name) {
+    public ResponseEntity<CategoryResponseDto> update(@Valid @PathVariable(name = "id") Long id, @RequestParam String name) {
         Category category = service.update(id, name);
         return new ResponseEntity<>(categoryMapper.toDto(category), HttpStatus.OK);
     }

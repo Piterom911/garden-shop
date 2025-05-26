@@ -28,6 +28,9 @@ public class ReportServiceImplTest {
     @Mock
     private OrderService orderService;
 
+    @Mock
+    private ProductService productService;
+
     @InjectMocks
     private ReportServiceImpl reportService;
 

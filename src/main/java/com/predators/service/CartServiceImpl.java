@@ -5,16 +5,12 @@ import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;
-import com.predators.exception.NotCurrentClientCartException;
-import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.CartJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -76,17 +72,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void deleteProduct(Long productId) {
-        Optional<CartItem> cartItemByProduct = cartItemService.findByProduct_Id(productId);
-        if (cartItemByProduct.isEmpty()) {
-            throw new ProductNotFoundException("Product with id " + productId + " not found");
-        }
+        Cart cart = shopUserService.getCurrentUser().getCart();
+        CartItem cartItem = cartItemService.findByProductIdAndCartId(productId, cart.getId());
 
-        ShopUser user = shopUserService.getCurrentUser();
-        Cart cart = cartItemByProduct.get().getCart();
-        if (!Objects.equals(user.getCart().getId(), cart.getId())) {
-            throw new NotCurrentClientCartException("This is not your Cart. Finger weg!");
-        }
-        cartItemService.delete(cartItemByProduct.get().getId());
+        cartItemService.delete(cartItem.getId());
     }
 
     @Override

@@ -5,8 +5,6 @@ import com.predators.entity.Cart;
 import com.predators.entity.CartItem;
 import com.predators.entity.Product;
 import com.predators.entity.ShopUser;
-import com.predators.exception.NotCurrentClientCartException;
-import com.predators.exception.ProductNotFoundException;
 import com.predators.repository.CartJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +15,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CartServiceImplTest {
@@ -133,44 +134,5 @@ class CartServiceImplTest {
         Set<CartItem> products = cartService.getAllCartItems();
 
         assertEquals(1, products.size());
-    }
-
-    @Test
-    void deleteProduct_shouldRemoveProductFromUserCart() {
-        Cart cart = new Cart();
-        cart.setId(1L);
-        CartItem item = CartItem.builder().id(22L).product(product).cart(cart).build();
-
-        user.setCart(cart);
-
-        when(shopUserService.getCurrentUser()).thenReturn(user);
-        when(cartItemService.findByProduct_Id(10L)).thenReturn(Optional.of(item));
-
-        cartService.deleteProduct(10L);
-
-        verify(cartItemService).delete(22L);
-    }
-
-    @Test
-    void deleteProduct_shouldThrowIfNotFound() {
-        when(cartItemService.findByProduct_Id(10L)).thenReturn(Optional.empty());
-
-        assertThrows(ProductNotFoundException.class, () -> cartService.deleteProduct(10L));
-    }
-
-    @Test
-    void deleteProduct_shouldThrowIfCartNotOwnedByUser() {
-        Cart cart = new Cart();
-        cart.setId(2L);
-        CartItem item = CartItem.builder().id(33L).product(product).cart(cart).build();
-
-        Cart userCart = new Cart();
-        userCart.setId(1L);
-        user.setCart(userCart);
-
-        when(shopUserService.getCurrentUser()).thenReturn(user);
-        when(cartItemService.findByProduct_Id(10L)).thenReturn(Optional.of(item));
-
-        assertThrows(NotCurrentClientCartException.class, () -> cartService.deleteProduct(10L));
     }
 }

@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +19,6 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public List<CartItem> getAll() {
         return cartItemJpaRepository.findAll();
-    }
-
-    @Override
-    public Set<CartItem> getAllByCart(Cart cart) {
-        return cartItemJpaRepository.findAllByCart(cart).orElse(null);
     }
 
     @Override
@@ -46,8 +39,10 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public Optional<CartItem> findByProduct_Id(Long productId) {
-        return cartItemJpaRepository.findByProduct_Id(productId);
+    public CartItem findByProduct_Id(Long productId) {
+        return cartItemJpaRepository.findByProduct_Id(productId).orElseThrow(
+                () -> new CartItemNotFoundException("Cart Item with product id " + productId + " not found.")
+        );
     }
 
     @Override
@@ -57,7 +52,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem getByProductIdAndCartId(Long productId, Long cartId) {
+    public CartItem findByProductIdAndCartId(Long productId, Long cartId) {
         return cartItemJpaRepository.findCartItemByProduct_IdAndCart_Id(productId, cartId)
                 .orElseThrow(() -> new CartItemNotFoundException("No cartItem with such ids"));
     }

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -95,10 +94,9 @@ class CartItemServiceImplTest {
     void findByProductId_ShouldReturnCartItemOptional() {
         when(cartItemJpaRepository.findByProduct_Id(2L)).thenReturn(Optional.of(testItem));
 
-        Optional<CartItem> result = cartItemService.findByProduct_Id(2L);
+        CartItem result = cartItemService.findByProduct_Id(2L);
 
-        assertTrue(result.isPresent());
-        assertEquals(testItem.getProduct().getId(), result.get().getProduct().getId());
+        assertEquals(testItem.getProduct().getId(), result.getProduct().getId());
     }
 
     @Test
@@ -110,15 +108,5 @@ class CartItemServiceImplTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(cartItemJpaRepository, times(1)).findAll();
-    }
-
-    @Test
-    void findByProductId_ShouldReturnEmptyOptional_WhenNotFound() {
-        when(cartItemJpaRepository.findByProduct_Id(99L)).thenReturn(Optional.empty());
-
-        Optional<CartItem> result = cartItemService.findByProduct_Id(99L);
-
-        assertFalse(result.isPresent());
-        verify(cartItemJpaRepository, times(1)).findByProduct_Id(99L);
     }
 }

@@ -88,5 +88,29 @@ dependencies.
 
 
 ---
-
+### Roman Dogoda
+- Entity: ShopUser
+- Test: ShopUser
+- SecurityConfiguration
+- Application-properties
+- Jacoco
 ---
+### Konstantin Serikov
+- Entity: Order, OrderItem
+- Test: Order, OrderItem
+- Scheduler
+- Mapstruct
+- Docker
+---
+### Serhii Kurlykin
+- Entity: Cart, CartItem, Category
+- Test: Cart, CartItem, Category
+- SwaggerConfiguration
+- RestApi Description
+- GlobalExceptionHandler
+---
+### Anton Schellhorn-Blaschewitsch
+- Entity: Product, Favorite
+- Test: Product, Favorite
+- Scheduler
+
